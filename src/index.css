@@ -518,17 +518,22 @@ body {
   width: 100px;
 }
 
-.scale-label:first-of-type {
+.scale-label-left {
   text-align: right;
 }
 
-.scale-label:last-of-type {
+.scale-label-right {
   text-align: left;
 }
 
 .scale-buttons {
   display: flex;
   gap: var(--space-sm);
+}
+
+/* Mobile-only labels - hidden on desktop */
+.scale-labels-mobile {
+  display: none;
 }
 
 .scale-button {
@@ -2171,17 +2176,31 @@ body {
     gap: var(--space-xs);
   }
   
+  /* Answer scale - hide desktop labels, show mobile labels */
   .answer-scale {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-xs);
   }
   
-  .scale-label {
-    width: auto;
-    text-align: center !important;
+  .answer-scale .scale-label {
+    display: none;
   }
   
   .scale-buttons {
-    order: -1;
+    gap: var(--space-xs);
+  }
+  
+  .scale-labels-mobile {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 280px;
+    margin: var(--space-sm) auto 0;
+    font-size: 0.7rem;
+    color: var(--gray-warm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
   
   .parallels-section {
@@ -2214,10 +2233,68 @@ body {
   .edit-form input[type="text"] {
     width: 100%;
   }
+  
+  /* Results page 768px */
+  .results-page,
+  .archetype-page {
+    padding: var(--space-lg) var(--space-md);
+  }
+  
+  .archetype-name {
+    font-size: 2rem;
+  }
+  
+  .dimension-bars {
+    gap: var(--space-sm);
+  }
+  
+  /* Email capture form 768px */
+  .email-capture {
+    padding: var(--space-lg);
+  }
+  
+  .email-form {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .email-input {
+    width: 100%;
+  }
+  
+  .opt-in-label {
+    font-size: 0.85rem;
+    text-align: left;
+  }
+  
+  /* Timer and loading 768px */
+  .generation-timer {
+    padding: 0 var(--space-md);
+  }
+  
+  .timer-elapsed {
+    font-size: 1.3rem;
+  }
+  
+  /* Archetype image mobile */
+  .archetype-image {
+    max-width: 200px;
+    margin: 0 auto var(--space-md);
+  }
+  
+  /* Secondary archetype mobile */
+  .secondary-archetype {
+    margin-top: var(--space-lg);
+  }
+  
+  .secondary-card {
+    padding: var(--space-md);
+  }
 }
 
 @media (max-width: 480px) {
   .title-main {
+    font-size: 1.8rem;
     letter-spacing: 0.05em;
   }
   
@@ -2226,15 +2303,119 @@ body {
   }
   
   .question-text {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
   }
   
   .scale-button {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
+    font-size: 0.9rem;
+  }
+  
+  .scale-buttons {
+    gap: 6px;
+  }
+  
+  .scale-labels-mobile {
+    max-width: 240px;
+    font-size: 0.65rem;
+  }
+  
+  /* Navigation arrows */
+  .navigation-arrows {
+    gap: var(--space-md);
+  }
+  
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* Results page mobile */
+  .archetype-header {
+    padding: var(--space-md);
+  }
+  
+  .archetype-name {
+    font-size: 1.8rem;
+  }
+  
+  .archetype-title {
+    font-size: 1rem;
+  }
+  
+  /* AI Report mobile */
+  .analysis-text.rich-report {
+    padding: var(--space-md);
+  }
+  
+  .rich-report h2.report-main-header {
+    font-size: 1.4rem;
+  }
+  
+  .rich-report h3.report-section-header {
+    font-size: 1.2rem;
+  }
+  
+  .rich-report p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  /* Product cards mobile */
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-card {
+    padding: var(--space-md);
+  }
+  
+  /* Email form mobile */
+  .email-form {
+    gap: var(--space-sm);
+  }
+  
+  .email-input {
+    padding: var(--space-sm);
+    font-size: 1rem;
+  }
+  
+  /* Dimension bars mobile */
+  .dimension-bar-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+  
+  .dimension-name {
+    width: 100%;
   }
   
   .admin-panel {
     padding: var(--space-sm);
+  }
+  
+  /* Landing page mobile */
+  .intro-text {
+    font-size: 1rem;
+    padding: 0 var(--space-sm);
+  }
+  
+  .cta-button {
+    padding: var(--space-md) var(--space-lg);
+    font-size: 0.9rem;
+  }
+  
+  /* Share buttons mobile */
+  .share-buttons {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .share-button {
+    width: 100%;
+    justify-content: center;
   }
 }
