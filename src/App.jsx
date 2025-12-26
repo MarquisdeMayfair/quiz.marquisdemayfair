@@ -1336,6 +1336,9 @@ export default function MarquisPersonaTest() {
   const generateAIAnalysis = async () => {
     setIsGeneratingAI(true);
     setGenerationStartTime(Date.now());
+    setElapsedTime(0);
+    
+    console.log("Starting AI Analysis generation...");
     
     try {
       const response = await fetch("/api/generate-analysis", {
@@ -1353,14 +1356,21 @@ export default function MarquisPersonaTest() {
         })
       });
 
+      console.log("API Response status:", response.status);
       const data = await response.json();
+      console.log("API Response data:", data);
       
-      if (data.analysis) {
+      if (data.analysis && data.analysis.length > 100) {
+        console.log("Grok report received, word count:", data.wordCount);
         setAiAnalysis(data.analysis);
+      } else if (data.error) {
+        console.error("API returned error:", data.error);
+        setAiAnalysis(primaryArchetype?.coldReading || "");
       } else if (data.fallback) {
-        // Use pre-written cold reading as fallback
+        console.log("API indicated fallback");
         setAiAnalysis(primaryArchetype?.coldReading || "");
       } else {
+        console.log("No analysis in response, using fallback");
         setAiAnalysis(primaryArchetype?.coldReading || "");
       }
     } catch (error) {
