@@ -1406,7 +1406,23 @@ export default function MarquisPersonaTest() {
     setPhase('archetype');
   };
 
-  // Subscribe email to database
+  // Generate share URL slug from archetype key
+  const getShareSlug = (archetypeKey) => {
+    if (!archetypeKey) return '';
+    // Convert archetype key like 'wild_heart' to 'the-wild-heart'
+    const slug = archetypeKey.replace(/_/g, '-');
+    return `the-${slug}`;
+  };
+
+  // Get share URL for current archetype
+  const getShareUrl = () => {
+    if (!primaryArchetype) return 'https://quiz.marquisdemayfair.com';
+    // Find the archetype key from ARCHETYPES
+    const key = Object.keys(ARCHETYPES).find(k => ARCHETYPES[k].name === primaryArchetype.name);
+    if (!key) return 'https://quiz.marquisdemayfair.com';
+    return `https://quiz.marquisdemayfair.com/share/${getShareSlug(key)}`;
+  };
+
   // Get reCAPTCHA token
   const getRecaptchaToken = async () => {
     try {
@@ -2187,7 +2203,7 @@ Where:
             
             <div className="social-share-buttons">
               <a 
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: https://quiz.marquisdemayfair.com`)}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="share-button share-x"
@@ -2200,7 +2216,7 @@ Where:
               
               <button 
                 onClick={() => {
-                  const text = `${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: https://quiz.marquisdemayfair.com`;
+                  const text = `${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`;
                   navigator.clipboard.writeText(text);
                   alert('Copied to clipboard! Paste in Instagram.');
                 }}
@@ -2210,6 +2226,20 @@ Where:
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                 </svg>
                 <span>Copy for Instagram</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  const text = `${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`;
+                  navigator.clipboard.writeText(text);
+                  alert('Copied to clipboard! Paste on FetLife.');
+                }}
+                className="share-button share-fetlife"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span>Copy for FetLife</span>
               </button>
             </div>
           </div>
@@ -2472,18 +2502,27 @@ Where:
             <div className="share-buttons">
               <button 
                 className="share-button twitter"
-                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\n🔥 Discover your BDSM personality: https://quiz.marquisdemayfair.com`)}`, '_blank')}
+                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`)}`, '_blank')}
               >
                 Share on X
               </button>
               <button 
                 className="share-button copy"
                 onClick={() => {
-                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}. My historical parallel is ${primaryArchetype?.historical}, and my mythological echo is ${primaryArchetype?.mythological}.\n\n🔥 Discover your BDSM personality: https://quiz.marquisdemayfair.com`);
+                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}. My historical parallel is ${primaryArchetype?.historical}, and my mythological echo is ${primaryArchetype?.mythological}.\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`);
                   alert('Copied to clipboard!');
                 }}
               >
                 Copy Result
+              </button>
+              <button 
+                className="share-button fetlife"
+                onClick={() => {
+                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`);
+                  alert('Copied to clipboard! Paste on FetLife.');
+                }}
+              >
+                Copy for FetLife
               </button>
             </div>
           </div>
