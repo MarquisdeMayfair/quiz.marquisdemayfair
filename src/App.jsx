@@ -1846,19 +1846,19 @@ Where:
               
               <div className="features">
                 <div className="feature">
-                  <span className="feature-text">{editableQuestions.length} Original Questions</span>
+                  <span className="feature-text">Original Questions and Methodology</span>
                 </div>
                 <div className="feature">
-                  <span className="feature-text">16 Dimensions</span>
+                  <span className="feature-text">No email needed, results are free</span>
                 </div>
                 <div className="feature">
-                  <span className="feature-text">AI-Powered Analysis</span>
+                  <span className="feature-text">AI-Powered Individual Report</span>
                 </div>
                 <div className="feature">
-                  <span className="feature-text">Personalised Product Matching</span>
+                  <span className="feature-text">BDSM Equipment Matching</span>
                 </div>
                 <div className="feature">
-                  <span className="feature-text">Historical & Mythological Parallels</span>
+                  <span className="feature-text">Meet your Historical & Mythological BDSM ancestor!</span>
                 </div>
               </div>
               
