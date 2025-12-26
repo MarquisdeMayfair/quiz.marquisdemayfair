@@ -840,6 +840,8 @@ const ARCHETYPES = {
     historical: "Catherine the Great",
     mythological: "Zeus/Hera",
     primaryDimension: 'dominance',
+    image: '/archetype-images/the_sovereign.png',
+    shareText: "I'm The Sovereign - natural authority meets sacred responsibility. Command with wisdom, lead with purpose.",
     productCategories: ['impact', 'restraints', 'collars_leashes'],
     suggestedProducts: [
       { name: "Black Label Collection Riding Crop", url: "/products/black-label-collection-riding-crop-6971126863258", reason: "Command with precision and elegance" },
@@ -859,6 +861,8 @@ Your path requires wisdom. The evolved Sovereign understands that true power lie
     historical: "Empress Josephine",
     mythological: "Psyche",
     primaryDimension: 'submission',
+    image: '/archetype-images/the_devotee.png',
+    shareText: "I'm The Devotee - surrender as strength, trust as power. Finding freedom in giving myself completely.",
     productCategories: ['restraints', 'collars', 'sensory'],
     suggestedProducts: [
       { name: "Paradise Regained: Devotional Neck Collar", url: "/products/leather-cosplay-choker-6971126861261", reason: "Wear your surrender with elegance" },
@@ -878,6 +882,8 @@ Your gift lies in your capacity to inspire protection and devoted care in those 
     historical: "Discipline as art form",
     mythological: "Hephaestus",
     primaryDimension: 'sadism',
+    image: '/archetype-images/the_artisan.png',
+    shareText: "I'm The Artisan - crafting sensation into art. Precision, skill, and the beauty of intensity.",
     productCategories: ['impact', 'sensation'],
     suggestedProducts: [
       { name: "Black Label Collection Flogger", url: "/products/black-label-collection-flogger-6971126863821", reason: "For those who understand impact as art" },
@@ -897,6 +903,8 @@ Your responsibility is immense, and you feel it deeply. You understand that cons
     historical: "Frida Kahlo",
     mythological: "Phoenix/Prometheus",
     primaryDimension: 'masochism',
+    image: '/archetype-images/the_phoenix.png',
+    shareText: "I'm The Phoenix - transformed through intensity. Rising stronger, finding euphoria in surrender to sensation.",
     productCategories: ['impact', 'sensation', 'restraints'],
     suggestedProducts: [
       { name: "Black Label Collection Paddle", url: "/products/black-label-collection-paddle-6971126863630", reason: "Quality impact for quality sensation" },
@@ -916,6 +924,8 @@ Your path requires discernment. Not all who wish to take you through intensity a
     historical: "Renaissance rope arts",
     mythological: "Arachne",
     primaryDimension: 'rigger',
+    image: '/archetype-images/the_weaver.png',
+    shareText: "I'm The Weaver - creating art through restraint. Every knot a meditation, every tie a masterpiece.",
     productCategories: ['rope', 'restraints'],
     suggestedProducts: [
       { name: "Luxury Shibari Rope", url: "/products/restraints-bondage-rope-6971126860615", reason: "Premium rope for the dedicated practitioner" },
@@ -935,6 +945,8 @@ Your work is both technical and intuitive. You probably study your craft with de
     historical: "Botticelli's Venus",
     mythological: "Andromeda",
     primaryDimension: 'rope_bottom',
+    image: '/archetype-images/the_chrysalis.png',
+    shareText: "I'm The Chrysalis - finding freedom in beautiful restriction. Stillness becomes transformation.",
     productCategories: ['rope', 'restraints', 'sensory'],
     suggestedProducts: [
       { name: "Luxury Shibari Rope", url: "/products/restraints-bondage-rope-6971126860615", reason: "Experience the embrace of quality rope" },
@@ -954,6 +966,8 @@ Your transformation is ongoing. Each time you are bound, you emerge subtly chang
     historical: "Mata Hari",
     mythological: "Aphrodite",
     primaryDimension: 'exhibitionist',
+    image: '/archetype-images/the_luminary.png',
+    shareText: "I'm The Luminary - radiant, magnetic, unapologetically seen. Being witnessed ignites my power.",
     productCategories: ['lingerie', 'accessories', 'display'],
     suggestedProducts: [
       { name: "The 'Tableaux Vivants' Spreader Bar", url: "/products/spreader-bar-with-wrist-and-ankle-cuffs-69711268648591", reason: "Be displayed with elegance" },
@@ -973,6 +987,8 @@ Your gift is permission. In your willingness to be seen, you grant others permis
     historical: "Anaïs Nin",
     mythological: "Artemis",
     primaryDimension: 'voyeur',
+    image: '/archetype-images/the_oracle.png',
+    shareText: "I'm The Oracle - seeing deeply into intimate mysteries. The art of witnessing as sacred practice.",
     productCategories: ['accessories', 'sensory'],
     suggestedProducts: [
       { name: "Bondage Fantasy: Deluxe Sling With Cuffs", url: "/products/bondage-gear-sling-with-cuffs-6971126863913", reason: "Create scenes worth witnessing" },
@@ -992,6 +1008,8 @@ Your seeing is a gift you give. Those you witness are not your entertainment, th
     historical: "The untameable wild",
     mythological: "Fenrir/The Wild Hunt",
     primaryDimension: 'primal_hunter',
+    image: '/archetype-images/the_apex.png',
+    shareText: "I'm The Apex - raw instinct unleashed. The thrill of the hunt runs through my veins.",
     productCategories: ['impact', 'restraints', 'primal'],
     suggestedProducts: [
       { name: "Black Label Collection BDSM Whip", url: "/products/black-label-collection-whip-6971126863838", reason: "Primal, raw, powerful" },
@@ -1011,6 +1029,8 @@ Your power requires containment. The ethical Apex knows that primal does not mea
     historical: "Atalanta",
     mythological: "Daphne",
     primaryDimension: 'primal_prey',
+    image: '/archetype-images/the_wild_heart.png',
+    shareText: "I'm The Wild Heart - alive in the chase, electric in capture. Primal joy in every pursuit.",
     productCategories: ['restraints', 'accessories'],
     suggestedProducts: [
       { name: "Paradise Regained: Devotional Neck Collar", url: "/products/leather-cosplay-choker-6971126861261", reason: "For when you're finally caught" },
@@ -1030,6 +1050,8 @@ Your wildness is not weakness. You probably control the chase more than others r
     historical: "The ideal protector",
     mythological: "Hades (as caretaker)",
     primaryDimension: 'owner',
+    image: '/archetype-images/the_guardian.png',
+    shareText: "I'm The Guardian - complete devotion earns complete protection. Ownership as sacred responsibility.",
     productCategories: ['collars', 'leashes', 'restraints'],
     suggestedProducts: [
       { name: "Paradise Regained: Devotional Neck Collar", url: "/products/leather-cosplay-choker-6971126861261", reason: "Mark your own with elegance" },
@@ -1049,6 +1071,8 @@ Your ownership is service. You probably spend more mental energy on your owned's
     historical: "Royal consorts",
     mythological: "Persephone (in her power)",
     primaryDimension: 'property',
+    image: '/archetype-images/the_beloved.png',
+    shareText: "I'm The Beloved - treasured, cherished, completely owned. Finding wholeness in belonging.",
     productCategories: ['collars', 'accessories', 'sensory'],
     suggestedProducts: [
       { name: "Paradise Regained: Devotional Neck Collar", url: "/products/leather-cosplay-choker-6971126861261", reason: "The symbol of belonging" },
@@ -1068,6 +1092,8 @@ Your devotion transforms those worthy of it. The right Owner becomes more patien
     historical: "The nurturing guide",
     mythological: "Demeter",
     primaryDimension: 'caregiver',
+    image: '/archetype-images/the_protector.png',
+    shareText: "I'm The Protector - fierce love wrapped in gentle authority. Nurturing and guiding with care.",
     productCategories: ['accessories', 'comfort', 'sensory'],
     suggestedProducts: [
       { name: "Sapiosexual: Portable Bishop Vibrator", url: "/products/the-chess-collection-bishopmini-vibrator-6971126864781", reason: "Gentle pleasure for your little" },
@@ -1087,6 +1113,8 @@ Your gift is the space you create. Within your protection, others can access par
     historical: "The preserved wonder",
     mythological: "Hebe",
     primaryDimension: 'dependent',
+    image: '/archetype-images/the_innocent.png',
+    shareText: "I'm The Innocent - playful wonder, joyful surrender. Finding safety in being completely cared for.",
     productCategories: ['comfort', 'sensory', 'playful'],
     suggestedProducts: [
       { name: "Sapiosexual: Queen's Love Orbs", url: "/products/the-chess-collection-queenpremium-metal-pleasure-balls-6971126864767", reason: "Playful internal pleasure" },
@@ -1106,6 +1134,8 @@ Your littleness is not weakness. You probably function extremely capably in the 
     historical: "David Bowie",
     mythological: "Loki/Tiresias",
     primaryDimension: 'switch',
+    image: '/archetype-images/the_shapeshifter.png',
+    shareText: "I'm The Shapeshifter - fluid, adaptable, containing multitudes. Power flows both ways through me.",
     productCategories: ['versatile', 'impact', 'restraints'],
     suggestedProducts: [
       { name: "Black Label Ultimate Impact Collection", url: "/products/black-label-deluxe-kit-6971126864194", reason: "Tools for every role you inhabit" },
@@ -1125,6 +1155,8 @@ Your gift is understanding. Because you have inhabited both sides of power excha
     historical: "Temple attendants",
     mythological: "Hestia",
     primaryDimension: 'service',
+    image: '/archetype-images/the_acolyte.png',
+    shareText: "I'm The Acolyte - devotion expressed through service. Anticipating needs is my art form.",
     productCategories: ['accessories', 'presentation'],
     suggestedProducts: [
       { name: "Paradise Regained: Devotional Collar", url: "/products/leather-cosplay-choker-6971126861261", reason: "Mark of your service" },
@@ -1965,11 +1997,52 @@ Where:
 
           <div className="archetype-preview">
             <h2>Your Primary Archetype</h2>
+            
+            {primaryArchetype?.image && (
+              <div className="archetype-image-container">
+                <img 
+                  src={primaryArchetype.image} 
+                  alt={primaryArchetype.name}
+                  className="archetype-image"
+                />
+              </div>
+            )}
+            
             <div className="archetype-card-mini">
               <div className="archetype-info">
                 <h3>{primaryArchetype?.name}</h3>
                 <p>{primaryArchetype?.title}</p>
               </div>
+            </div>
+            
+            <p className="archetype-share-text">{primaryArchetype?.shareText}</p>
+            
+            <div className="social-share-buttons">
+              <a 
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: https://quiz.marquisdemayfair.com`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="share-button share-x"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                <span>Share on X</span>
+              </a>
+              
+              <button 
+                onClick={() => {
+                  const text = `${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: https://quiz.marquisdemayfair.com`;
+                  navigator.clipboard.writeText(text);
+                  alert('Copied to clipboard! Paste in Instagram.');
+                }}
+                className="share-button share-instagram"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                <span>Copy for Instagram</span>
+              </button>
             </div>
           </div>
 

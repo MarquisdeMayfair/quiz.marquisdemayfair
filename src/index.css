@@ -856,8 +856,80 @@ body {
   text-align: center;
 }
 
-.archetype-icon {
-  font-size: 2.5rem;
+/* Archetype Image */
+.archetype-image-container {
+  margin-bottom: var(--space-lg);
+  display: flex;
+  justify-content: center;
+}
+
+.archetype-image {
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 2px solid var(--gold-muted);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.archetype-share-text {
+  font-family: var(--font-elegant);
+  font-style: italic;
+  color: var(--cream-muted);
+  font-size: 1rem;
+  max-width: 400px;
+  margin: var(--space-md) auto;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Social Share Buttons */
+.social-share-buttons {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  margin-top: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: none;
+}
+
+.share-x {
+  background: #000;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+.share-x:hover {
+  background: #1a1a1a;
+  border-color: var(--gold-muted);
+}
+
+.share-instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #fff;
+}
+
+.share-instagram:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.share-button svg {
+  flex-shrink: 0;
 }
 
 .archetype-info h3 {
