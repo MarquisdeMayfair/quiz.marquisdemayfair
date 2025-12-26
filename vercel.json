@@ -4,7 +4,8 @@
   "installCommand": "npm install",
   "framework": "vite",
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/share/:archetype", "destination": "/api/share/:archetype" },
+    { "source": "/((?!api/)(?!share/).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
