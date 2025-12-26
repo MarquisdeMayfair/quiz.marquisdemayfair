@@ -1236,12 +1236,13 @@ body {
 
 .analysis-loading {
   text-align: center;
-  padding: var(--space-lg);
+  padding: var(--space-xl);
 }
 
 .loading-quill {
-  font-size: 2rem;
+  font-size: 3rem;
   animation: write 1s ease-in-out infinite;
+  margin-bottom: var(--space-md);
 }
 
 @keyframes write {
@@ -1249,10 +1250,105 @@ body {
   50% { transform: rotate(5deg); }
 }
 
+.generation-timer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+.timer-elapsed {
+  font-size: 1.5rem;
+  color: var(--gold-bright);
+  font-family: var(--font-display);
+}
+
+.timer-note {
+  font-size: 0.85rem;
+  color: var(--gray-warm);
+  font-style: italic;
+}
+
+.loading-progress {
+  width: 100%;
+  max-width: 300px;
+  height: 4px;
+  background: var(--black-soft);
+  border-radius: 2px;
+  margin: var(--space-md) auto 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-muted), var(--gold-bright));
+  border-radius: 2px;
+  transition: width 1s ease-out;
+}
+
 .analysis-text {
   background: var(--black-soft);
   border-left: 3px solid var(--gold-muted);
   padding: var(--space-lg);
+}
+
+.analysis-text.rich-report {
+  padding: var(--space-xl);
+  line-height: 1.8;
+}
+
+.rich-report h2.report-main-header {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold-bright);
+  margin: var(--space-lg) 0 var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--gold-dark);
+}
+
+.rich-report h3.report-section-header {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--gold-pale);
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.rich-report h4.report-subsection-header {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--cream);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+
+.rich-report p {
+  margin-bottom: var(--space-md);
+  color: var(--gray-warm);
+}
+
+.rich-report p strong {
+  color: var(--gold-bright);
+}
+
+.rich-report .report-divider {
+  border: none;
+  border-top: 1px solid var(--gold-dark);
+  margin: var(--space-lg) 0;
+}
+
+.rich-report .report-list-item {
+  margin-left: var(--space-lg);
+  margin-bottom: var(--space-sm);
+  color: var(--gray-warm);
+  list-style-type: disc;
+}
+
+.rich-report a {
+  color: var(--gold-bright);
+  text-decoration: underline;
+}
+
+.rich-report a:hover {
+  color: var(--gold-pale);
 }
 
 .analysis-text p {

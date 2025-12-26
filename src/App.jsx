@@ -1195,6 +1195,8 @@ export default function MarquisPersonaTest() {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState('');
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [generationStartTime, setGenerationStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [showAdmin, setShowAdmin] = useState(false);
   const [editableQuestions, setEditableQuestions] = useState(ORIGINAL_QUESTIONS);
@@ -1205,6 +1207,19 @@ export default function MarquisPersonaTest() {
     const shuffled = [...editableQuestions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
   }, [editableQuestions]);
+
+  // Timer for AI generation progress
+  useEffect(() => {
+    let interval;
+    if (generationStartTime) {
+      interval = setInterval(() => {
+        setElapsedTime(Math.floor((Date.now() - generationStartTime) / 1000));
+      }, 1000);
+    } else {
+      setElapsedTime(0);
+    }
+    return () => clearInterval(interval);
+  }, [generationStartTime]);
 
   // Calculate scores with weighted normalization
   const calculateScores = useCallback(() => {
@@ -1312,6 +1327,7 @@ export default function MarquisPersonaTest() {
   // Generate AI Analysis via Grok API
   const generateAIAnalysis = async () => {
     setIsGeneratingAI(true);
+    setGenerationStartTime(Date.now());
     
     try {
       const response = await fetch("/api/generate-analysis", {
@@ -1323,7 +1339,9 @@ export default function MarquisPersonaTest() {
           scores,
           primaryArchetype,
           secondaryArchetype,
-          dimensions: DIMENSIONS
+          dimensions: DIMENSIONS,
+          answers,
+          questions: shuffledQuestions
         })
       });
 
@@ -1344,6 +1362,7 @@ export default function MarquisPersonaTest() {
     }
     
     setIsGeneratingAI(false);
+    setGenerationStartTime(null);
     setPhase('archetype');
   };
 
@@ -2180,25 +2199,53 @@ Where:
           </div>
 
           <div className="analysis-section">
-            <h2>Your Personal Reading</h2>
+            <h2>Your Comprehensive Personal Report</h2>
             {isGeneratingAI ? (
               <div className="analysis-loading">
                 <div className="loading-quill">✒</div>
-                <p>The Marquis is crafting your analysis...</p>
+                <p>The Marquis is crafting your comprehensive report...</p>
+                <div className="generation-timer">
+                  <span className="timer-elapsed">{elapsedTime} seconds</span>
+                  <span className="timer-note">Comprehensive reports typically take 30-60 seconds</span>
+                </div>
+                <div className="loading-progress">
+                  <div className="progress-bar" style={{ width: `${Math.min((elapsedTime / 45) * 100, 95)}%` }}></div>
+                </div>
               </div>
             ) : (
-              <div className="analysis-text">
-                {(aiAnalysis || primaryArchetype?.coldReading || '').split('\n\n').map((para, idx) => (
-                  <p key={idx}>{para}</p>
-                ))}
+              <div className="analysis-text rich-report">
+                {(aiAnalysis || primaryArchetype?.coldReading || '').split('\n').map((line, idx) => {
+                  // Handle markdown-style headers
+                  if (line.startsWith('## ')) {
+                    return <h3 key={idx} className="report-section-header">{line.replace('## ', '')}</h3>;
+                  }
+                  if (line.startsWith('### ')) {
+                    return <h4 key={idx} className="report-subsection-header">{line.replace('### ', '')}</h4>;
+                  }
+                  if (line.startsWith('# ')) {
+                    return <h2 key={idx} className="report-main-header">{line.replace('# ', '')}</h2>;
+                  }
+                  if (line.startsWith('---')) {
+                    return <hr key={idx} className="report-divider" />;
+                  }
+                  if (line.startsWith('- ')) {
+                    return <li key={idx} className="report-list-item">{line.replace('- ', '')}</li>;
+                  }
+                  if (line.trim() === '') {
+                    return null;
+                  }
+                  // Bold text handling
+                  const boldParsed = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                  return <p key={idx} dangerouslySetInnerHTML={{ __html: boldParsed }} />;
+                })}
               </div>
             )}
           </div>
 
-          {/* Product Recommendations Section */}
-          <div className="products-section">
-            <h2>Curated For Your Archetype</h2>
-            <p className="products-intro">Based on your unique profile, the Marquis recommends these instruments for your exploration:</p>
+          {/* Quick Product Links Section */}
+          <div className="products-section products-quick-links">
+            <h2>Quick Links: Your Recommended Collection</h2>
+            <p className="products-intro">Direct links to the products mentioned in your report:</p>
             
             <div className="products-grid">
               {primaryArchetype?.suggestedProducts?.map((product, idx) => (
@@ -2210,8 +2257,7 @@ Where:
                   className="product-card"
                 >
                   <h4>{product.name}</h4>
-                  <p>{product.reason}</p>
-                  <span className="product-cta">View at Marquis de Mayfair →</span>
+                  <span className="product-cta">Shop Now →</span>
                 </a>
               ))}
             </div>

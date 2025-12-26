@@ -1,5 +1,5 @@
 // Vercel Serverless Function - Grok AI Analysis Generation
-// Securely proxies requests to xAI's Grok API
+// Generates comprehensive 1500+ word personalized BDSM psychology report
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -24,37 +24,144 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { scores, primaryArchetype, secondaryArchetype, dimensions } = req.body;
+    const { scores, primaryArchetype, secondaryArchetype, dimensions, answers, questions } = req.body;
 
-    // Build the prompt for Grok
-    const topDimensions = Object.entries(scores || {})
+    // Build comprehensive dimension scores section
+    const allDimensionScores = Object.entries(scores || {})
       .sort(([, a], [, b]) => b - a)
-      .slice(0, 5);
+      .map(([dim, score]) => {
+        const dimInfo = dimensions?.[dim];
+        return `- ${dimInfo?.name || dim}: ${score}% ${score >= 70 ? '(HIGH)' : score <= 30 ? '(LOW)' : '(MODERATE)'}`;
+      })
+      .join('\n');
 
-    const prompt = `You are the Marquis de Mayfair, an elegant, sophisticated psychologist specializing in BDSM power dynamics and intimate psychology. You write with the wit and insight of a luxury brand—think Tom Ford meets Esther Perel.
+    // Build answer context - map answers to questions for insight
+    let answerContext = '';
+    if (answers && questions) {
+      const significantAnswers = questions
+        .filter(q => answers[q.id] !== undefined)
+        .map(q => {
+          const answerValue = answers[q.id];
+          const intensity = answerValue >= 4 ? 'strongly agrees' : answerValue <= 2 ? 'strongly disagrees' : 'is neutral about';
+          return `- "${q.text}" → User ${intensity} (${answerValue}/5)`;
+        })
+        .slice(0, 20); // Include top 20 most relevant for context
+      
+      answerContext = significantAnswers.join('\n');
+    }
 
-Based on these assessment results, write a deeply personalized 3-paragraph cold reading analysis.
+    // Build product recommendations section
+    const products = primaryArchetype?.suggestedProducts || [];
+    const productContext = products.map(p => 
+      `- ${p.name}: ${p.reason} (URL: https://www.marquisdemayfair.com${p.url})`
+    ).join('\n');
 
-**Dimension Scores (0-100):**
-${topDimensions.map(([dim, score]) => `- ${dimensions?.[dim]?.name || dim}: ${score}%`).join('\n')}
+    const prompt = `You are the Marquis de Mayfair, an elegant, sophisticated psychologist specializing in BDSM power dynamics, intimate psychology, and sexual self-discovery. You write with the insight of a master therapist combined with the wit of a luxury brand—think Esther Perel meets Tom Ford, with the psychological depth of Carl Jung.
 
-**Primary Archetype:** ${primaryArchetype?.name} - ${primaryArchetype?.title}
-**Secondary Archetype:** ${secondaryArchetype?.name} - ${secondaryArchetype?.title}
+You are writing a COMPREHENSIVE PERSONALIZED REPORT for someone who has just completed your psychometric assessment. This is the most important deliverable of the quiz—make it feel like a profound, transformative reading that reveals truths about themselves they may have sensed but never articulated.
 
-**Instructions:**
-- Write in second person ("You...")
-- Use cold reading techniques—specific enough to feel personal, universal enough to resonate broadly
-- Reference their top dimensions by name
-- Be sex-positive, affirming, sophisticated
-- Use BDSM terminology naturally (Dom, sub, scene, play, etc.)
-- Maximum 350 words
+=== ASSESSMENT RESULTS ===
 
-**Structure:**
-1. **Core Essence** (1 paragraph): What drives them at the deepest level, what they've always sensed about themselves
-2. **Relational Dynamics** (1 paragraph): How partners experience them, what they need to thrive, their gifts in power exchange
-3. **Growth Path** (1 paragraph): Shadow work, evolution, how to develop their authentic expression
+**PRIMARY ARCHETYPE:** ${primaryArchetype?.name} - "${primaryArchetype?.title}"
+Historical Parallel: ${primaryArchetype?.historical}
+Mythological Connection: ${primaryArchetype?.mythological}
 
-Tone: Warm, insightful, literary, unapologetically adult. Celebrate their unique configuration.`;
+**SECONDARY ARCHETYPE:** ${secondaryArchetype?.name} - "${secondaryArchetype?.title}"
+
+**ALL DIMENSION SCORES (16 Dimensions):**
+${allDimensionScores}
+
+**SAMPLE OF USER'S ACTUAL RESPONSES:**
+${answerContext || 'Response data not available'}
+
+**RECOMMENDED PRODUCTS FOR THIS ARCHETYPE:**
+${productContext}
+
+=== YOUR TASK ===
+
+Write a deeply personalized, psychologically rich report of AT LEAST 1500 WORDS structured in these sections:
+
+---
+
+## 1. YOUR CORE IDENTITY: The ${primaryArchetype?.name} (400+ words)
+
+Begin with a powerful opening that makes the reader feel truly SEEN. Use cold reading techniques—specific enough to feel personal, universal enough to resonate. Explain:
+- What it means to embody this archetype at their core
+- The historical figure (${primaryArchetype?.historical}) connection—what traits do they share? How does this historical parallel illuminate their nature?
+- The mythological archetype (${primaryArchetype?.mythological})—what ancient wisdom does this reveal about their role in power dynamics?
+- Why their specific combination of high/low dimension scores created this archetype result
+- What they've probably always sensed about themselves that this confirms
+
+---
+
+## 2. YOUR PSYCHOLOGICAL LANDSCAPE (400+ words)
+
+Analyze their dimension scores in depth. For their TOP 3 highest dimensions and their LOWEST dimension:
+- What does each score reveal about their inner world?
+- How do these dimensions interact and create their unique psychological fingerprint?
+- What internal tensions or harmonies exist between their high and low scores?
+- Use specific language: "Your ${Object.entries(scores || {}).sort(([,a],[,b]) => b - a)[0]?.[0] || 'dominant'} score of ${Object.entries(scores || {}).sort(([,a],[,b]) => b - a)[0]?.[1] || 0}% suggests..."
+- Reference their actual answers where relevant to show you understand their specific responses
+
+---
+
+## 3. YOUR RELATIONAL DYNAMICS (300+ words)
+
+How do they show up in intimate relationships and power exchange dynamics?
+- What kind of partner brings out their best?
+- What are their gifts in BDSM contexts?
+- How do they communicate desire and boundaries?
+- What do partners experience when in dynamic with them?
+- Their secondary archetype (${secondaryArchetype?.name}) influence—how does this add nuance?
+
+---
+
+## 4. SHADOW WORK & GROWTH PATH (200+ words)
+
+Every archetype has shadow aspects:
+- What are the potential pitfalls or blind spots of their configuration?
+- What might they need to integrate or develop?
+- How can they evolve into the fullest expression of their archetype?
+- What practices or awareness could support their growth?
+
+---
+
+## 5. YOUR CURATED COLLECTION: Tools for Your Journey (200+ words)
+
+Introduce the products as sacred tools for their exploration. For EACH of the ${products.length} products:
+- Name the product and explain WHY it specifically suits their archetype
+- How would someone with their psychological profile USE this item?
+- What experiences or states might it facilitate for them specifically?
+- Include the full URL for each product
+
+Products to recommend:
+${productContext}
+
+---
+
+=== WRITING GUIDELINES ===
+
+TONE: 
+- Warm, insightful, literary, unapologetically sexual and adult
+- Use BDSM terminology naturally (Dom, sub, scene, play, power exchange, dynamic, etc.)
+- Sex-positive and affirming—celebrate their configuration
+- Cold reading style: "You have probably always felt..." "Others may have told you..." "There's a quality in you that..."
+
+STYLE:
+- Second person throughout ("You...")
+- Rich, evocative language
+- Specific details that feel personal
+- Psychological depth without jargon
+- Sensual and sophisticated
+
+CRITICAL REQUIREMENTS:
+- AT LEAST 1500 words total
+- Reference specific dimension scores by name and percentage
+- Include ALL product recommendations with URLs
+- Make it feel like a genuine psychological reading, not a template
+- Every paragraph should feel personally relevant to THIS user's results
+
+Begin the report now:`;
 
     const response = await fetch('https://api.x.ai/v1/chat/completions', {
       method: 'POST',
@@ -67,15 +174,15 @@ Tone: Warm, insightful, literary, unapologetically adult. Celebrate their unique
         messages: [
           {
             role: 'system',
-            content: 'You are the Marquis de Mayfair, an elegant expert in BDSM psychology and power dynamics. You write sophisticated, sex-positive psychological analyses with literary flair.'
+            content: 'You are the Marquis de Mayfair, an elegant master of BDSM psychology and intimate power dynamics. You write comprehensive, deeply personalized psychological reports that combine clinical insight with literary sophistication. Your reports are thorough (1500+ words), sexually explicit when appropriate, and make readers feel profoundly understood. You always include specific product recommendations with full URLs and detailed explanations.'
           },
           {
             role: 'user',
             content: prompt
           }
         ],
-        max_tokens: 800,
-        temperature: 0.8
+        max_tokens: 4000,
+        temperature: 0.85
       })
     });
 
@@ -93,7 +200,8 @@ Tone: Warm, insightful, literary, unapologetically adult. Celebrate their unique
 
     return res.status(200).json({ 
       analysis: analysisText,
-      model: 'grok-2-latest'
+      model: 'grok-2-latest',
+      wordCount: analysisText.split(/\s+/).length
     });
 
   } catch (error) {
@@ -104,4 +212,3 @@ Tone: Warm, insightful, literary, unapologetically adult. Celebrate their unique
     });
   }
 }
-
