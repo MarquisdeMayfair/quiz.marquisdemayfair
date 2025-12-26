@@ -1811,7 +1811,6 @@ Where:
           
           <div className="question-card">
             <div className="dimension-badge" style={{ borderColor: DIMENSIONS[question.dimension]?.color }}>
-              <span className="badge-icon">{DIMENSIONS[question.dimension]?.icon}</span>
               <span className="badge-text">{DIMENSIONS[question.dimension]?.name}</span>
             </div>
             
@@ -1834,13 +1833,30 @@ Where:
             </div>
           </div>
           
-          <div className="navigation-dots">
-            {shuffledQuestions.slice(Math.max(0, currentQuestion - 3), currentQuestion + 4).map((q, idx) => (
-              <span 
-                key={q.id} 
-                className={`dot ${answers[q.id] !== undefined ? 'answered' : ''} ${shuffledQuestions[currentQuestion]?.id === q.id ? 'current' : ''}`}
-              ></span>
-            ))}
+          <div className="navigation-arrows">
+            <button 
+              className={`nav-arrow nav-back ${currentQuestion === 0 ? 'disabled' : ''}`}
+              onClick={() => currentQuestion > 0 && setCurrentQuestion(currentQuestion - 1)}
+              disabled={currentQuestion === 0}
+              aria-label="Previous question"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            
+            <span className="nav-counter">{currentQuestion + 1} / {shuffledQuestions.length}</span>
+            
+            <button 
+              className={`nav-arrow nav-forward ${!answers[question.id] ? 'disabled' : ''}`}
+              onClick={() => answers[question.id] && currentQuestion < shuffledQuestions.length - 1 && setCurrentQuestion(currentQuestion + 1)}
+              disabled={!answers[question.id]}
+              aria-label="Next question"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
