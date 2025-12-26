@@ -2295,6 +2295,40 @@ Where:
             </div>
           </div>
 
+          {/* Exclusive Discount Code Section */}
+          <div className="discount-code-section">
+            <div className="discount-code-card">
+              <h3>Your Exclusive Reward</h3>
+              <p className="discount-intro">As a thank you for completing your Persona Assessment, enjoy:</p>
+              <div className="discount-code-display">
+                <span className="discount-amount">10% OFF</span>
+                <span className="discount-label">your entire order</span>
+              </div>
+              <div className="discount-code-box">
+                <span className="code-label">Your Code:</span>
+                <span className="code-value">PERSONA10</span>
+                <button 
+                  className="copy-code-btn"
+                  onClick={() => {
+                    navigator.clipboard.writeText('PERSONA10');
+                    alert('Code copied! Use PERSONA10 at checkout.');
+                  }}
+                >
+                  Copy
+                </button>
+              </div>
+              <p className="discount-note">Use the same email address ({email}) at checkout to redeem your discount.</p>
+              <a 
+                href="https://www.marquisdemayfair.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="shop-now-btn"
+              >
+                Shop Now & Save 10%
+              </a>
+            </div>
+          </div>
+
           <div className="secondary-archetype">
             <h3>Secondary Expression</h3>
             <div className="secondary-card">

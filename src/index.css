@@ -1477,6 +1477,127 @@ body {
 }
 
 /* ============================================================================
+   DISCOUNT CODE SECTION
+   ============================================================================ */
+
+.discount-code-section {
+  margin-bottom: var(--space-xl);
+}
+
+.discount-code-card {
+  background: linear-gradient(135deg, rgba(246, 197, 65, 0.1), rgba(246, 197, 65, 0.02));
+  border: 2px solid var(--gold-bright);
+  border-radius: 12px;
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.discount-code-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-sm);
+}
+
+.discount-intro {
+  font-family: var(--font-elegant);
+  font-size: 1rem;
+  color: var(--cream-dark);
+  margin-bottom: var(--space-md);
+}
+
+.discount-code-display {
+  margin-bottom: var(--space-md);
+}
+
+.discount-amount {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--gold-bright);
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(246, 197, 65, 0.3);
+}
+
+.discount-label {
+  font-family: var(--font-elegant);
+  font-size: 1.2rem;
+  color: var(--cream);
+}
+
+.discount-code-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: var(--black-deep);
+  border: 2px dashed var(--gold-muted);
+  border-radius: 8px;
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.code-label {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--cream-muted);
+}
+
+.code-value {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.2em;
+  font-weight: 700;
+}
+
+.copy-code-btn {
+  background: var(--gold-muted);
+  color: var(--black-deep);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-code-btn:hover {
+  background: var(--gold-bright);
+}
+
+.discount-note {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--cream-dark);
+  margin-bottom: var(--space-md);
+}
+
+.shop-now-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
+  color: var(--black-deep);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(246, 197, 65, 0.3);
+}
+
+.shop-now-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(246, 197, 65, 0.5);
+}
+
+/* ============================================================================
    SECONDARY ARCHETYPE & SHARING
    ============================================================================ */
 
