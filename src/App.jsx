@@ -1956,7 +1956,7 @@ Where:
               <div className="progress-fill" style={{ width: `${progress}%` }}></div>
             </div>
             <div className="progress-text">
-              Question {currentQuestion + 1} of {shuffledQuestions.length}
+              Question {currentQuestion + 1}
             </div>
           </div>
           
@@ -2000,7 +2000,7 @@ Where:
               </svg>
             </button>
             
-            <span className="nav-counter">{currentQuestion + 1} / {shuffledQuestions.length}</span>
+            <span className="nav-counter">{currentQuestion + 1}</span>
             
             <button 
               className={`nav-arrow nav-forward ${currentQuestion >= furthestQuestion ? 'disabled' : ''}`}
