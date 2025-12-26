@@ -2193,10 +2193,15 @@ Where:
       <div className="app-container">
         <div className="archetype-page">
           <div className="archetype-header">
-            <div className="archetype-crest">
-              <span className="crest-main">{primaryArchetype?.icon}</span>
-              <span className="crest-secondary">{secondaryArchetype?.icon}</span>
-            </div>
+            {primaryArchetype?.image && (
+              <div className="archetype-image-container archetype-page-image">
+                <img 
+                  src={primaryArchetype.image} 
+                  alt={primaryArchetype.name}
+                  className="archetype-image"
+                />
+              </div>
+            )}
             <h1 className="archetype-title">{primaryArchetype?.name}</h1>
             <p className="archetype-subtitle">{primaryArchetype?.title}</p>
           </div>

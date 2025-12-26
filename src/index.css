@@ -893,6 +893,11 @@ body {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 
+/* Larger image for the full archetype report page */
+.archetype-page-image .archetype-image {
+  max-width: 350px;
+}
+
 .archetype-share-text {
   font-family: var(--font-elegant);
   font-style: italic;
