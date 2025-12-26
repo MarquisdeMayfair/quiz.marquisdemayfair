@@ -2153,7 +2153,7 @@ Where:
               
               <div className="discount-callout">
                 <span className="discount-badge">EXCLUSIVE OFFER</span>
-                <p className="discount-text">Get <strong>10% OFF</strong> your first order at Marquis de Mayfair</p>
+                <p className="discount-text">Get <strong>10% OFF</strong> your next order at Marquis de Mayfair</p>
               </div>
               
               {!emailSubmitted ? (
