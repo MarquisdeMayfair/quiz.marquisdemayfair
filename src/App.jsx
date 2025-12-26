@@ -1182,6 +1182,13 @@ export default function MarquisPersonaTest() {
   const [scores, setScores] = useState({});
   const [primaryArchetype, setPrimaryArchetype] = useState(null);
   const [secondaryArchetype, setSecondaryArchetype] = useState(null);
+
+  // Google Analytics event tracking helper
+  const trackEvent = (eventName, params = {}) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', eventName, params);
+    }
+  };
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [marketingOptIn, setMarketingOptIn] = useState(false);
@@ -1262,6 +1269,14 @@ export default function MarquisPersonaTest() {
     const question = shuffledQuestions[currentQuestion];
     setAnswers(prev => ({ ...prev, [question.id]: value }));
     
+    // Track question progress
+    trackEvent('question_answered', {
+      event_category: 'Quiz',
+      question_number: currentQuestion + 1,
+      total_questions: shuffledQuestions.length,
+      dimension: question.dimension
+    });
+    
     // Only auto-advance if we're at the furthest point (not reviewing previous answers)
     const isAtFurthestPoint = currentQuestion >= furthestQuestion;
     
@@ -1274,6 +1289,7 @@ export default function MarquisPersonaTest() {
         }, 300);
       } else {
         // Last question answered - go to calculating
+        trackEvent('quiz_completed', { event_category: 'Quiz' });
         setPhase('calculating');
         setTimeout(() => {
           const calculated = calculateScores();
@@ -1281,6 +1297,11 @@ export default function MarquisPersonaTest() {
           const { primary, secondary } = determineArchetypes(calculated);
           setPrimaryArchetype(primary);
           setSecondaryArchetype(secondary);
+          trackEvent('results_viewed', {
+            event_category: 'Quiz',
+            primary_archetype: primary?.name,
+            secondary_archetype: secondary?.name
+          });
           setPhase('results');
         }, 3000);
       }
@@ -1353,6 +1374,10 @@ export default function MarquisPersonaTest() {
   const handleEmailSubmit = (e) => {
     e.preventDefault();
     if (email && email.includes('@')) {
+      trackEvent('email_submitted', {
+        event_category: 'Quiz',
+        archetype: primaryArchetype?.name
+      });
       setEmailSubmitted(true);
       // Subscribe email in background
       subscribeEmail();
@@ -1446,8 +1471,28 @@ export default function MarquisPersonaTest() {
       a.click();
     };
 
-    const exportLeadsCSV = () => {
-      window.open(`/api/export-leads?password=${encodeURIComponent(adminPassword)}`, '_blank');
+    const exportLeadsCSV = async () => {
+      if (isLocalDev) {
+        alert('Lead export is only available when deployed to Vercel.');
+        return;
+      }
+      try {
+        const response = await fetch(`/api/export-leads?password=${encodeURIComponent(adminPassword)}`);
+        if (!response.ok) {
+          const error = await response.json();
+          alert(`Export failed: ${error.error || 'Unknown error'}`);
+          return;
+        }
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `marquis-leads-${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        alert('Export failed. Please try again.');
+      }
     };
 
     // Login screen
@@ -1786,12 +1831,15 @@ Where:
               </div>
               
               <p className="intro-text">
-                Discover your true BDSM personality and uncover insights about yourself you never knew. 
-                Powered by peer-reviewed psychology and AI, the Marquis de Mayfair assessment 
-                is unlike anything you've experienced before.
+                The most accurate way to discover your true BDSM personality and uncover insights 
+                about yourself you never knew. Powered by peer-reviewed psychology and AI, the Marquis 
+                de Mayfair assessment is unlike anything you've experienced before.
               </p>
               
-              <button className="cta-button" onClick={() => setPhase('assessment')}>
+              <button className="cta-button" onClick={() => {
+                trackEvent('quiz_start', { event_category: 'Quiz' });
+                setPhase('assessment');
+              }}>
                 <span className="button-text">Begin Your Revelation</span>
                 <span className="button-ornament">→</span>
               </button>
