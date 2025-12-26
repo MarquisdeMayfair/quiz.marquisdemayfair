@@ -258,16 +258,23 @@ body {
 
 .features {
   display: flex;
-  justify-content: center;
-  gap: var(--space-lg);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
   margin-bottom: var(--space-lg);
-  flex-wrap: wrap;
 }
 
 .feature {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
+}
+
+.feature::before {
+  content: '•';
+  color: var(--gold-bright);
+  font-size: 1.2rem;
 }
 
 .feature-icon {
@@ -2065,8 +2072,7 @@ body {
   }
   
   .features {
-    flex-direction: column;
-    align-items: center;
+    gap: var(--space-xs);
   }
   
   .answer-scale {
