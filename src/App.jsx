@@ -1374,20 +1374,25 @@ export default function MarquisPersonaTest() {
     const [leadCount, setLeadCount] = useState(0);
     const [recentLeads, setRecentLeads] = useState([]);
 
-    // Fetch lead stats when authenticated
+    // Check if running locally (development mode)
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    // Fetch lead stats when authenticated (only on production)
     useEffect(() => {
-      if (isAuthenticated && adminPassword) {
+      if (isAuthenticated && adminPassword && !isLocalDev) {
         fetch('/api/leads-count', {
           headers: { 'X-Admin-Password': adminPassword }
         })
-          .then(res => res.json())
+          .then(res => res.ok ? res.json() : Promise.reject())
           .then(data => {
             setLeadCount(data.count || 0);
             setRecentLeads(data.recent || []);
           })
-          .catch(() => {});
+          .catch(() => {
+            // API not available - silently fail
+          });
       }
-    }, [isAuthenticated, adminPassword]);
+    }, [isAuthenticated, adminPassword, isLocalDev]);
 
     const handleLogin = (e) => {
       e.preventDefault();
@@ -1488,6 +1493,12 @@ export default function MarquisPersonaTest() {
         {/* Lead Stats Section */}
         <div className="admin-leads-section">
           <h3>Email Leads</h3>
+          {isLocalDev ? (
+            <div className="local-dev-notice">
+              <p>Lead statistics are only available when deployed to Vercel.</p>
+              <p>Deploy to production to view collected emails and export CSV.</p>
+            </div>
+          ) : (
           <div className="leads-overview">
             <div className="stat lead-stat">
               <span className="stat-number">{leadCount}</span>
@@ -1505,6 +1516,7 @@ export default function MarquisPersonaTest() {
               </div>
             )}
           </div>
+          )}
         </div>
 
         <div className="admin-stats">
@@ -1632,11 +1644,6 @@ export default function MarquisPersonaTest() {
 
         <section>
           <h2>Original Question Development</h2>
-          <div className="highlight-box">
-            <h3>⚠️ Copyright Independence Statement</h3>
-            <p>All questions in the Marquis de Mayfair Assessment are <strong>original compositions</strong> developed by our research team. We have not copied, adapted, or derived questions from BDSMtest.org or any other existing assessment tool.</p>
-            <p>Our questions are developed using a construct-first methodology: we identify psychological constructs from peer-reviewed literature, then write original items that operationalize those constructs for self-report measurement.</p>
-          </div>
 
           <h3>Question Design Principles</h3>
           <ul>
@@ -1784,6 +1791,11 @@ Where:
                 is unlike anything you've experienced before.
               </p>
               
+              <button className="cta-button" onClick={() => setPhase('assessment')}>
+                <span className="button-text">Begin Your Revelation</span>
+                <span className="button-ornament">→</span>
+              </button>
+              
               <div className="features">
                 <div className="feature">
                   <span className="feature-text">{editableQuestions.length} Original Questions</span>
@@ -1801,11 +1813,6 @@ Where:
                   <span className="feature-text">Historical & Mythological Parallels</span>
                 </div>
               </div>
-              
-              <button className="cta-button" onClick={() => setPhase('assessment')}>
-                <span className="button-text">Begin Your Revelation</span>
-                <span className="button-ornament">→</span>
-              </button>
               
               <div className="secondary-actions">
                 <button className="text-link" onClick={() => setPhase('methodology')}>

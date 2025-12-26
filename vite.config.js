@@ -11,7 +11,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: undefined
-      }
+      },
+      // Exclude API files from client bundle
+      external: [/^\/api\/.*/]
     }
   },
   server: {
@@ -20,5 +22,9 @@ export default defineConfig({
   },
   preview: {
     port: 4173
+  },
+  // Exclude API directory from processing
+  optimizeDeps: {
+    exclude: ['api']
   }
 })

@@ -1541,6 +1541,19 @@ body {
   flex-wrap: wrap;
 }
 
+.local-dev-notice {
+  background: rgba(246, 197, 65, 0.1);
+  border: 1px solid var(--gold-muted);
+  padding: var(--space-md);
+  border-radius: 4px;
+  color: var(--gold-bright);
+}
+
+.local-dev-notice p {
+  margin: 0.5em 0;
+  font-size: 0.9rem;
+}
+
 .lead-stat {
   background: var(--black-deep);
   padding: var(--space-md);
