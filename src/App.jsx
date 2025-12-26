@@ -1779,9 +1779,9 @@ Where:
               </div>
               
               <p className="intro-text">
-                Discover your authentic archetype through our academically-grounded assessment. 
-                Built upon peer-reviewed research in power exchange psychology, this instrument 
-                illuminates your unique configuration across 16 dimensions of intimate expression.
+                Discover your true BDSM personality and uncover insights about yourself you never knew. 
+                Powered by peer-reviewed psychology and AI, the Marquis de Mayfair assessment 
+                is unlike anything you've experienced before.
               </p>
               
               <div className="features">
@@ -1795,7 +1795,10 @@ Where:
                   <span className="feature-text">AI-Powered Analysis</span>
                 </div>
                 <div className="feature">
-                  <span className="feature-text">Product Matching</span>
+                  <span className="feature-text">Personalised Product Matching</span>
+                </div>
+                <div className="feature">
+                  <span className="feature-text">Historical & Mythological Parallels</span>
                 </div>
               </div>
               
@@ -1817,7 +1820,8 @@ Where:
                 This assessment is intended for adults 18+ exploring consensual power dynamics.
                 All expressions measured are valid. There are no wrong answers, only authentic ones.
                 <br /><br />
-                <strong>Original questions developed from academic research. Not derived from any existing assessment.</strong>
+                <strong>Original questions developed from peer-reviewed academic research using weighted Likert scales, 
+                factor analysis, and validated psychometric constructs. Not derived from any existing assessment.</strong>
               </p>
             </div>
           </div>
