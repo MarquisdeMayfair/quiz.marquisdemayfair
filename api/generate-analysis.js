@@ -189,14 +189,23 @@ Begin the report now:`;
     if (!response.ok) {
       const errorData = await response.text();
       console.error('Grok API error:', response.status, errorData);
-      return res.status(response.status).json({ 
+      return res.status(200).json({ 
         error: 'AI service error',
+        details: `Status: ${response.status}, Response: ${errorData.substring(0, 500)}`,
         fallback: true 
       });
     }
 
     const data = await response.json();
     const analysisText = data.choices?.[0]?.message?.content || '';
+
+    if (!analysisText) {
+      return res.status(200).json({
+        error: 'Empty response from AI',
+        details: JSON.stringify(data).substring(0, 500),
+        fallback: true
+      });
+    }
 
     return res.status(200).json({ 
       analysis: analysisText,
@@ -206,8 +215,9 @@ Begin the report now:`;
 
   } catch (error) {
     console.error('Generate analysis error:', error);
-    return res.status(500).json({ 
+    return res.status(200).json({ 
       error: 'Failed to generate analysis',
+      details: error.message,
       fallback: true
     });
   }
