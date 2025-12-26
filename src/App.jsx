@@ -2135,7 +2135,12 @@ Where:
           <div className="unlock-section">
             <div className="unlock-card">
               <h2>Unlock Your Full Persona</h2>
-              <p>Receive a detailed <strong>FREE</strong> personalised report about your sexual archetype! Based on your individual responses with historical parallels, mythological connections, and your ideal BDSM product recommendations from the Marquis's private collection <em>(with exclusive discounts)</em>.</p>
+              <p>Receive a detailed <strong>FREE</strong> personalised report about your sexual archetype! Based on your individual responses with historical parallels, mythological connections, and your ideal BDSM product recommendations from the Marquis's private collection.</p>
+              
+              <div className="discount-callout">
+                <span className="discount-badge">EXCLUSIVE OFFER</span>
+                <p className="discount-text">Get <strong>10% OFF</strong> your first order at Marquis de Mayfair</p>
+              </div>
               
               {!emailSubmitted ? (
                 <form onSubmit={handleEmailSubmit} className="email-form">
