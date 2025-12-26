@@ -1551,20 +1551,24 @@ export default function MarquisPersonaTest() {
       e.preventDefault();
       // Validate password against server
       try {
-        const response = await fetch('/api/leads-count', {
-          headers: { 'X-Admin-Password': adminPassword }
+        const response = await fetch('/api/admin-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: adminPassword })
         });
-        if (response.ok) {
+        const data = await response.json();
+        if (response.ok && data.authenticated) {
           setIsAuthenticated(true);
         } else {
-          alert('Invalid password');
+          alert(data.error || 'Invalid password');
         }
       } catch (error) {
-        // For local dev or if API fails, allow any password 4+ chars
-        if (adminPassword.length >= 4) {
+        console.error('Auth error:', error);
+        // For local dev, allow password if 4+ chars (API not available locally)
+        if (isLocalDev && adminPassword.length >= 4) {
           setIsAuthenticated(true);
         } else {
-          alert('Password must be at least 4 characters');
+          alert('Authentication failed. Please try again.');
         }
       }
     };
