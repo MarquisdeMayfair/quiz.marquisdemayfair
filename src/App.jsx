@@ -1152,7 +1152,7 @@ export default function MarquisPersonaTest() {
   const [secondaryArchetype, setSecondaryArchetype] = useState(null);
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [marketingOptIn, setMarketingOptIn] = useState(true);
+  const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState('');
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
@@ -1875,40 +1875,50 @@ Where:
       <div className="app-container">
         <div className="results-page">
           <div className="results-header">
-            <span className="header-icon">⚜</span>
             <h1>Your Psychometric Fingerprint</h1>
             <p className="header-sub">A statistical portrait of your intimate dimensions</p>
           </div>
 
           <div className="scores-grid">
-            {sortedScores.map(([dimension, score], index) => (
-              <div 
-                key={dimension} 
-                className={`score-bar ${index < 3 ? 'top-score' : ''}`}
-                style={{ '--delay': `${index * 0.05}s` }}
-              >
-                <div className="bar-header">
-                  <span className="bar-icon">{DIMENSIONS[dimension]?.icon}</span>
-                  <span className="bar-name">{DIMENSIONS[dimension]?.name}</span>
-                  <span className="bar-percent">{score}%</span>
+            {sortedScores.map(([dimension, score], index) => {
+              // Color gradient: Gold (top) → Green → Teal → Red (bottom)
+              const getRankColor = (idx, total) => {
+                const ratio = idx / (total - 1);
+                if (ratio < 0.2) return '#f6c541'; // Gold (top scores)
+                if (ratio < 0.4) return '#7cb342'; // Light green
+                if (ratio < 0.6) return '#059669'; // Green/Teal
+                if (ratio < 0.8) return '#0891b2'; // Teal/Blue
+                return '#8B1538'; // Burgundy/Red (lowest)
+              };
+              const barColor = getRankColor(index, sortedScores.length);
+              
+              return (
+                <div 
+                  key={dimension} 
+                  className={`score-bar ${index < 3 ? 'top-score' : ''}`}
+                  style={{ '--delay': `${index * 0.05}s` }}
+                >
+                  <div className="bar-header">
+                    <span className="bar-name">{DIMENSIONS[dimension]?.name}</span>
+                    <span className="bar-percent">{score}%</span>
+                  </div>
+                  <div className="bar-track">
+                    <div 
+                      className="bar-fill" 
+                      style={{ 
+                        width: `${score}%`,
+                        backgroundColor: barColor
+                      }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="bar-track">
-                  <div 
-                    className="bar-fill" 
-                    style={{ 
-                      width: `${score}%`,
-                      backgroundColor: DIMENSIONS[dimension]?.color
-                    }}
-                  ></div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="archetype-preview">
             <h2>Your Primary Archetype</h2>
             <div className="archetype-card-mini">
-              <span className="archetype-icon">{primaryArchetype?.icon}</span>
               <div className="archetype-info">
                 <h3>{primaryArchetype?.name}</h3>
                 <p>{primaryArchetype?.title}</p>
@@ -1919,7 +1929,7 @@ Where:
           <div className="unlock-section">
             <div className="unlock-card">
               <h2>Unlock Your Full Persona</h2>
-              <p>Receive your personalized AI-generated analysis, historical parallels, mythological connections, and curated product recommendations matched to your archetype.</p>
+              <p>Receive a detailed <strong>FREE</strong> personalised report about your sexual archetype! Based on your individual responses with historical parallels, mythological connections, and your ideal BDSM product recommendations from the Marquis's private collection <em>(with exclusive discounts)</em>.</p>
               
               {!emailSubmitted ? (
                 <form onSubmit={handleEmailSubmit} className="email-form">
@@ -1944,10 +1954,11 @@ Where:
                       checked={marketingOptIn}
                       onChange={(e) => setMarketingOptIn(e.target.checked)}
                       className="opt-in-checkbox"
+                      required
                     />
-                    <span>Send me exclusive offers and new product announcements</span>
+                    <span>I agree the Marquis de Mayfair may contact me with my individual report and relevant offers. <em>*Unsubscribe any time.</em></span>
                   </label>
-                  <button type="submit" className="unlock-button">
+                  <button type="submit" className={`unlock-button gold-shine ${!marketingOptIn ? 'disabled' : ''}`} disabled={!marketingOptIn}>
                     <span>Reveal My Archetype</span>
                   </button>
                 </form>

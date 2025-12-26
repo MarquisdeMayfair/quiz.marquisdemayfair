@@ -796,6 +796,9 @@ body {
 .archetype-preview {
   text-align: center;
   margin-bottom: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .archetype-preview h2 {
@@ -807,12 +810,14 @@ body {
 }
 
 .archetype-card-mini {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-md);
   background: linear-gradient(135deg, var(--burgundy-deep), var(--purple-muted));
   border: 1px solid var(--gold-muted);
   padding: var(--space-md) var(--space-lg);
+  text-align: center;
 }
 
 .archetype-icon {
@@ -935,21 +940,64 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  background: linear-gradient(135deg, var(--burgundy), var(--burgundy-deep));
-  border: 1px solid var(--gold-muted);
-  color: var(--cream);
-  padding: 1rem;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold-muted));
+  border: 2px solid var(--gold-bright);
+  color: var(--black-deep);
+  padding: 1rem 2rem;
   font-family: var(--font-display);
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.unlock-button.gold-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
 }
 
 .unlock-button:hover {
-  background: linear-gradient(135deg, var(--burgundy-light), var(--burgundy));
-  box-shadow: var(--shadow-gold);
+  background: linear-gradient(135deg, var(--gold-pale), var(--gold-bright));
+  box-shadow: 0 0 30px rgba(246, 197, 65, 0.5);
+  transform: translateY(-2px);
+}
+
+.unlock-button.disabled {
+  background: var(--gray-cool);
+  border-color: var(--gray-cool);
+  color: var(--gray-warm);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.unlock-button.disabled::before {
+  display: none;
+}
+
+.unlock-button.disabled:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 .generating-notice {
