@@ -1193,6 +1193,8 @@ export default function MarquisPersonaTest() {
   const [firstName, setFirstName] = useState('');
   const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState('');
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [generationStartTime, setGenerationStartTime] = useState(null);
@@ -1405,9 +1407,34 @@ export default function MarquisPersonaTest() {
   };
 
   // Subscribe email to database
-  const subscribeEmail = async () => {
+  // Get reCAPTCHA token
+  const getRecaptchaToken = async () => {
     try {
-      await fetch("/api/subscribe", {
+      if (window.grecaptcha && window.grecaptcha.ready) {
+        return new Promise((resolve) => {
+          window.grecaptcha.ready(async () => {
+            try {
+              const token = await window.grecaptcha.execute(
+                process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LcXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                { action: 'submit_quiz' }
+              );
+              resolve(token);
+            } catch (e) {
+              console.warn('reCAPTCHA execute failed:', e);
+              resolve(null);
+            }
+          });
+        });
+      }
+    } catch (e) {
+      console.warn('reCAPTCHA not available:', e);
+    }
+    return null;
+  };
+
+  const subscribeEmail = async (recaptchaToken) => {
+    try {
+      const response = await fetch("/api/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1419,27 +1446,71 @@ export default function MarquisPersonaTest() {
           secondaryArchetype: secondaryArchetype?.name || null,
           scores,
           optIn: marketingOptIn,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          recaptchaToken
         })
       });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        if (data.code === 'RATE_LIMITED') {
+          return { 
+            success: false, 
+            error: data.error,
+            daysRemaining: data.daysRemaining
+          };
+        }
+        if (data.code === 'CAPTCHA_FAILED') {
+          return { 
+            success: false, 
+            error: 'Security check failed. Please try again.'
+          };
+        }
+        return { success: false, error: data.error || 'Submission failed' };
+      }
+      
+      return { success: true };
     } catch (error) {
       console.error("Subscribe error:", error);
-      // Don't block the user experience if subscription fails
+      return { success: true }; // Don't block on network errors
     }
   };
 
-  const handleEmailSubmit = (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    if (email && email.includes('@')) {
+    if (!email || !email.includes('@')) return;
+    
+    setIsSubmitting(true);
+    setSubmitError('');
+    
+    try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken();
+      
+      // Subscribe and check for rate limiting
+      const result = await subscribeEmail(recaptchaToken);
+      
+      if (!result.success) {
+        setSubmitError(result.error);
+        setIsSubmitting(false);
+        return;
+      }
+      
       trackEvent('email_submitted', {
         event_category: 'Quiz',
         archetype: primaryArchetype?.name
       });
+      
       setEmailSubmitted(true);
-      // Subscribe email in background
-      subscribeEmail();
+      setIsSubmitting(false);
+      
       // Generate AI analysis
       generateAIAnalysis();
+    } catch (error) {
+      console.error('Submit error:', error);
+      setSubmitError('An error occurred. Please try again.');
+      setIsSubmitting(false);
     }
   };
 
@@ -2188,20 +2259,31 @@ Where:
               
               {!emailSubmitted ? (
                 <form onSubmit={handleEmailSubmit} className="email-form">
+                  {submitError && (
+                    <div className="submit-error">
+                      <span className="error-icon">⚠</span>
+                      <span>{submitError}</span>
+                    </div>
+                  )}
                   <input
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="First name (optional)"
                     className="email-input name-input"
+                    disabled={isSubmitting}
                   />
                   <input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setSubmitError(''); // Clear error when email changes
+                    }}
                     placeholder="Enter your email address"
                     className="email-input"
                     required
+                    disabled={isSubmitting}
                   />
                   <label className="opt-in-label">
                     <input
@@ -2210,12 +2292,18 @@ Where:
                       onChange={(e) => setMarketingOptIn(e.target.checked)}
                       className="opt-in-checkbox"
                       required
+                      disabled={isSubmitting}
                     />
                     <span>I agree the Marquis de Mayfair may contact me with my individual report and relevant offers. <em>*Unsubscribe any time.</em></span>
                   </label>
-                  <button type="submit" className={`unlock-button gold-shine ${!marketingOptIn ? 'disabled' : ''}`} disabled={!marketingOptIn}>
-                    <span>Reveal My Archetype</span>
+                  <button 
+                    type="submit" 
+                    className={`unlock-button gold-shine ${!marketingOptIn || isSubmitting ? 'disabled' : ''}`} 
+                    disabled={!marketingOptIn || isSubmitting}
+                  >
+                    <span>{isSubmitting ? 'Verifying...' : 'Reveal My Archetype'}</span>
                   </button>
+                  <p className="recaptcha-notice">Protected by reCAPTCHA</p>
                 </form>
               ) : (
                 <div className="generating-notice">
