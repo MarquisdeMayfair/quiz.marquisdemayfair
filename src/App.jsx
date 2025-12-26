@@ -1197,6 +1197,7 @@ export default function MarquisPersonaTest() {
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [generationStartTime, setGenerationStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [loadingStatus, setLoadingStatus] = useState('');
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [showAdmin, setShowAdmin] = useState(false);
   const [editableQuestions, setEditableQuestions] = useState(ORIGINAL_QUESTIONS);
@@ -1208,15 +1209,33 @@ export default function MarquisPersonaTest() {
     setShuffledQuestions(shuffled);
   }, [editableQuestions]);
 
-  // Timer for AI generation progress
+  // Timer for AI generation progress with status messages
   useEffect(() => {
     let interval;
+    const statusMessages = [
+      { time: 0, message: 'Securing your data...' },
+      { time: 3, message: 'Analyzing your responses...' },
+      { time: 8, message: 'Mapping your psychological profile...' },
+      { time: 15, message: 'Consulting the Marquis...' },
+      { time: 25, message: 'Crafting your personalized report...' },
+      { time: 40, message: 'Adding historical parallels...' },
+      { time: 55, message: 'Finalizing product recommendations...' },
+      { time: 70, message: 'Almost ready...' },
+    ];
+    
     if (generationStartTime) {
       interval = setInterval(() => {
-        setElapsedTime(Math.floor((Date.now() - generationStartTime) / 1000));
+        const elapsed = Math.floor((Date.now() - generationStartTime) / 1000);
+        setElapsedTime(elapsed);
+        // Find the appropriate status message
+        const currentStatus = [...statusMessages].reverse().find(s => elapsed >= s.time);
+        if (currentStatus) {
+          setLoadingStatus(currentStatus.message);
+        }
       }, 1000);
     } else {
       setElapsedTime(0);
+      setLoadingStatus('');
     }
     return () => clearInterval(interval);
   }, [generationStartTime]);
@@ -1337,6 +1356,7 @@ export default function MarquisPersonaTest() {
     setIsGeneratingAI(true);
     setGenerationStartTime(Date.now());
     setElapsedTime(0);
+    setLoadingStatus('Securing your data...');
     
     console.log("Starting AI Analysis generation...");
     
@@ -2162,8 +2182,8 @@ Where:
               <p>Receive a detailed <strong>FREE</strong> personalised report about your sexual archetype! Based on your individual responses with historical parallels, mythological connections, and your ideal BDSM product recommendations from the Marquis's private collection.</p>
               
               <div className="discount-callout">
-                <span className="discount-badge">EXCLUSIVE OFFER</span>
-                <p className="discount-text">Get <strong>10% OFF</strong> your next order at Marquis de Mayfair</p>
+                <span className="discount-badge">Get 10% OFF your next order at Marquis de Mayfair</span>
+                <p className="discount-text">Includes: Exclusive 10% discount code for Marquis de Mayfair</p>
               </div>
               
               {!emailSubmitted ? (
@@ -2200,7 +2220,12 @@ Where:
               ) : (
                 <div className="generating-notice">
                   <div className="generating-spinner"></div>
-                  <p>Generating your personalized analysis...</p>
+                  <p className="loading-status">{loadingStatus || 'Generating your personalized analysis...'}</p>
+                  <p className="loading-timer">{elapsedTime} seconds</p>
+                  <p className="loading-note">Your comprehensive report typically takes 30-60 seconds</p>
+                  <div className="loading-progress-bar-container">
+                    <div className="loading-progress-bar" style={{ width: `${Math.min((elapsedTime / 60) * 100, 95)}%` }}></div>
+                  </div>
                 </div>
               )}
             </div>
@@ -2355,14 +2380,14 @@ Where:
             <div className="share-buttons">
               <button 
                 className="share-button twitter"
-                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}. Discover your intimate archetype at marquisdemayfair.com`)}&url=${encodeURIComponent('https://marquisdemayfair.com/persona-test')}`, '_blank')}
+                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\n🔥 Discover your BDSM personality: https://quiz.marquisdemayfair.com`)}`, '_blank')}
               >
                 Share on X
               </button>
               <button 
                 className="share-button copy"
                 onClick={() => {
-                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}. My historical parallel is ${primaryArchetype?.historical}, and my mythological echo is ${primaryArchetype?.mythological}. Discover your intimate archetype at marquisdemayfair.com/persona-test`);
+                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}. My historical parallel is ${primaryArchetype?.historical}, and my mythological echo is ${primaryArchetype?.mythological}.\n\n🔥 Discover your BDSM personality: https://quiz.marquisdemayfair.com`);
                   alert('Copied to clipboard!');
                 }}
               >
