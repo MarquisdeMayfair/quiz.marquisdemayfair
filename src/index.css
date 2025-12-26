@@ -132,10 +132,13 @@ body {
 
 .ornate-border {
   position: relative;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-dark) 50%, var(--gold-bright) 100%);
   max-width: 800px;
   width: 100%;
-  /* Removed gold border and decorative elements */
 }
+
+/* Decorative symbols removed - just the gold border remains */
 
 .landing-content {
   background: var(--black-rich);
