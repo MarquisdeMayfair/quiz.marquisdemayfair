@@ -1,9 +1,16 @@
 // Vercel Serverless Function - Export Leads as CSV
 // Password-protected endpoint for admin access
 
-import { kv } from '@vercel/kv';
-
 export default async function handler(req, res) {
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Admin-Password');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   // Only allow GET requests
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -22,14 +29,18 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Dynamic import to handle KV not being configured
+    const { kv } = await import('@vercel/kv');
+    
     // Get all lead IDs
     const leadIds = await kv.lrange('leads:all', 0, -1);
     
     if (!leadIds || leadIds.length === 0) {
-      return res.status(200).json({ 
-        message: 'No leads found',
-        count: 0 
-      });
+      // Return empty CSV with headers
+      const headers = ['Email', 'First Name', 'Primary Archetype', 'Secondary Archetype', 'Opt In', 'Date'];
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename=marquis-leads-${new Date().toISOString().split('T')[0]}.csv`);
+      return res.status(200).send(headers.join(',') + '\n');
     }
 
     // Fetch all leads
@@ -82,7 +93,7 @@ export default async function handler(req, res) {
     for (const lead of leads) {
       const scores = lead.scores || {};
       const row = [
-        `"${lead.email}"`,
+        `"${lead.email || ''}"`,
         `"${lead.firstName || ''}"`,
         `"${lead.archetype || ''}"`,
         `"${lead.secondaryArchetype || ''}"`,
@@ -118,7 +129,12 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Export error:', error);
-    return res.status(500).json({ error: 'Export failed' });
+    // Return error as JSON
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).json({ 
+      error: 'KV database not connected',
+      message: 'Please link Vercel KV to this project in the Vercel dashboard.',
+      count: 0 
+    });
   }
 }
-

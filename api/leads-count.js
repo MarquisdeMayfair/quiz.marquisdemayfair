@@ -1,8 +1,6 @@
 // Vercel Serverless Function - Get Lead Count
 // For admin panel display
 
-import { kv } from '@vercel/kv';
-
 export default async function handler(req, res) {
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -26,6 +24,9 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Dynamic import to handle KV not being configured
+    const { kv } = await import('@vercel/kv');
+    
     const count = await kv.get('leads:count') || 0;
     
     // Get recent leads (last 5)
@@ -53,8 +54,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ 
       count: 0,
       recent: [],
-      error: 'Database not configured'
+      warning: 'KV database not connected. Please link Vercel KV to this project.'
     });
   }
 }
-
