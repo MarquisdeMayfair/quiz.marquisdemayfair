@@ -425,9 +425,8 @@ body {
 }
 
 .assessment-logo img {
-  height: 60px;
+  height: 180px;
   width: auto;
-  opacity: 0.9;
 }
 
 .progress-section {
@@ -2215,7 +2214,7 @@ body {
   
   /* Assessment logo mobile */
   .assessment-logo img {
-    height: 50px;
+    height: 120px;
   }
   
   /* Progress bar mobile */
