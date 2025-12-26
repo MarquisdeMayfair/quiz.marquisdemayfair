@@ -1159,6 +1159,7 @@ export default function MarquisPersonaTest() {
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [showAdmin, setShowAdmin] = useState(false);
   const [editableQuestions, setEditableQuestions] = useState(ORIGINAL_QUESTIONS);
+  const [furthestQuestion, setFurthestQuestion] = useState(0); // Track furthest point reached
 
   // Shuffle questions on mount for validity
   useEffect(() => {
@@ -1229,19 +1230,30 @@ export default function MarquisPersonaTest() {
     const question = shuffledQuestions[currentQuestion];
     setAnswers(prev => ({ ...prev, [question.id]: value }));
     
-    if (currentQuestion < shuffledQuestions.length - 1) {
-      setTimeout(() => setCurrentQuestion(prev => prev + 1), 300);
-    } else {
-      setPhase('calculating');
-      setTimeout(() => {
-        const calculated = calculateScores();
-        setScores(calculated);
-        const { primary, secondary } = determineArchetypes(calculated);
-        setPrimaryArchetype(primary);
-        setSecondaryArchetype(secondary);
-        setPhase('results');
-      }, 3000);
+    // Only auto-advance if we're at the furthest point (not reviewing previous answers)
+    const isAtFurthestPoint = currentQuestion >= furthestQuestion;
+    
+    if (isAtFurthestPoint) {
+      if (currentQuestion < shuffledQuestions.length - 1) {
+        // Move to next question and update furthest point
+        setTimeout(() => {
+          setCurrentQuestion(prev => prev + 1);
+          setFurthestQuestion(prev => Math.max(prev, currentQuestion + 1));
+        }, 300);
+      } else {
+        // Last question answered - go to calculating
+        setPhase('calculating');
+        setTimeout(() => {
+          const calculated = calculateScores();
+          setScores(calculated);
+          const { primary, secondary } = determineArchetypes(calculated);
+          setPrimaryArchetype(primary);
+          setSecondaryArchetype(secondary);
+          setPhase('results');
+        }, 3000);
+      }
     }
+    // If user went back and changed an answer, stay on current question (no auto-advance)
   };
 
   // Generate AI Analysis via Grok API
@@ -1793,7 +1805,26 @@ Where:
   if (phase === 'assessment') {
     const question = shuffledQuestions[currentQuestion];
     
+    // If no question (shouldn't happen), check if quiz is complete
     if (!question) {
+      // Check if all questions are answered
+      const allAnswered = shuffledQuestions.length > 0 && 
+        shuffledQuestions.every(q => answers[q.id] !== undefined);
+      
+      if (allAnswered && shuffledQuestions.length > 0) {
+        // Quiz complete - trigger results
+        setPhase('calculating');
+        setTimeout(() => {
+          const calculated = calculateScores();
+          setScores(calculated);
+          const { primary, secondary } = determineArchetypes(calculated);
+          setPrimaryArchetype(primary);
+          setSecondaryArchetype(secondary);
+          setPhase('results');
+        }, 3000);
+        return <div className="app-container"><div className="loading">Processing your results...</div></div>;
+      }
+      
       return <div className="app-container"><div className="loading">Loading questions...</div></div>;
     }
 
@@ -1848,9 +1879,9 @@ Where:
             <span className="nav-counter">{currentQuestion + 1} / {shuffledQuestions.length}</span>
             
             <button 
-              className={`nav-arrow nav-forward ${!answers[question.id] ? 'disabled' : ''}`}
-              onClick={() => answers[question.id] && currentQuestion < shuffledQuestions.length - 1 && setCurrentQuestion(currentQuestion + 1)}
-              disabled={!answers[question.id]}
+              className={`nav-arrow nav-forward ${currentQuestion >= furthestQuestion ? 'disabled' : ''}`}
+              onClick={() => currentQuestion < furthestQuestion && setCurrentQuestion(currentQuestion + 1)}
+              disabled={currentQuestion >= furthestQuestion}
               aria-label="Next question"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
