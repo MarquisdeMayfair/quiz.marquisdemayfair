@@ -420,6 +420,16 @@ body {
   z-index: 1;
 }
 
+.assessment-logo {
+  margin-bottom: var(--space-md);
+}
+
+.assessment-logo img {
+  height: 60px;
+  width: auto;
+  opacity: 0.9;
+}
+
 .progress-section {
   width: 100%;
   max-width: 600px;
@@ -2201,6 +2211,11 @@ body {
     color: var(--gray-warm);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+  
+  /* Assessment logo mobile */
+  .assessment-logo img {
+    height: 50px;
   }
   
   /* Progress bar mobile */

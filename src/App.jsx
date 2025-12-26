@@ -1948,6 +1948,9 @@ Where:
     return (
       <div className="app-container">
         <div className="assessment-page">
+          <div className="assessment-logo">
+            <img src="/logo.png" alt="Marquis de Mayfair" />
+          </div>
           <div className="progress-section">
             <div className="progress-bar">
               <div className="progress-fill" style={{ width: `${progress}%` }}></div>
