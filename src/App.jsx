@@ -2257,8 +2257,8 @@ Where:
               <p>Receive a detailed <strong>FREE</strong> personalised report about your sexual archetype! Based on your individual responses with historical parallels, mythological connections, and your ideal BDSM product recommendations from the Marquis's private collection.</p>
               
               <div className="discount-callout">
-                <span className="discount-badge">Get 10% OFF your next order at Marquis de Mayfair</span>
-                <p className="discount-text">Includes: Exclusive 10% discount code for Marquis de Mayfair</p>
+                <span className="discount-badge">EXCLUSIVE OFFER</span>
+                <p className="discount-text">Get <strong>10% OFF</strong> your next order with code <strong>PERSONA10</strong></p>
               </div>
               
               {!emailSubmitted ? (
