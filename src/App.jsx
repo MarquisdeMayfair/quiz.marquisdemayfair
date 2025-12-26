@@ -1908,12 +1908,6 @@ Where:
             </div>
           </div>
           
-          <div className="floating-elements">
-            <span className="float float-1">⛓</span>
-            <span className="float float-2">🌹</span>
-            <span className="float float-3">🔥</span>
-            <span className="float float-4">👑</span>
-          </div>
         </div>
       </div>
     );

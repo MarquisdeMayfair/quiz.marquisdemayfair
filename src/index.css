@@ -132,31 +132,9 @@ body {
 
 .ornate-border {
   position: relative;
-  padding: 3px;
-  background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-dark) 50%, var(--gold-bright) 100%);
   max-width: 800px;
   width: 100%;
-}
-
-.ornate-border::before,
-.ornate-border::after {
-  content: '❧';
-  position: absolute;
-  font-size: 1.5rem;
-  color: var(--gold-bright);
-  text-shadow: var(--glow-gold);
-}
-
-.ornate-border::before {
-  top: -1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.ornate-border::after {
-  bottom: -1.5rem;
-  left: 50%;
-  transform: translateX(-50%) rotate(180deg);
+  /* Removed gold border and decorative elements */
 }
 
 .landing-content {
@@ -375,13 +353,9 @@ body {
   margin-right: auto;
 }
 
-/* Floating Elements */
+/* Floating Elements - Disabled */
 .floating-elements {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  display: none;
   pointer-events: none;
   z-index: 0;
 }
@@ -1184,7 +1158,7 @@ body {
 
 .crest-main {
   font-size: 4rem;
-  animation: float 3s ease-in-out infinite;
+  /* Animation removed */
 }
 
 .crest-secondary {
