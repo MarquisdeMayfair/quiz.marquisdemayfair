@@ -2050,43 +2050,6 @@ Where:
             <p className="header-sub">A statistical portrait of your intimate dimensions</p>
           </div>
 
-          <div className="scores-grid">
-            {sortedScores.map(([dimension, score], index) => {
-              // Color gradient: Gold (top) → Green → Teal → Red (bottom)
-              const getRankColor = (idx, total) => {
-                const ratio = idx / (total - 1);
-                if (ratio < 0.2) return '#f6c541'; // Gold (top scores)
-                if (ratio < 0.4) return '#7cb342'; // Light green
-                if (ratio < 0.6) return '#059669'; // Green/Teal
-                if (ratio < 0.8) return '#0891b2'; // Teal/Blue
-                return '#8B1538'; // Burgundy/Red (lowest)
-              };
-              const barColor = getRankColor(index, sortedScores.length);
-              
-              return (
-                <div 
-                  key={dimension} 
-                  className={`score-bar ${index < 3 ? 'top-score' : ''}`}
-                  style={{ '--delay': `${index * 0.05}s` }}
-                >
-                  <div className="bar-header">
-                    <span className="bar-name">{DIMENSIONS[dimension]?.name}</span>
-                    <span className="bar-percent">{score}%</span>
-                  </div>
-                  <div className="bar-track">
-                    <div 
-                      className="bar-fill" 
-                      style={{ 
-                        width: `${score}%`,
-                        backgroundColor: barColor
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
           <div className="archetype-preview">
             <h2>Your Primary Archetype</h2>
             
@@ -2136,6 +2099,43 @@ Where:
                 <span>Copy for Instagram</span>
               </button>
             </div>
+          </div>
+
+          <div className="scores-grid">
+            {sortedScores.map(([dimension, score], index) => {
+              // Color gradient: Gold (top) → Green → Teal → Red (bottom)
+              const getRankColor = (idx, total) => {
+                const ratio = idx / (total - 1);
+                if (ratio < 0.2) return '#f6c541'; // Gold (top scores)
+                if (ratio < 0.4) return '#7cb342'; // Light green
+                if (ratio < 0.6) return '#059669'; // Green/Teal
+                if (ratio < 0.8) return '#0891b2'; // Teal/Blue
+                return '#8B1538'; // Burgundy/Red (lowest)
+              };
+              const barColor = getRankColor(index, sortedScores.length);
+              
+              return (
+                <div 
+                  key={dimension} 
+                  className={`score-bar ${index < 3 ? 'top-score' : ''}`}
+                  style={{ '--delay': `${index * 0.05}s` }}
+                >
+                  <div className="bar-header">
+                    <span className="bar-name">{DIMENSIONS[dimension]?.name}</span>
+                    <span className="bar-percent">{score}%</span>
+                  </div>
+                  <div className="bar-track">
+                    <div 
+                      className="bar-fill" 
+                      style={{ 
+                        width: `${score}%`,
+                        backgroundColor: barColor
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <div className="unlock-section">
