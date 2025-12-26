@@ -1446,11 +1446,25 @@ export default function MarquisPersonaTest() {
       }
     }, [isAuthenticated, adminPassword, isLocalDev]);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
       e.preventDefault();
-      // Simple client-side check - real validation happens on API calls
-      if (adminPassword.length >= 4) {
-        setIsAuthenticated(true);
+      // Validate password against server
+      try {
+        const response = await fetch('/api/leads-count', {
+          headers: { 'X-Admin-Password': adminPassword }
+        });
+        if (response.ok) {
+          setIsAuthenticated(true);
+        } else {
+          alert('Invalid password');
+        }
+      } catch (error) {
+        // For local dev or if API fails, allow any password 4+ chars
+        if (adminPassword.length >= 4) {
+          setIsAuthenticated(true);
+        } else {
+          alert('Password must be at least 4 characters');
+        }
       }
     };
 

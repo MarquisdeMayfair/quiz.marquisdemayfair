@@ -862,7 +862,7 @@ body {
 }
 
 .archetype-image {
-  max-width: 280px;
+  max-width: 400px;
   width: 100%;
   height: auto;
   border-radius: 8px;
@@ -872,7 +872,7 @@ body {
 
 /* Larger image for the full archetype report page */
 .archetype-page-image .archetype-image {
-  max-width: 350px;
+  max-width: 500px;
 }
 
 .archetype-share-text {
