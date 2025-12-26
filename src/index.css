@@ -1284,7 +1284,7 @@ body {
   overflow: hidden;
 }
 
-.progress-bar {
+.loading-progress-bar {
   height: 100%;
   background: linear-gradient(90deg, var(--gold-muted), var(--gold-bright));
   border-radius: 2px;
@@ -2201,6 +2201,20 @@ body {
     color: var(--gray-warm);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+  
+  /* Progress bar mobile */
+  .progress-section {
+    max-width: 100%;
+    padding: 0 var(--space-sm);
+  }
+  
+  .progress-bar {
+    height: 6px;
+  }
+  
+  .progress-text {
+    font-size: 0.8rem;
   }
   
   .parallels-section {

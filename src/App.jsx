@@ -1204,9 +1204,6 @@ export default function MarquisPersonaTest() {
 
   // Shuffle questions on mount for validity
   useEffect(() => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:useEffect-shuffle',message:'Shuffling questions - editableQuestions changed',data:{editableQuestionsCount:editableQuestions.length,currentPhase:phase},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'E'})}).catch(()=>{});
-    // #endregion
     const shuffled = [...editableQuestions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
   }, [editableQuestions]);
@@ -1285,9 +1282,6 @@ export default function MarquisPersonaTest() {
   // Handle answer selection
   const handleAnswer = (value) => {
     const question = shuffledQuestions[currentQuestion];
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:handleAnswer',message:'handleAnswer called',data:{currentQuestion,totalQuestions:shuffledQuestions.length,questionId:question?.id,value,furthestQuestion},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-    // #endregion
     setAnswers(prev => ({ ...prev, [question.id]: value }));
     
     // Track question progress
@@ -1300,25 +1294,24 @@ export default function MarquisPersonaTest() {
     
     // Only auto-advance if we're at the furthest point (not reviewing previous answers)
     const isAtFurthestPoint = currentQuestion >= furthestQuestion;
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:handleAnswer',message:'isAtFurthestPoint check',data:{isAtFurthestPoint,currentQuestion,furthestQuestion,isLastQuestion:currentQuestion>=shuffledQuestions.length-1},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-    // #endregion
     
     if (isAtFurthestPoint) {
       if (currentQuestion < shuffledQuestions.length - 1) {
         // Move to next question and update furthest point
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:handleAnswer',message:'Advancing to next question',data:{currentQuestion,nextQuestion:currentQuestion+1},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
-        // #endregion
+        const nextQuestion = currentQuestion + 1; // Capture value before setTimeout
         setTimeout(() => {
-          setCurrentQuestion(prev => prev + 1);
-          setFurthestQuestion(prev => Math.max(prev, currentQuestion + 1));
+          // Use functional updates to avoid stale closure issues
+          setCurrentQuestion(prev => {
+            // Only advance if we haven't already moved past this point
+            if (prev === currentQuestion) {
+              return nextQuestion;
+            }
+            return prev;
+          });
+          setFurthestQuestion(prev => Math.max(prev, nextQuestion));
         }, 300);
       } else {
         // Last question answered - go to calculating
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:handleAnswer',message:'LAST QUESTION - setting phase to calculating',data:{currentQuestion,totalQuestions:shuffledQuestions.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-        // #endregion
         trackEvent('quiz_completed', { event_category: 'Quiz' });
         setPhase('calculating');
         setTimeout(() => {
@@ -1332,9 +1325,6 @@ export default function MarquisPersonaTest() {
             primary_archetype: primary?.name,
             secondary_archetype: secondary?.name
           });
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:handleAnswer',message:'Setting phase to results',data:{primaryArchetype:primary?.name,secondaryArchetype:secondary?.name},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'D'})}).catch(()=>{});
-          // #endregion
           setPhase('results');
         }, 3000);
       }
@@ -1935,22 +1925,12 @@ Where:
     
     // If no question (shouldn't happen), check if quiz is complete
     if (!question) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:assessment-render',message:'NO QUESTION - question is undefined',data:{currentQuestion,shuffledQuestionsLength:shuffledQuestions.length,answersCount:Object.keys(answers).length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B,E'})}).catch(()=>{});
-      // #endregion
       // Check if all questions are answered
       const allAnswered = shuffledQuestions.length > 0 && 
         shuffledQuestions.every(q => answers[q.id] !== undefined);
-      // #region agent log
-      const missingAnswers = shuffledQuestions.filter(q => answers[q.id] === undefined).map(q => q.id);
-      fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:assessment-render',message:'allAnswered check',data:{allAnswered,shuffledQuestionsLength:shuffledQuestions.length,answersCount:Object.keys(answers).length,missingAnswerIds:missingAnswers.slice(0,10)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
-      // #endregion
       
       if (allAnswered && shuffledQuestions.length > 0) {
         // Quiz complete - trigger results
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:assessment-render',message:'All answered - going to calculating from fallback',data:{},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'D'})}).catch(()=>{});
-        // #endregion
         setPhase('calculating');
         setTimeout(() => {
           const calculated = calculateScores();
@@ -1962,9 +1942,6 @@ Where:
         }, 3000);
         return <div className="app-container"><div className="loading">Processing your results...</div></div>;
       }
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:assessment-render',message:'SHOWING Loading questions - THIS IS THE BUG',data:{currentQuestion,shuffledQuestionsLength:shuffledQuestions.length,allAnswered},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B,C,E'})}).catch(()=>{});
-      // #endregion
       return <div className="app-container"><div className="loading">Loading questions...</div></div>;
     }
 
@@ -2243,7 +2220,7 @@ Where:
                   <span className="timer-note">Comprehensive reports typically take 30-60 seconds</span>
                 </div>
                 <div className="loading-progress">
-                  <div className="progress-bar" style={{ width: `${Math.min((elapsedTime / 45) * 100, 95)}%` }}></div>
+                  <div className="loading-progress-bar" style={{ width: `${Math.min((elapsedTime / 45) * 100, 95)}%` }}></div>
                 </div>
               </div>
             ) : (
