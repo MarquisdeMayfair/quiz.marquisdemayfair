@@ -170,7 +170,7 @@ Begin the report now:`;
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'grok-beta',
+        model: 'grok-3',
         messages: [
           {
             role: 'system',
@@ -209,7 +209,7 @@ Begin the report now:`;
 
     return res.status(200).json({ 
       analysis: analysisText,
-      model: 'grok-beta',
+      model: 'grok-3',
       wordCount: analysisText.split(/\s+/).length
     });
 
