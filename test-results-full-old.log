@@ -1,0 +1,125 @@
+Starting quiz validation tests...
+
+Progress: 1/200 tests | Correct: 1 | Incorrect: 0 | Current: Test #1Progress: 2/200 tests | Correct: 2 | Incorrect: 0 | Current: Test #2
+❌ INCORRECT RESULT - Test #3
+   Expected Primary: devotee
+   Actual Primary: acolyte
+   Top 3 Expected Scores: submission: 86, service: 86, dominance: 82
+Progress: 3/200 tests | Correct: 2 | Incorrect: 1 | Current: Test #3Progress: 4/200 tests | Correct: 3 | Incorrect: 1 | Current: Test #4Progress: 5/200 tests | Correct: 4 | Incorrect: 1 | Current: Test #5Progress: 6/200 tests | Correct: 5 | Incorrect: 1 | Current: Test #6Progress: 7/200 tests | Correct: 6 | Incorrect: 1 | Current: Test #7Progress: 8/200 tests | Correct: 7 | Incorrect: 1 | Current: Test #8Progress: 9/200 tests | Correct: 8 | Incorrect: 1 | Current: Test #9Progress: 10/200 tests | Correct: 9 | Incorrect: 1 | Current: Test #10
+Progress: 10/200 tests | Correct: 9 | Incorrect: 1 | Current: Test #10
+Progress: 11/200 tests | Correct: 10 | Incorrect: 1 | Current: Test #11Progress: 12/200 tests | Correct: 11 | Incorrect: 1 | Current: Test #12Progress: 13/200 tests | Correct: 12 | Incorrect: 1 | Current: Test #13Progress: 14/200 tests | Correct: 13 | Incorrect: 1 | Current: Test #14Progress: 15/200 tests | Correct: 14 | Incorrect: 1 | Current: Test #15Progress: 16/200 tests | Correct: 15 | Incorrect: 1 | Current: Test #16Progress: 17/200 tests | Correct: 16 | Incorrect: 1 | Current: Test #17Progress: 18/200 tests | Correct: 17 | Incorrect: 1 | Current: Test #18Progress: 19/200 tests | Correct: 18 | Incorrect: 1 | Current: Test #19Progress: 20/200 tests | Correct: 19 | Incorrect: 1 | Current: Test #20
+Progress: 20/200 tests | Correct: 19 | Incorrect: 1 | Current: Test #20
+Progress: 21/200 tests | Correct: 20 | Incorrect: 1 | Current: Test #21Progress: 22/200 tests | Correct: 21 | Incorrect: 1 | Current: Test #22Progress: 23/200 tests | Correct: 22 | Incorrect: 1 | Current: Test #23Progress: 24/200 tests | Correct: 23 | Incorrect: 1 | Current: Test #24Progress: 25/200 tests | Correct: 24 | Incorrect: 1 | Current: Test #25Progress: 26/200 tests | Correct: 25 | Incorrect: 1 | Current: Test #26Progress: 27/200 tests | Correct: 26 | Incorrect: 1 | Current: Test #27Progress: 28/200 tests | Correct: 27 | Incorrect: 1 | Current: Test #28Progress: 29/200 tests | Correct: 28 | Incorrect: 1 | Current: Test #29Progress: 30/200 tests | Correct: 29 | Incorrect: 1 | Current: Test #30
+Progress: 30/200 tests | Correct: 29 | Incorrect: 1 | Current: Test #30
+
+❌ INCORRECT RESULT - Test #31
+   Expected Primary: chrysalis
+   Actual Primary: apex
+   Top 3 Expected Scores: rope_bottom: 84, primal_hunter: 84, sadism: 76
+Progress: 31/200 tests | Correct: 29 | Incorrect: 2 | Current: Test #31Progress: 32/200 tests | Correct: 30 | Incorrect: 2 | Current: Test #32Progress: 33/200 tests | Correct: 31 | Incorrect: 2 | Current: Test #33Progress: 34/200 tests | Correct: 32 | Incorrect: 2 | Current: Test #34Progress: 35/200 tests | Correct: 33 | Incorrect: 2 | Current: Test #35Progress: 36/200 tests | Correct: 34 | Incorrect: 2 | Current: Test #36
+❌ INCORRECT RESULT - Test #37
+   Expected Primary: devotee
+   Actual Primary: innocent
+   Top 3 Expected Scores: submission: 87, dependent: 87, caregiver: 78
+Progress: 37/200 tests | Correct: 34 | Incorrect: 3 | Current: Test #37Progress: 38/200 tests | Correct: 35 | Incorrect: 3 | Current: Test #38Progress: 39/200 tests | Correct: 36 | Incorrect: 3 | Current: Test #39Progress: 40/200 tests | Correct: 37 | Incorrect: 3 | Current: Test #40
+Progress: 40/200 tests | Correct: 37 | Incorrect: 3 | Current: Test #40
+Progress: 41/200 tests | Correct: 38 | Incorrect: 3 | Current: Test #41
+❌ INCORRECT RESULT - Test #42
+   Expected Primary: shapeshifter
+   Actual Primary: acolyte
+   Top 3 Expected Scores: switch: 80, voyeur: 75, masochism: 72
+Progress: 42/200 tests | Correct: 38 | Incorrect: 4 | Current: Test #42Progress: 43/200 tests | Correct: 39 | Incorrect: 4 | Current: Test #43Progress: 44/200 tests | Correct: 40 | Incorrect: 4 | Current: Test #44Progress: 45/200 tests | Correct: 41 | Incorrect: 4 | Current: Test #45Progress: 46/200 tests | Correct: 42 | Incorrect: 4 | Current: Test #46Progress: 47/200 tests | Correct: 43 | Incorrect: 4 | Current: Test #47Progress: 48/200 tests | Correct: 44 | Incorrect: 4 | Current: Test #48
+❌ INCORRECT RESULT - Test #49
+   Expected Primary: apex
+   Actual Primary: innocent
+   Top 3 Expected Scores: primal_hunter: 100, dependent: 100, owner: 79
+Progress: 49/200 tests | Correct: 44 | Incorrect: 5 | Current: Test #49Progress: 50/200 tests | Correct: 45 | Incorrect: 5 | Current: Test #50
+Progress: 50/200 tests | Correct: 45 | Incorrect: 5 | Current: Test #50
+Progress: 51/200 tests | Correct: 46 | Incorrect: 5 | Current: Test #51Progress: 52/200 tests | Correct: 47 | Incorrect: 5 | Current: Test #52Progress: 53/200 tests | Correct: 48 | Incorrect: 5 | Current: Test #53Progress: 54/200 tests | Correct: 49 | Incorrect: 5 | Current: Test #54Progress: 55/200 tests | Correct: 50 | Incorrect: 5 | Current: Test #55Progress: 56/200 tests | Correct: 51 | Incorrect: 5 | Current: Test #56
+❌ INCORRECT RESULT - Test #57
+   Expected Primary: devotee
+   Actual Primary: innocent
+   Top 3 Expected Scores: submission: 80, dependent: 80, exhibitionist: 77
+Progress: 57/200 tests | Correct: 51 | Incorrect: 6 | Current: Test #57Progress: 58/200 tests | Correct: 52 | Incorrect: 6 | Current: Test #58Progress: 59/200 tests | Correct: 53 | Incorrect: 6 | Current: Test #59Progress: 60/200 tests | Correct: 54 | Incorrect: 6 | Current: Test #60
+Progress: 60/200 tests | Correct: 54 | Incorrect: 6 | Current: Test #60
+Progress: 61/200 tests | Correct: 55 | Incorrect: 6 | Current: Test #61Progress: 62/200 tests | Correct: 56 | Incorrect: 6 | Current: Test #62Progress: 63/200 tests | Correct: 57 | Incorrect: 6 | Current: Test #63Progress: 64/200 tests | Correct: 58 | Incorrect: 6 | Current: Test #64Progress: 65/200 tests | Correct: 59 | Incorrect: 6 | Current: Test #65Progress: 66/200 tests | Correct: 60 | Incorrect: 6 | Current: Test #66Progress: 67/200 tests | Correct: 61 | Incorrect: 6 | Current: Test #67Progress: 68/200 tests | Correct: 62 | Incorrect: 6 | Current: Test #68Progress: 69/200 tests | Correct: 63 | Incorrect: 6 | Current: Test #69Progress: 70/200 tests | Correct: 64 | Incorrect: 6 | Current: Test #70
+Progress: 70/200 tests | Correct: 64 | Incorrect: 6 | Current: Test #70
+Progress: 71/200 tests | Correct: 65 | Incorrect: 6 | Current: Test #71
+❌ INCORRECT RESULT - Test #72
+   Expected Primary: devotee
+   Actual Primary: protector
+   Top 3 Expected Scores: submission: 88, caregiver: 86, switch: 67
+Progress: 72/200 tests | Correct: 65 | Incorrect: 7 | Current: Test #72Progress: 73/200 tests | Correct: 66 | Incorrect: 7 | Current: Test #73Progress: 74/200 tests | Correct: 67 | Incorrect: 7 | Current: Test #74Progress: 75/200 tests | Correct: 68 | Incorrect: 7 | Current: Test #75Progress: 76/200 tests | Correct: 69 | Incorrect: 7 | Current: Test #76Progress: 77/200 tests | Correct: 70 | Incorrect: 7 | Current: Test #77Progress: 78/200 tests | Correct: 71 | Incorrect: 7 | Current: Test #78Progress: 79/200 tests | Correct: 72 | Incorrect: 7 | Current: Test #79
+❌ INCORRECT RESULT - Test #80
+   Expected Primary: artisan
+   Actual Primary: acolyte
+   Top 3 Expected Scores: sadism: 89, rigger: 79, primal_prey: 67
+Progress: 80/200 tests | Correct: 72 | Incorrect: 8 | Current: Test #80
+Progress: 80/200 tests | Correct: 72 | Incorrect: 8 | Current: Test #80
+Progress: 81/200 tests | Correct: 73 | Incorrect: 8 | Current: Test #81Progress: 82/200 tests | Correct: 74 | Incorrect: 8 | Current: Test #82Progress: 83/200 tests | Correct: 75 | Incorrect: 8 | Current: Test #83Progress: 84/200 tests | Correct: 76 | Incorrect: 8 | Current: Test #84Progress: 85/200 tests | Correct: 77 | Incorrect: 8 | Current: Test #85Progress: 86/200 tests | Correct: 78 | Incorrect: 8 | Current: Test #86Progress: 87/200 tests | Correct: 79 | Incorrect: 8 | Current: Test #87Progress: 88/200 tests | Correct: 80 | Incorrect: 8 | Current: Test #88Progress: 89/200 tests | Correct: 81 | Incorrect: 8 | Current: Test #89Progress: 90/200 tests | Correct: 82 | Incorrect: 8 | Current: Test #90
+Progress: 90/200 tests | Correct: 82 | Incorrect: 8 | Current: Test #90
+Progress: 91/200 tests | Correct: 83 | Incorrect: 8 | Current: Test #91Progress: 92/200 tests | Correct: 84 | Incorrect: 8 | Current: Test #92Progress: 93/200 tests | Correct: 85 | Incorrect: 8 | Current: Test #93Progress: 94/200 tests | Correct: 86 | Incorrect: 8 | Current: Test #94
+❌ INCORRECT RESULT - Test #95
+   Expected Primary: guardian
+   Actual Primary: shapeshifter
+   Top 3 Expected Scores: owner: 84, caregiver: 81, switch: 75
+Progress: 95/200 tests | Correct: 86 | Incorrect: 9 | Current: Test #95Progress: 96/200 tests | Correct: 87 | Incorrect: 9 | Current: Test #96Progress: 97/200 tests | Correct: 88 | Incorrect: 9 | Current: Test #97Progress: 98/200 tests | Correct: 89 | Incorrect: 9 | Current: Test #98Progress: 99/200 tests | Correct: 90 | Incorrect: 9 | Current: Test #99
+❌ INCORRECT RESULT - Test #100
+   Expected Primary: shapeshifter
+   Actual Primary: innocent
+   Top 3 Expected Scores: switch: 80, submission: 74, caregiver: 73
+Progress: 100/200 tests | Correct: 90 | Incorrect: 10 | Current: Test #100
+Progress: 100/200 tests | Correct: 90 | Incorrect: 10 | Current: Test #100
+Progress: 101/200 tests | Correct: 91 | Incorrect: 10 | Current: Test #101Progress: 102/200 tests | Correct: 92 | Incorrect: 10 | Current: Test #102Progress: 103/200 tests | Correct: 93 | Incorrect: 10 | Current: Test #103Progress: 104/200 tests | Correct: 94 | Incorrect: 10 | Current: Test #104Progress: 105/200 tests | Correct: 95 | Incorrect: 10 | Current: Test #105Progress: 106/200 tests | Correct: 96 | Incorrect: 10 | Current: Test #106Progress: 107/200 tests | Correct: 97 | Incorrect: 10 | Current: Test #107
+❌ INCORRECT RESULT - Test #108
+   Expected Primary: oracle
+   Actual Primary: apex
+   Top 3 Expected Scores: voyeur: 85, primal_hunter: 85, dominance: 75
+Progress: 108/200 tests | Correct: 97 | Incorrect: 11 | Current: Test #108Progress: 109/200 tests | Correct: 98 | Incorrect: 11 | Current: Test #109Progress: 110/200 tests | Correct: 99 | Incorrect: 11 | Current: Test #110
+Progress: 110/200 tests | Correct: 99 | Incorrect: 11 | Current: Test #110
+Progress: 111/200 tests | Correct: 100 | Incorrect: 11 | Current: Test #111Progress: 112/200 tests | Correct: 101 | Incorrect: 11 | Current: Test #112Progress: 113/200 tests | Correct: 102 | Incorrect: 11 | Current: Test #113Progress: 114/200 tests | Correct: 103 | Incorrect: 11 | Current: Test #114
+❌ INCORRECT RESULT - Test #115
+   Expected Primary: acolyte
+   Actual Primary: oracle
+   Top 3 Expected Scores: service: 73, dominance: 71, masochism: 68
+Progress: 115/200 tests | Correct: 103 | Incorrect: 12 | Current: Test #115Progress: 116/200 tests | Correct: 104 | Incorrect: 12 | Current: Test #116Progress: 117/200 tests | Correct: 105 | Incorrect: 12 | Current: Test #117
+❌ INCORRECT RESULT - Test #118
+   Expected Primary: luminary
+   Actual Primary: innocent
+   Top 3 Expected Scores: exhibitionist: 86, dependent: 86, owner: 85
+Progress: 118/200 tests | Correct: 105 | Incorrect: 13 | Current: Test #118Progress: 119/200 tests | Correct: 106 | Incorrect: 13 | Current: Test #119Test 120: Could not match question at position 18, skipping
+Test 120: Could not match question at position 22, skipping
+Test 120: Could not match question at position 35, skipping
+Test 120: Could not match question at position 42, skipping
+Test 120: Could not match question at position 43, skipping
+Test 120: Could not match question at position 45, skipping
+Test 120: Could not match question at position 46, skipping
+Test 120: Could not match question at position 47, skipping
+Test 120: Could not match question at position 49, skipping
+Test 120: Could not match question at position 50, skipping
+Test 120: Could not match question at position 51, skipping
+Test 120: Could not match question at position 52, skipping
+Test 120: Could not match question at position 54, skipping
+Test 120: Could not match question at position 55, skipping
+Test 120: Could not match question at position 56, skipping
+Test 120: Could not match question at position 57, skipping
+Test 120: Could not match question at position 60, skipping
+Test 120: Could not match question at position 62, skipping
+Test 120: Could not match question at position 64, skipping
+
+❌ INCORRECT RESULT - Test #120
+   Expected Primary: phoenix
+   Actual Primary: apex
+   Top 3 Expected Scores: masochism: 100, dependent: 90, primal_hunter: 80
+Progress: 120/200 tests | Correct: 106 | Incorrect: 14 | Current: Test #120
+Progress: 120/200 tests | Correct: 106 | Incorrect: 14 | Current: Test #120
+Test 121: Could not match question at position 62, skipping
+Test 121: Could not match question at position 63, skipping
+Test 121: Could not match question at position 64, skipping
+Progress: 121/200 tests | Correct: 107 | Incorrect: 14 | Current: Test #121Progress: 122/200 tests | Correct: 108 | Incorrect: 14 | Current: Test #122Progress: 123/200 tests | Correct: 109 | Incorrect: 14 | Current: Test #123Progress: 124/200 tests | Correct: 110 | Incorrect: 14 | Current: Test #124Progress: 125/200 tests | Correct: 111 | Incorrect: 14 | Current: Test #125Test 126 error: Attempted to use detached Frame 'C62DC5979A0E5560F299DB6AD3F9AF1A'.
+ConnectionClosedError: Connection closed.
+    at Connection._rawSend (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Connection.js:102:35)
+    at Connection.send (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Connection.js:95:21)
+    at CdpPage.close (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Page.js:872:34)
+    at async runSingleTest (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/automate-quiz-tests.js:469:5)
+    at async runTests (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/automate-quiz-tests.js:486:20)

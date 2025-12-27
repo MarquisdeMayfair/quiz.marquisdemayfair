@@ -1,8 +1,112 @@
 // Vercel Serverless Function - Email Subscription
 // Stores leads in Vercel KV with full quiz data
+// Syncs to Shopify Customers with tags
 // Includes reCAPTCHA verification and 6-month rate limiting
 
 const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000; // ~6 months in milliseconds
+
+// Sync customer to Shopify
+async function syncToShopify(email, firstName, archetype, secondaryArchetype) {
+  const shopifyUrl = process.env.SHOPIFY_STORE_URL;
+  const accessToken = process.env.SHOPIFY_ACCESS_TOKEN;
+  
+  console.log('Shopify sync starting for:', email);
+  console.log('Shopify URL configured:', shopifyUrl ? 'YES' : 'NO');
+  console.log('Shopify Token configured:', accessToken ? 'YES (length: ' + accessToken.length + ')' : 'NO');
+  
+  if (!shopifyUrl || !accessToken) {
+    console.log('Shopify credentials not configured, skipping sync');
+    return;
+  }
+  
+  try {
+    // Build tags array
+    const tags = ['quiz-lead'];
+    if (archetype) {
+      tags.push(`archetype-${archetype.toLowerCase().replace(/[^a-z0-9]/g, '-')}`);
+    }
+    if (secondaryArchetype) {
+      tags.push(`secondary-${secondaryArchetype.toLowerCase().replace(/[^a-z0-9]/g, '-')}`);
+    }
+    
+    const apiBase = `https://${shopifyUrl}/admin/api/2024-01`;
+    const headers = {
+      'X-Shopify-Access-Token': accessToken,
+      'Content-Type': 'application/json'
+    };
+    
+    console.log('Shopify API base:', apiBase);
+    
+    // Search for existing customer by email
+    const searchRes = await fetch(
+      `${apiBase}/customers/search.json?query=email:${encodeURIComponent(email)}`,
+      { headers }
+    );
+    
+    console.log('Shopify search response status:', searchRes.status);
+    const searchData = await searchRes.json();
+    console.log('Shopify search result:', JSON.stringify(searchData).substring(0, 500));
+    
+    if (searchData.customers && searchData.customers.length > 0) {
+      // Customer exists - update their tags
+      const customer = searchData.customers[0];
+      const existingTags = customer.tags ? customer.tags.split(', ').filter(t => t) : [];
+      
+      // Merge tags (avoid duplicates)
+      const allTags = [...new Set([...existingTags, ...tags])];
+      
+      // Update customer
+      const updateRes = await fetch(`${apiBase}/customers/${customer.id}.json`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          customer: {
+            id: customer.id,
+            tags: allTags.join(', '),
+            // Update first name if provided and customer doesn't have one
+            ...(firstName && !customer.first_name ? { first_name: firstName } : {})
+          }
+        })
+      });
+      
+      if (updateRes.ok) {
+        console.log(`Shopify: Updated existing customer ${customer.id} with tags: ${allTags.join(', ')}`);
+      } else {
+        const errorData = await updateRes.json();
+        console.warn('Shopify update error:', errorData);
+      }
+    } else {
+      // Create new customer
+      const createRes = await fetch(`${apiBase}/customers.json`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          customer: {
+            email: email,
+            first_name: firstName || '',
+            tags: tags.join(', '),
+            email_marketing_consent: {
+              state: 'subscribed',
+              opt_in_level: 'single_opt_in',
+              consent_updated_at: new Date().toISOString()
+            }
+          }
+        })
+      });
+      
+      if (createRes.ok) {
+        const newCustomer = await createRes.json();
+        console.log(`Shopify: Created new customer ${newCustomer.customer?.id} with tags: ${tags.join(', ')}`);
+      } else {
+        const errorData = await createRes.json();
+        console.warn('Shopify create error:', errorData);
+      }
+    }
+  } catch (shopifyError) {
+    console.error('Shopify sync error:', shopifyError.message);
+    // Don't throw - we don't want to fail the subscription if Shopify is down
+  }
+}
 
 export default async function handler(req, res) {
   // CORS headers
@@ -117,6 +221,15 @@ export default async function handler(req, res) {
     } catch (kvError) {
       // KV not configured - log but don't fail
       console.warn('Vercel KV not available:', kvError.message);
+    }
+
+    // Sync to Shopify (wait for it to complete)
+    try {
+      await syncToShopify(normalizedEmail, firstName, archetype, secondaryArchetype);
+      console.log('Shopify sync completed');
+    } catch (shopifyErr) {
+      console.error('Shopify sync failed:', shopifyErr.message);
+      // Don't fail the request if Shopify fails
     }
 
     return res.status(200).json({ 

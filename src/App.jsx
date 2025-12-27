@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import html2canvas from 'html2canvas';
 
 // ============================================================================
 // MARQUIS DE MAYFAIR PERSONA ASSESSMENT v2.0
@@ -841,6 +842,7 @@ const ARCHETYPES = {
     mythological: "Zeus/Hera",
     primaryDimension: 'dominance',
     image: '/archetype-images/the_sovereign.png',
+    video: '/archetype-videos/the_sovereign.mp4',
     shareText: "I'm The Sovereign - natural authority meets sacred responsibility. Command with wisdom, lead with purpose.",
     productCategories: ['impact', 'restraints', 'collars_leashes'],
     suggestedProducts: [
@@ -862,6 +864,7 @@ Your path requires wisdom. The evolved Sovereign understands that true power lie
     mythological: "Psyche",
     primaryDimension: 'submission',
     image: '/archetype-images/the_devotee.png',
+    video: '/archetype-videos/the_devotee.mp4',
     shareText: "I'm The Devotee - surrender as strength, trust as power. Finding freedom in giving myself completely.",
     productCategories: ['restraints', 'collars', 'sensory'],
     suggestedProducts: [
@@ -883,6 +886,7 @@ Your gift lies in your capacity to inspire protection and devoted care in those 
     mythological: "Hephaestus",
     primaryDimension: 'sadism',
     image: '/archetype-images/the_artisan.png',
+    video: '/archetype-videos/the_artisan.mp4',
     shareText: "I'm The Artisan - crafting sensation into art. Precision, skill, and the beauty of intensity.",
     productCategories: ['impact', 'sensation'],
     suggestedProducts: [
@@ -904,6 +908,7 @@ Your responsibility is immense, and you feel it deeply. You understand that cons
     mythological: "Phoenix/Prometheus",
     primaryDimension: 'masochism',
     image: '/archetype-images/the_phoenix.png',
+    video: '/archetype-videos/the_phoenix.mp4',
     shareText: "I'm The Phoenix - transformed through intensity. Rising stronger, finding euphoria in surrender to sensation.",
     productCategories: ['impact', 'sensation', 'restraints'],
     suggestedProducts: [
@@ -925,6 +930,7 @@ Your path requires discernment. Not all who wish to take you through intensity a
     mythological: "Arachne",
     primaryDimension: 'rigger',
     image: '/archetype-images/the_weaver.png',
+    video: '/archetype-videos/the_weaver.mp4',
     shareText: "I'm The Weaver - creating art through restraint. Every knot a meditation, every tie a masterpiece.",
     productCategories: ['rope', 'restraints'],
     suggestedProducts: [
@@ -946,6 +952,7 @@ Your work is both technical and intuitive. You probably study your craft with de
     mythological: "Andromeda",
     primaryDimension: 'rope_bottom',
     image: '/archetype-images/the_chrysalis.png',
+    video: '/archetype-videos/the_chrysalis.mp4',
     shareText: "I'm The Chrysalis - finding freedom in beautiful restriction. Stillness becomes transformation.",
     productCategories: ['rope', 'restraints', 'sensory'],
     suggestedProducts: [
@@ -967,6 +974,7 @@ Your transformation is ongoing. Each time you are bound, you emerge subtly chang
     mythological: "Aphrodite",
     primaryDimension: 'exhibitionist',
     image: '/archetype-images/the_luminary.png',
+    video: '/archetype-videos/the_luminary.mp4',
     shareText: "I'm The Luminary - radiant, magnetic, unapologetically seen. Being witnessed ignites my power.",
     productCategories: ['lingerie', 'accessories', 'display'],
     suggestedProducts: [
@@ -988,6 +996,7 @@ Your gift is permission. In your willingness to be seen, you grant others permis
     mythological: "Artemis",
     primaryDimension: 'voyeur',
     image: '/archetype-images/the_oracle.png',
+    video: '/archetype-videos/the_oracle.mp4',
     shareText: "I'm The Oracle - seeing deeply into intimate mysteries. The art of witnessing as sacred practice.",
     productCategories: ['accessories', 'sensory'],
     suggestedProducts: [
@@ -1009,6 +1018,7 @@ Your seeing is a gift you give. Those you witness are not your entertainment, th
     mythological: "Fenrir/The Wild Hunt",
     primaryDimension: 'primal_hunter',
     image: '/archetype-images/the_apex.png',
+    video: '/archetype-videos/the_apex.mp4',
     shareText: "I'm The Apex - raw instinct unleashed. The thrill of the hunt runs through my veins.",
     productCategories: ['impact', 'restraints', 'primal'],
     suggestedProducts: [
@@ -1030,6 +1040,7 @@ Your power requires containment. The ethical Apex knows that primal does not mea
     mythological: "Daphne",
     primaryDimension: 'primal_prey',
     image: '/archetype-images/the_wild_heart.png',
+    video: '/archetype-videos/the_wild_heart.mp4',
     shareText: "I'm The Wild Heart - alive in the chase, electric in capture. Primal joy in every pursuit.",
     productCategories: ['restraints', 'accessories'],
     suggestedProducts: [
@@ -1051,6 +1062,7 @@ Your wildness is not weakness. You probably control the chase more than others r
     mythological: "Hades (as caretaker)",
     primaryDimension: 'owner',
     image: '/archetype-images/the_guardian.png',
+    video: '/archetype-videos/the_guardian.mp4',
     shareText: "I'm The Guardian - complete devotion earns complete protection. Ownership as sacred responsibility.",
     productCategories: ['collars', 'leashes', 'restraints'],
     suggestedProducts: [
@@ -1072,6 +1084,7 @@ Your ownership is service. You probably spend more mental energy on your owned's
     mythological: "Persephone (in her power)",
     primaryDimension: 'property',
     image: '/archetype-images/the_beloved.png',
+    video: '/archetype-videos/the_beloved.mp4',
     shareText: "I'm The Beloved - treasured, cherished, completely owned. Finding wholeness in belonging.",
     productCategories: ['collars', 'accessories', 'sensory'],
     suggestedProducts: [
@@ -1093,6 +1106,7 @@ Your devotion transforms those worthy of it. The right Owner becomes more patien
     mythological: "Demeter",
     primaryDimension: 'caregiver',
     image: '/archetype-images/the_protector.png',
+    video: '/archetype-videos/the_protector.mp4',
     shareText: "I'm The Protector - fierce love wrapped in gentle authority. Nurturing and guiding with care.",
     productCategories: ['accessories', 'comfort', 'sensory'],
     suggestedProducts: [
@@ -1114,6 +1128,7 @@ Your gift is the space you create. Within your protection, others can access par
     mythological: "Hebe",
     primaryDimension: 'dependent',
     image: '/archetype-images/the_innocent.png',
+    video: '/archetype-videos/the_innocent.mp4',
     shareText: "I'm The Innocent - playful wonder, joyful surrender. Finding safety in being completely cared for.",
     productCategories: ['comfort', 'sensory', 'playful'],
     suggestedProducts: [
@@ -1135,6 +1150,7 @@ Your littleness is not weakness. You probably function extremely capably in the 
     mythological: "Loki/Tiresias",
     primaryDimension: 'switch',
     image: '/archetype-images/the_shapeshifter.png',
+    video: '/archetype-videos/the_shapeshifter.mp4',
     shareText: "I'm The Shapeshifter - fluid, adaptable, containing multitudes. Power flows both ways through me.",
     productCategories: ['versatile', 'impact', 'restraints'],
     suggestedProducts: [
@@ -1156,6 +1172,7 @@ Your gift is understanding. Because you have inhabited both sides of power excha
     mythological: "Hestia",
     primaryDimension: 'service',
     image: '/archetype-images/the_acolyte.png',
+    video: '/archetype-videos/the_acolyte.mp4',
     shareText: "I'm The Acolyte - devotion expressed through service. Anticipating needs is my art form.",
     productCategories: ['accessories', 'presentation'],
     suggestedProducts: [
@@ -1169,6 +1186,282 @@ The Acolyte archetype suggests you derive spiritual fulfillment through acts of 
 
 Your devotion is your art. You find deep satisfaction in the accumulation of small perfections, the training of your anticipation, the refinement of your offerings. Those you serve may not fully understand the depth of your gift, but they feel it in everything you provide.`
   }
+};
+
+// ============================================================================
+// REPORT SLIDESHOW COMPONENT
+// ============================================================================
+
+const ReportSlideshow = ({ 
+  aiAnalysis, 
+  firstName, 
+  primaryArchetype, 
+  secondaryArchetype, 
+  scores, 
+  dimensions,
+  email 
+}) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const summaryRef = useRef(null);
+  const touchStartX = useRef(0);
+  
+  // Parse AI analysis into sections by ## headers
+  const parseReportSections = useCallback((text) => {
+    if (!text) return [];
+    
+    const sections = [];
+    const lines = text.split('\n');
+    let currentSection = null;
+    let currentContent = [];
+    let introContent = []; // Content before first ##
+    
+    for (const line of lines) {
+      if (line.startsWith('## ')) {
+        // Save previous section
+        if (currentSection) {
+          sections.push({
+            title: currentSection,
+            content: currentContent.join('\n')
+          });
+        }
+        // Start new section
+        currentSection = line.replace('## ', '').replace(/^\d+\.\s*/, '');
+        currentContent = [];
+      } else if (currentSection) {
+        currentContent.push(line);
+      } else {
+        // Content before any ## header
+        introContent.push(line);
+      }
+    }
+    
+    // Don't forget the last section
+    if (currentSection) {
+      sections.push({
+        title: currentSection,
+        content: currentContent.join('\n')
+      });
+    }
+    
+    // If no sections found, treat the whole text as one section
+    if (sections.length === 0 && text.trim()) {
+      sections.push({
+        title: 'Your Personal Reading',
+        content: text
+      });
+    }
+    
+    return sections;
+  }, []);
+  
+  const sections = useMemo(() => parseReportSections(aiAnalysis), [aiAnalysis, parseReportSections]);
+  
+  // Get dimension priority for consistent sorting
+  const dimensionPriority = Object.keys(dimensions);
+  const sortedScores = Object.entries(scores)
+    .filter(([dim]) => dimensions[dim])
+    .sort(([dimA, scoreA], [dimB, scoreB]) => {
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return dimensionPriority.indexOf(dimA) - dimensionPriority.indexOf(dimB);
+    });
+  
+  // Total slides = parsed sections + 1 summary slide (summary at the END)
+  const totalSlides = sections.length + 1;
+  
+  // Navigation functions
+  const nextSlide = () => setCurrentSlide(prev => Math.min(prev + 1, totalSlides - 1));
+  const prevSlide = () => setCurrentSlide(prev => Math.max(prev - 1, 0));
+  const goToSlide = (idx) => setCurrentSlide(idx);
+  
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+  
+  // Touch swipe handling
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  
+  const handleTouchEnd = (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+  };
+  
+  // Download summary as PNG
+  const downloadSummary = async () => {
+    if (!summaryRef.current) return;
+    try {
+      const canvas = await html2canvas(summaryRef.current, {
+        backgroundColor: '#0a0a14',
+        scale: 2,
+        useCORS: true
+      });
+      const link = document.createElement('a');
+      const filename = firstName 
+        ? `${firstName}-${primaryArchetype?.name?.replace(/\s+/g, '-')}-report.png`
+        : `${primaryArchetype?.name?.replace(/\s+/g, '-')}-report.png`;
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (err) {
+      console.error('Download failed:', err);
+      alert('Download failed. Please try again.');
+    }
+  };
+  
+  // Render content with markdown parsing
+  const renderContent = (content) => {
+    if (!content) return null;
+    return content.split('\n').map((line, idx) => {
+      if (line.startsWith('### ')) {
+        return <h4 key={idx} className="slide-subheader">{line.replace('### ', '')}</h4>;
+      }
+      if (line.startsWith('---')) {
+        return <hr key={idx} className="slide-divider" />;
+      }
+      if (line.startsWith('- ')) {
+        return <li key={idx} className="slide-list-item">{line.replace('- ', '')}</li>;
+      }
+      if (line.trim() === '') return null;
+      const boldParsed = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      return <p key={idx} dangerouslySetInnerHTML={{ __html: boldParsed }} />;
+    });
+  };
+  
+  // Section icons - letter/report focused
+  const sectionIcons = ['✉️', '🧠', '💫', '🌗', '🎁'];
+  
+  // Personalized greeting
+  const greeting = firstName ? `${firstName}, ` : '';
+  
+  return (
+    <div 
+      className="report-slideshow"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Slide Navigation Dots */}
+      <div className="slide-dots">
+        {Array.from({ length: totalSlides }).map((_, idx) => (
+          <button
+            key={idx}
+            className={`slide-dot ${currentSlide === idx ? 'active' : ''}`}
+            onClick={() => goToSlide(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
+      </div>
+      
+      {/* Slides Container */}
+      <div className="slides-container">
+        {/* Content Slides */}
+        {sections.map((section, idx) => (
+          <div 
+            key={idx}
+            className={`slide ${currentSlide === idx ? 'active' : ''} ${currentSlide > idx ? 'prev' : ''}`}
+          >
+            <div className="slide-header">
+              <span className="slide-icon">{sectionIcons[idx] || '✧'}</span>
+              <span className="slide-number">Section {idx + 1} of {totalSlides}</span>
+            </div>
+            <h3 className="slide-title">
+              {idx === 0 && greeting}{section.title}
+            </h3>
+            <div className="slide-content">
+              {renderContent(section.content)}
+            </div>
+          </div>
+        ))}
+        
+        {/* Summary Slide with Chart - LAST SLIDE */}
+        <div 
+          className={`slide summary-slide ${currentSlide === sections.length ? 'active' : ''} ${currentSlide > sections.length ? 'prev' : ''}`}
+        >
+          <div className="slide-header">
+            <span className="slide-icon">📊</span>
+            <span className="slide-number">Your Profile Summary</span>
+          </div>
+          
+          {/* Share & Download Actions at TOP */}
+          <div className="summary-actions-top">
+            <button 
+              className="summary-share-btn"
+              onClick={() => {
+                const shareText = `I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: https://quiz.marquisdemayfair.com`;
+                if (navigator.share) {
+                  navigator.share({ title: 'My BDSM Archetype', text: shareText });
+                } else {
+                  navigator.clipboard.writeText(shareText);
+                  alert('Copied to clipboard!');
+                }
+              }}
+            >
+              Share Result
+            </button>
+            <button className="summary-download-btn" onClick={downloadSummary}>
+              Download
+            </button>
+          </div>
+          
+          <div ref={summaryRef} className="summary-content-compact">
+            <div className="summary-archetype-compact">
+              <span className="summary-label">You are</span>
+              <h4 className="summary-archetype-name">{primaryArchetype?.name}</h4>
+            </div>
+            
+            {/* Compact Bar Chart - Top 5 only */}
+            <div className="summary-chart-compact">
+              {sortedScores.slice(0, 5).map(([dimension, score], index) => {
+                const colors = ['#f6c541', '#d4af37', '#7cb342', '#059669', '#0891b2'];
+                return (
+                  <div key={dimension} className="summary-bar-compact">
+                    <div className="summary-bar-info">
+                      <span className="summary-bar-name">{dimensions[dimension]?.name}</span>
+                      <span className="summary-bar-value">{score}%</span>
+                    </div>
+                    <div className="summary-bar-track-compact">
+                      <div 
+                        className="summary-bar-fill"
+                        style={{ width: `${score}%`, backgroundColor: colors[index] }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Navigation Arrows */}
+      <div className="slide-nav">
+        <button 
+          className="slide-nav-btn prev"
+          onClick={prevSlide}
+          disabled={currentSlide === 0}
+        >
+          ← Previous
+        </button>
+        <button 
+          className="slide-nav-btn next"
+          onClick={nextSlide}
+          disabled={currentSlide === totalSlides - 1}
+        >
+          Next →
+        </button>
+      </div>
+    </div>
+  );
 };
 
 // ============================================================================
@@ -1204,12 +1497,21 @@ export default function MarquisPersonaTest() {
   const [showAdmin, setShowAdmin] = useState(false);
   const [editableQuestions, setEditableQuestions] = useState(ORIGINAL_QUESTIONS);
   const [furthestQuestion, setFurthestQuestion] = useState(0); // Track furthest point reached
+  const [videoHasPlayed, setVideoHasPlayed] = useState(false); // Track if archetype video has played
+  const [reportVideoHasPlayed, setReportVideoHasPlayed] = useState(false); // Track if report page video has played
 
   // Shuffle questions on mount for validity
   useEffect(() => {
     const shuffled = [...editableQuestions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
   }, [editableQuestions]);
+
+  // Check for /admin path on mount
+  useEffect(() => {
+    if (window.location.pathname === '/admin') {
+      setShowAdmin(true);
+    }
+  }, []);
 
   // Timer for AI generation progress with status messages
   useEffect(() => {
@@ -1283,11 +1585,26 @@ export default function MarquisPersonaTest() {
     return normalized;
   }, [answers, shuffledQuestions]);
 
-  // Determine archetypes from scores
+  // Determine archetypes from scores with deterministic tie-breaking
   const determineArchetypes = useCallback((scores) => {
-    const sorted = Object.entries(scores)
-      .filter(([dim]) => DIMENSIONS[dim]) // Only valid dimensions
-      .sort(([,a], [,b]) => b - a);
+    // Get dimension priority order from DIMENSIONS declaration
+    // Earlier = higher priority (dominant traits before submissive)
+    const dimensionPriority = Object.keys(DIMENSIONS);
+    
+    const entries = Object.entries(scores)
+      .filter(([dim]) => DIMENSIONS[dim]); // Only valid dimensions
+    
+    // Sort with deterministic tie-breaking:
+    // 1. Primary: highest score wins
+    // 2. Tie-breaker: declaration order in DIMENSIONS (earlier = higher priority)
+    const sorted = entries.sort(([dimA, scoreA], [dimB, scoreB]) => {
+      // Primary comparison: higher score wins
+      if (scoreB !== scoreA) {
+        return scoreB - scoreA;
+      }
+      // Tie: use declaration order (lower index = higher priority)
+      return dimensionPriority.indexOf(dimA) - dimensionPriority.indexOf(dimB);
+    });
     
     if (sorted.length < 2) return { primary: null, secondary: null };
     
@@ -1431,7 +1748,7 @@ export default function MarquisPersonaTest() {
           window.grecaptcha.ready(async () => {
             try {
               const token = await window.grecaptcha.execute(
-                process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LcXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LcSjTgsAAAAABooLz8kwjbbHFy8uVDbnnMlFrEb',
                 { action: 'submit_quiz' }
               );
               resolve(token);
@@ -1976,69 +2293,64 @@ Where:
         <div className="landing-page">
           <div className="ornate-border">
             <div className="landing-content">
-              <div className="crest">
-                <img src="/logo.png" alt="Marquis de Mayfair" className="crest-logo" />
+              <div className="header-logo-container">
+                <img src="/header-logo.png" alt="Marquis de Mayfair" className="header-logo" />
               </div>
               
               <h1 className="main-title">
-                <span className="title-pre">The</span>
-                <span className="title-main">Marquis de Mayfair</span>
-                <span className="title-post">Persona Assessment</span>
+                <span className="title-main">BDSM Persona Assessment</span>
               </h1>
+              
+              <div className="intro-text">
+                <p className="intro-line">Discover your true BDSM persona.</p>
+                <p className="intro-line">Understand how you give power, take control, or surrender.</p>
+                <p className="intro-line intro-spacer"></p>
+                <p className="intro-line">This assessment reveals the patterns behind your desires.</p>
+                <p className="intro-line">Powered by psychology, AI scoring, and deep BDSM expertise</p>
+              </div>
               
               <div className="subtitle">
                 <span className="line"></span>
-                <span className="text">A Psychometric Exploration of Intimate Power</span>
+                <span className="text">Not labels. Not fantasies. Your real erotic psychology.</span>
                 <span className="line"></span>
               </div>
-              
-              <p className="intro-text">
-                The most accurate way to discover your true BDSM personality and uncover insights 
-                about yourself you never knew. Powered by peer-reviewed psychology and AI, the Marquis 
-                de Mayfair assessment is unlike anything you've experienced before.
-              </p>
               
               <button className="cta-button" onClick={() => {
                 trackEvent('quiz_start', { event_category: 'Quiz' });
                 setPhase('assessment');
               }}>
-                <span className="button-text">Begin Your Revelation</span>
+                <span className="button-text">Start the Assessment</span>
                 <span className="button-ornament">→</span>
               </button>
+              <p className="cta-microcopy">Free. Private. Takes a few minutes.</p>
               
               <div className="features">
                 <div className="feature">
-                  <span className="feature-text">Original Questions and Methodology</span>
+                  <span className="feature-title">Original Questions and Methodology</span>
+                  <span className="feature-subtitle">No recycled quizzes. All new academic framework</span>
                 </div>
                 <div className="feature">
-                  <span className="feature-text">No email needed, results are free</span>
+                  <span className="feature-title">AI-Powered Individual Report</span>
+                  <span className="feature-subtitle">A <strong>free</strong> 1,500-word analysis written uniquely for you</span>
                 </div>
                 <div className="feature">
-                  <span className="feature-text">AI-Powered Individual Report</span>
+                  <span className="feature-title">BDSM Equipment Matching</span>
+                  <span className="feature-subtitle">Recommendations aligned to your natural persona</span>
                 </div>
                 <div className="feature">
-                  <span className="feature-text">BDSM Equipment Matching</span>
+                  <span className="feature-title">Meet Your Historical & Mythological Counterpart</span>
+                  <span className="feature-subtitle">Discover the archetype that controls your inner self</span>
                 </div>
-                <div className="feature">
-                  <span className="feature-text">Meet your Historical & Mythological BDSM ancestor!</span>
-                </div>
-              </div>
-              
-              <div className="secondary-actions">
-                <button className="text-link" onClick={() => setPhase('methodology')}>
-                  View Scientific Methodology
-                </button>
-                <button className="text-link admin-link" onClick={() => setShowAdmin(true)}>
-                  Admin Panel
-                </button>
               </div>
               
               <p className="disclaimer">
                 This assessment is intended for adults 18+ exploring consensual power dynamics.
                 All expressions measured are valid. There are no wrong answers, only authentic ones.
                 <br /><br />
-                <strong>Original questions developed from peer-reviewed academic research using weighted Likert scales, 
-                factor analysis, and validated psychometric constructs. Not derived from any existing assessment.</strong>
+                Original questions developed from peer-reviewed <button className="text-link-inline" onClick={() => setPhase('methodology')}>academic research</button> using weighted Likert scales, 
+                factor analysis, and validated psychometric constructs. Not derived from any existing assessment.
+                <br /><br />
+                Copyright © 2025 Marquis de Mayfair Ltd. Registered in the UK under company number 15762981
               </p>
             </div>
           </div>
@@ -2167,9 +2479,16 @@ Where:
 
   // RESULTS PHASE (Statistical Summary)
   if (phase === 'results') {
+    // Get dimension priority order from DIMENSIONS declaration
+    const dimensionPriority = Object.keys(DIMENSIONS);
     const sortedScores = Object.entries(scores)
       .filter(([dim]) => DIMENSIONS[dim])
-      .sort(([,a], [,b]) => b - a);
+      .sort(([dimA, scoreA], [dimB, scoreB]) => {
+        // Primary: higher score wins
+        if (scoreB !== scoreA) return scoreB - scoreA;
+        // Tie-breaker: declaration order (lower index = higher priority)
+        return dimensionPriority.indexOf(dimA) - dimensionPriority.indexOf(dimB);
+      });
 
     return (
       <div className="app-container">
@@ -2182,7 +2501,24 @@ Where:
           <div className="archetype-preview">
             <h2>Your Primary Archetype</h2>
             
-            {primaryArchetype?.image && (
+            {primaryArchetype?.video && (
+              <div className="archetype-video-container">
+                <video 
+                  autoPlay={!videoHasPlayed}
+                  muted 
+                  playsInline
+                  className="archetype-video"
+                  onEnded={(e) => { 
+                    e.target.currentTime = 0; 
+                    setVideoHasPlayed(true);
+                  }}
+                >
+                  <source src={primaryArchetype.video} type="video/mp4" />
+                </video>
+              </div>
+            )}
+            
+            {!primaryArchetype?.video && primaryArchetype?.image && (
               <div className="archetype-image-container">
                 <img 
                   src={primaryArchetype.image} 
@@ -2283,62 +2619,86 @@ Where:
 
           <div className="unlock-section">
             <div className="unlock-card">
-              <h2>Unlock Your Full Persona</h2>
-              <p>Receive a detailed <strong>FREE</strong> personalised report about your sexual archetype! Based on your individual responses with historical parallels, mythological connections, and your ideal BDSM product recommendations from the Marquis's private collection.</p>
+              <h2>FREE 1,500-Word Personalised Sexual Archetype Report</h2>
+              <p className="unlock-tagline">Written for you. Decoded by AI. Curated by the Marquis.</p>
               
-              <div className="discount-callout">
-                <span className="discount-badge">EXCLUSIVE OFFER</span>
-                <p className="discount-text">Get <strong>10% OFF</strong> your next order with code <strong>PERSONA10</strong></p>
+              <h3 className="unlock-intro">You are not random. Your desires follow patterns.<br />This free 1,500-word report reveals exactly how yours are wired.</h3>
+              
+              <div className="unlock-benefits">
+                <h4>What you'll receive</h4>
+                <ul>
+                  <li>A full AI-scored analysis of your sexual archetype, based on your answers</li>
+                  <li>Clear breakdown of your dominant traits, secondary influences, and hidden drives</li>
+                  <li>Desire mapped like a horoscope. Tendencies, cycles, and repeat behaviours revealed</li>
+                  <li>Insights powered by our proprietary BDSM knowledge base and behavioural frameworks</li>
+                  <li>Historical and mythological parallels that mirror your power dynamic</li>
+                  <li>Explanation of how you seek control, surrender, intimacy, or tension</li>
+                  <li>Compatibility signals. What draws you in. What keeps you obsessed</li>
+                  <li>Personalised BDSM product recommendations aligned to your archetype</li>
+                  <li>Exclusive private offers tailored specifically to your profile</li>
+                  <li>Curated and interpreted by the Marquis</li>
+                </ul>
               </div>
               
               {!emailSubmitted ? (
-                <form onSubmit={handleEmailSubmit} className="email-form">
-                  {submitError && (
-                    <div className="submit-error">
-                      <span className="error-icon">⚠</span>
-                      <span>{submitError}</span>
+                <div className="email-capture-section">
+                  <h4 className="email-cta">Enter your email to receive your free report</h4>
+                  <form onSubmit={handleEmailSubmit} className="email-form">
+                    {submitError && (
+                      <div className="submit-error">
+                        <span className="error-icon">⚠</span>
+                        <span>{submitError}</span>
+                      </div>
+                    )}
+                    <div className="email-inputs">
+                      <input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="First name (optional)"
+                        className="email-input name-input"
+                        disabled={isSubmitting}
+                      />
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setSubmitError(''); // Clear error when email changes
+                        }}
+                        placeholder="Enter your email address"
+                        className="email-input"
+                        required
+                        disabled={isSubmitting}
+                      />
                     </div>
-                  )}
-                  <input
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="First name (optional)"
-                    className="email-input name-input"
-                    disabled={isSubmitting}
-                  />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setSubmitError(''); // Clear error when email changes
-                    }}
-                    placeholder="Enter your email address"
-                    className="email-input"
-                    required
-                    disabled={isSubmitting}
-                  />
-                  <label className="opt-in-label">
-                    <input
-                      type="checkbox"
-                      checked={marketingOptIn}
-                      onChange={(e) => setMarketingOptIn(e.target.checked)}
-                      className="opt-in-checkbox"
-                      required
-                      disabled={isSubmitting}
-                    />
-                    <span>I agree the Marquis de Mayfair may contact me with my individual report and relevant offers. <em>*Unsubscribe any time.</em></span>
-                  </label>
-                  <button 
-                    type="submit" 
-                    className={`unlock-button gold-shine ${!marketingOptIn || isSubmitting ? 'disabled' : ''}`} 
-                    disabled={!marketingOptIn || isSubmitting}
-                  >
-                    <span>{isSubmitting ? 'Verifying...' : 'Reveal My Archetype'}</span>
-                  </button>
+                    <label className="opt-in-label">
+                      <input
+                        type="checkbox"
+                        checked={marketingOptIn}
+                        onChange={(e) => setMarketingOptIn(e.target.checked)}
+                        className="opt-in-checkbox"
+                        required
+                        disabled={isSubmitting}
+                      />
+                      <span>I agree the Marquis de Mayfair may contact me with my individual report and relevant offers. <em>*Unsubscribe any time.</em></span>
+                    </label>
+                    <button 
+                      type="submit" 
+                      className={`unlock-button gold-shine ${!marketingOptIn || isSubmitting ? 'disabled' : ''}`} 
+                      disabled={!marketingOptIn || isSubmitting}
+                    >
+                      <span>{isSubmitting ? 'Verifying...' : 'Reveal My Archetype'}</span>
+                    </button>
+                  </form>
+                  
+                  <div className="discount-callout">
+                    <span className="discount-badge">EXCLUSIVE OFFER</span>
+                    <p className="discount-text">Contains a <strong>10% discount code</strong> for Marquis de Mayfair</p>
+                  </div>
+                  
                   <p className="recaptcha-notice">Protected by reCAPTCHA</p>
-                </form>
+                </div>
               ) : (
                 <div className="generating-notice">
                   <div className="generating-spinner"></div>
@@ -2363,7 +2723,23 @@ Where:
       <div className="app-container">
         <div className="archetype-page">
           <div className="archetype-header">
-            {primaryArchetype?.image && (
+            {primaryArchetype?.video && (
+              <div className="archetype-video-container archetype-page-video">
+                <video 
+                  autoPlay={!reportVideoHasPlayed}
+                  muted 
+                  playsInline
+                  className="archetype-video"
+                  onEnded={(e) => { 
+                    e.target.currentTime = 0; 
+                    setReportVideoHasPlayed(true);
+                  }}
+                >
+                  <source src={primaryArchetype.video} type="video/mp4" />
+                </video>
+              </div>
+            )}
+            {!primaryArchetype?.video && primaryArchetype?.image && (
               <div className="archetype-image-container archetype-page-image">
                 <img 
                   src={primaryArchetype.image} 
@@ -2402,32 +2778,15 @@ Where:
                 </div>
               </div>
             ) : (
-              <div className="analysis-text rich-report">
-                {(aiAnalysis || primaryArchetype?.coldReading || '').split('\n').map((line, idx) => {
-                  // Handle markdown-style headers
-                  if (line.startsWith('## ')) {
-                    return <h3 key={idx} className="report-section-header">{line.replace('## ', '')}</h3>;
-                  }
-                  if (line.startsWith('### ')) {
-                    return <h4 key={idx} className="report-subsection-header">{line.replace('### ', '')}</h4>;
-                  }
-                  if (line.startsWith('# ')) {
-                    return <h2 key={idx} className="report-main-header">{line.replace('# ', '')}</h2>;
-                  }
-                  if (line.startsWith('---')) {
-                    return <hr key={idx} className="report-divider" />;
-                  }
-                  if (line.startsWith('- ')) {
-                    return <li key={idx} className="report-list-item">{line.replace('- ', '')}</li>;
-                  }
-                  if (line.trim() === '') {
-                    return null;
-                  }
-                  // Bold text handling
-                  const boldParsed = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                  return <p key={idx} dangerouslySetInnerHTML={{ __html: boldParsed }} />;
-                })}
-              </div>
+              <ReportSlideshow
+                aiAnalysis={aiAnalysis || primaryArchetype?.coldReading || ''}
+                firstName={firstName}
+                primaryArchetype={primaryArchetype}
+                secondaryArchetype={secondaryArchetype}
+                scores={scores}
+                dimensions={DIMENSIONS}
+                email={email}
+              />
             )}
           </div>
 
@@ -2483,17 +2842,6 @@ Where:
               >
                 Shop Now & Save 10%
               </a>
-            </div>
-          </div>
-
-          <div className="secondary-archetype">
-            <h3>Secondary Expression</h3>
-            <div className="secondary-card">
-              <span className="secondary-icon">{secondaryArchetype?.icon}</span>
-              <div className="secondary-info">
-                <h4>{secondaryArchetype?.name}</h4>
-                <p>{secondaryArchetype?.title}</p>
-              </div>
             </div>
           </div>
 

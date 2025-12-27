@@ -159,6 +159,21 @@ body {
   filter: drop-shadow(0 0 20px rgba(246, 197, 65, 0.3));
 }
 
+/* Header logo for landing page */
+.header-logo-container {
+  margin-bottom: var(--space-lg);
+  display: flex;
+  justify-content: center;
+}
+
+.header-logo {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(246, 197, 65, 0.3));
+}
+
 .crest-icon {
   font-size: 3rem;
   color: var(--gold-bright);
@@ -237,25 +252,38 @@ body {
   margin: 0 auto var(--space-lg);
 }
 
+.intro-line {
+  margin: 0;
+  padding: 0;
+}
+
+.intro-spacer {
+  height: 0.8em;
+}
+
+.intro-emphasis {
+  font-style: italic;
+  color: var(--gold-bright);
+}
+
 .features {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-md);
   margin-top: var(--space-xl);
   margin-bottom: var(--space-lg);
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .feature {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-sm);
-}
-
-.feature::before {
-  content: '•';
-  color: var(--gold-bright);
-  font-size: 1.2rem;
+  text-align: center;
+  gap: 0.25rem;
 }
 
 .feature-icon {
@@ -268,6 +296,22 @@ body {
   font-weight: 500;
   color: var(--cream);
   letter-spacing: 0.05em;
+}
+
+.feature-title {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gold-bright);
+  letter-spacing: 0.03em;
+}
+
+.feature-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--cream-dark);
+  letter-spacing: 0.02em;
 }
 
 .cta-button {
@@ -287,6 +331,15 @@ body {
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+}
+
+.cta-microcopy {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--cream-dark);
+  margin-top: var(--space-sm);
+  letter-spacing: 0.05em;
+  opacity: 0.8;
 }
 
 .cta-button::before {
@@ -339,6 +392,24 @@ body {
 }
 
 .text-link:hover {
+  color: var(--gold-bright);
+}
+
+.text-link-inline {
+  background: none;
+  border: none;
+  color: var(--gold-muted);
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+
+.text-link-inline:hover {
   color: var(--gold-bright);
 }
 
@@ -848,10 +919,26 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--space-md);
-  background: linear-gradient(135deg, var(--burgundy-deep), var(--purple-muted));
-  border: 1px solid var(--gold-muted);
+  /* Gold plaque style */
+  background: linear-gradient(180deg, 
+    #d4af37 0%, 
+    #c9a227 15%, 
+    #b8942a 30%, 
+    #a88725 50%, 
+    #b8942a 70%, 
+    #c9a227 85%, 
+    #d4af37 100%
+  );
+  border: 3px solid #8b7355;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3);
   padding: var(--space-md) var(--space-lg);
   text-align: center;
+  border-radius: 4px;
+  position: relative;
 }
 
 /* Archetype Image */
@@ -875,15 +962,36 @@ body {
   max-width: 500px;
 }
 
+/* Video container styling */
+.archetype-video-container {
+  margin-bottom: var(--space-lg);
+  display: flex;
+  justify-content: center;
+}
+
+.archetype-video {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 2px solid var(--gold-muted);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Larger video for the full archetype report page */
+.archetype-page-video .archetype-video {
+  max-width: 500px;
+}
+
 .archetype-share-text {
   font-family: var(--font-elegant);
   font-style: italic;
-  color: var(--cream-muted);
-  font-size: 1rem;
-  max-width: 400px;
-  margin: var(--space-md) auto;
+  color: var(--cream);
+  font-size: 1.25rem;
+  max-width: 500px;
+  margin: var(--space-lg) auto;
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 /* Social Share Buttons */
@@ -949,31 +1057,48 @@ body {
 
 .archetype-info h3 {
   font-family: var(--font-display);
-  font-size: 1.3rem;
-  color: var(--gold-bright);
+  font-size: 1.4rem;
+  /* Engraved text effect on gold */
+  color: #3d3220;
+  text-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.5),
+    0 -1px 0 rgba(0, 0, 0, 0.3);
   margin-bottom: 0.25rem;
+  letter-spacing: 0.05em;
 }
 
 .archetype-info p {
   font-family: var(--font-elegant);
-  font-size: 0.95rem;
-  color: var(--cream-dark);
+  font-size: 1rem;
+  /* Engraved subtitle */
+  color: #4a3c2a;
+  text-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.4);
   font-style: italic;
 }
 
 .unlock-section {
-  display: flex;
-  justify-content: center;
+  width: 100%;
 }
 
 .unlock-card {
   background: linear-gradient(135deg, var(--black-soft), var(--black-rich));
   border: 2px solid var(--gold-muted);
-  padding: var(--space-lg);
-  max-width: 500px;
+  padding: var(--space-xl);
   text-align: center;
   position: relative;
+  /* Flexbox for element ordering */
+  display: flex;
+  flex-direction: column;
 }
+
+/* Order elements: title, tagline, intro, email form, discount, then bullets */
+.unlock-card h2 { order: 1; }
+.unlock-card .unlock-tagline { order: 2; }
+.unlock-card .unlock-intro { order: 3; }
+.unlock-card .email-capture-section { order: 4; }
+.unlock-card .discount-callout { order: 5; }
+.unlock-card .unlock-benefits { order: 6; }
 
 .unlock-card::before {
   content: '✧';
@@ -989,10 +1114,69 @@ body {
 
 .unlock-card h2 {
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: var(--gold-bright);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   margin-bottom: var(--space-sm);
+  line-height: 1.3;
+}
+
+.unlock-tagline {
+  font-family: var(--font-elegant);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--cream);
+  margin-bottom: var(--space-md);
+}
+
+.unlock-intro {
+  font-family: var(--font-elegant);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.6;
+  margin-bottom: var(--space-lg);
+}
+
+.unlock-benefits {
+  text-align: left;
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+  padding: var(--space-md);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.unlock-benefits h4 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+
+.unlock-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.unlock-benefits li {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--cream-dark);
+  line-height: 1.6;
+  padding: var(--space-xs) 0;
+  padding-left: var(--space-md);
+  position: relative;
+}
+
+.unlock-benefits li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--gold-bright);
 }
 
 .unlock-card > p {
@@ -1005,11 +1189,11 @@ body {
 
 /* Discount Callout */
 .discount-callout {
-  background: linear-gradient(135deg, rgba(246, 197, 65, 0.15), rgba(246, 197, 65, 0.05));
-  border: 2px solid var(--gold-bright);
+  background: linear-gradient(135deg, rgba(246, 197, 65, 0.08), rgba(246, 197, 65, 0.02));
+  border: 1px solid var(--gold-muted);
   border-radius: 8px;
-  padding: var(--space-md);
-  margin-bottom: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  margin-top: var(--space-md);
   text-align: center;
 }
 
@@ -1037,6 +1221,34 @@ body {
   color: var(--gold-bright);
   font-size: 1.4rem;
   font-weight: 700;
+  font-variant-numeric: lining-nums;
+  letter-spacing: 0.05em;
+}
+
+/* Email Capture Section - High Conversion Design */
+.email-capture-section {
+  background: linear-gradient(135deg, rgba(246, 197, 65, 0.12), rgba(246, 197, 65, 0.04));
+  border: 2px solid var(--gold-bright);
+  border-radius: 12px;
+  padding: var(--space-lg);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.email-cta {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--gold-bright);
+  text-align: center;
+  margin-bottom: var(--space-md);
+  letter-spacing: 0.05em;
+}
+
+.email-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
 
 .email-form {
@@ -1474,6 +1686,387 @@ body {
 }
 
 /* ============================================================================
+   REPORT SLIDESHOW
+   ============================================================================ */
+
+.report-slideshow {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  background: var(--black-soft);
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Slide Navigation Dots */
+.slide-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.slide-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.slide-dot:hover {
+  border-color: var(--gold-bright);
+}
+
+.slide-dot.active {
+  background: var(--gold-bright);
+  border-color: var(--gold-bright);
+  transform: scale(1.2);
+}
+
+/* Slides Container */
+.slides-container {
+  position: relative;
+  min-height: 450px;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: var(--space-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(20px);
+  transition: all 0.4s ease;
+}
+
+.slide.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.slide.prev {
+  transform: translateX(-20px);
+}
+
+/* Slide Header */
+.slide-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--gold-dark);
+}
+
+.slide-icon {
+  font-size: 1.5rem;
+}
+
+.slide-number {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--gold-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Slide Title */
+.slide-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--gold-bright);
+  margin-bottom: var(--space-md);
+  line-height: 1.3;
+}
+
+/* Slide Content */
+.slide-content {
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: var(--space-sm);
+}
+
+.slide-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.slide-content::-webkit-scrollbar-track {
+  background: var(--black-rich);
+}
+
+.slide-content::-webkit-scrollbar-thumb {
+  background: var(--gold-dark);
+  border-radius: 2px;
+}
+
+.slide-content p {
+  font-family: var(--font-elegant);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--cream-dark);
+  margin-bottom: var(--space-md);
+}
+
+.slide-content p strong {
+  color: var(--gold-bright);
+}
+
+.slide-subheader {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--cream);
+  margin: var(--space-md) 0 var(--space-sm);
+}
+
+.slide-divider {
+  border: none;
+  border-top: 1px solid var(--gold-dark);
+  margin: var(--space-md) 0;
+}
+
+.slide-list-item {
+  font-family: var(--font-elegant);
+  font-size: 1rem;
+  color: var(--cream-dark);
+  margin-left: var(--space-lg);
+  margin-bottom: var(--space-xs);
+  list-style-type: disc;
+}
+
+/* Navigation Arrows */
+.slide-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid var(--gold-dark);
+}
+
+.slide-nav-btn {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--gold-bright);
+  background: transparent;
+  border: 1px solid var(--gold-muted);
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.slide-nav-btn:hover:not(:disabled) {
+  background: var(--gold-bright);
+  color: var(--black-deep);
+}
+
+.slide-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Summary Slide - Compact Design */
+.summary-actions-top {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.summary-actions-top .summary-share-btn,
+.summary-actions-top .summary-download-btn {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.03em;
+}
+
+.summary-actions-top .summary-share-btn {
+  background: var(--gold-bright);
+  color: var(--black-deep);
+  border: none;
+}
+
+.summary-actions-top .summary-share-btn:hover {
+  background: var(--gold-pale);
+}
+
+.summary-actions-top .summary-download-btn {
+  background: transparent;
+  color: var(--gold-muted);
+  border: 1px solid var(--gold-dark);
+}
+
+.summary-actions-top .summary-download-btn:hover {
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+}
+
+.summary-content-compact {
+  background: linear-gradient(180deg, var(--black-rich), var(--black-soft));
+  padding: var(--space-md);
+  border-radius: 8px;
+  border: 1px solid var(--gold-dark);
+}
+
+.summary-archetype-compact {
+  text-align: center;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--gold-dark);
+}
+
+.summary-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--gold-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.summary-archetype-name {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--gold-bright);
+  margin: 0;
+}
+
+/* Compact Bar Chart - 5 bars */
+.summary-chart-compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.summary-bar-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summary-bar-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-bar-name {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--cream-dark);
+}
+
+.summary-bar-value {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--gold-bright);
+}
+
+.summary-bar-track-compact {
+  height: 8px;
+  background: var(--black-deep);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.summary-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+/* Mobile Responsive Slideshow */
+@media (max-width: 768px) {
+  .report-slideshow {
+    min-height: 400px;
+  }
+  
+  .slides-container {
+    min-height: 350px;
+  }
+  
+  .slide {
+    padding: var(--space-md);
+  }
+  
+  .slide-title {
+    font-size: 1.3rem;
+  }
+  
+  .slide-content {
+    max-height: 280px;
+  }
+  
+  .slide-content p {
+    font-size: 0.95rem;
+  }
+  
+  .summary-archetype-name {
+    font-size: 1.2rem;
+  }
+  
+  .slide-nav {
+    padding: var(--space-sm) var(--space-md);
+  }
+  
+  .slide-nav-btn {
+    font-size: 0.8rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  .summary-actions-top {
+    gap: var(--space-xs);
+  }
+  
+  .summary-actions-top .summary-share-btn,
+  .summary-actions-top .summary-download-btn {
+    font-size: 0.75rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .slide-dots {
+    padding: var(--space-sm);
+  }
+  
+  .slide-dot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .slide-title {
+    font-size: 1.1rem;
+  }
+  
+  .summary-bar-name {
+    font-size: 0.65rem;
+  }
+  
+  .summary-bar-value {
+    font-size: 0.7rem;
+  }
+  
+  .summary-content-compact {
+    padding: var(--space-sm);
+  }
+}
+
+/* ============================================================================
    PRODUCTS SECTION
    ============================================================================ */
 
@@ -1629,6 +2222,7 @@ body {
   color: var(--gold-bright);
   letter-spacing: 0.2em;
   font-weight: 700;
+  font-variant-numeric: lining-nums;
 }
 
 .copy-code-btn {
@@ -2398,6 +2992,10 @@ body {
     padding: var(--space-lg);
   }
   
+  .header-logo {
+    max-width: 320px;
+  }
+  
   .features {
     gap: var(--space-xs);
   }
@@ -2432,6 +3030,41 @@ body {
   /* Assessment logo mobile */
   .assessment-logo img {
     height: 120px;
+  }
+  
+  /* Unlock section mobile */
+  .unlock-card {
+    padding: var(--space-lg);
+  }
+  
+  .unlock-card h2 {
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+  
+  .unlock-tagline {
+    font-size: 1rem;
+  }
+  
+  .unlock-benefits {
+    padding: var(--space-sm);
+  }
+  
+  .unlock-benefits li {
+    font-size: 0.9rem;
+  }
+  
+  /* Email capture mobile */
+  .email-capture-section {
+    padding: var(--space-md);
+  }
+  
+  .email-cta {
+    font-size: 1rem;
+  }
+  
+  .unlock-intro {
+    font-size: 1.1rem;
   }
   
   /* Progress bar mobile */
@@ -2524,6 +3157,12 @@ body {
   /* Archetype image mobile */
   .archetype-image {
     max-width: 200px;
+    margin: 0 auto var(--space-md);
+  }
+  
+  /* Archetype video mobile */
+  .archetype-video {
+    max-width: 280px;
     margin: 0 auto var(--space-md);
   }
   
@@ -2662,5 +3301,82 @@ body {
   .share-button {
     width: 100%;
     justify-content: center;
+  }
+  
+  /* MOBILE ONLY: Expand content width - reduce outer padding */
+  .landing-page,
+  .results-page,
+  .assessment-page,
+  .methodology-page,
+  .archetype-page {
+    padding: var(--space-xs);
+  }
+  
+  .ornate-border {
+    max-width: 100%;
+  }
+  
+  .landing-content {
+    padding: var(--space-md);
+  }
+  
+  .results-page,
+  .archetype-page {
+    max-width: 100%;
+  }
+  
+  /* MOBILE ONLY: Reorder email section - form before bullets */
+  .unlock-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    border: none;
+    background: linear-gradient(135deg, var(--black-soft), var(--black-rich));
+  }
+  
+  .unlock-card h2 {
+    order: 1;
+    font-size: 1.1rem;
+  }
+  
+  .unlock-card .unlock-tagline {
+    order: 2;
+    font-size: 0.9rem;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .unlock-card .unlock-intro {
+    order: 3;
+    font-size: 1rem;
+    margin-bottom: var(--space-md);
+  }
+  
+  /* Email form comes BEFORE bullets on mobile */
+  .unlock-card .email-capture-section {
+    order: 4;
+    margin-bottom: var(--space-md);
+  }
+  
+  .unlock-card .discount-callout {
+    order: 5;
+    margin-bottom: var(--space-md);
+  }
+  
+  /* Bullets moved to bottom on mobile */
+  .unlock-card .unlock-benefits {
+    order: 6;
+    margin-top: var(--space-sm);
+  }
+  
+  .unlock-card::before {
+    display: none; /* Hide decorative star on mobile */
+  }
+  
+  .unlock-benefits h4 {
+    font-size: 0.95rem;
+  }
+  
+  .unlock-benefits li {
+    font-size: 0.85rem;
   }
 }

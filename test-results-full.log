@@ -1,0 +1,177 @@
+Starting quiz validation tests...
+
+Progress: 1/200 tests | Correct: 1 | Incorrect: 0 | Current: Test #1Progress: 2/200 tests | Correct: 2 | Incorrect: 0 | Current: Test #2
+❌ INCORRECT RESULT - Test #3
+   Expected Primary: apex
+   Actual Primary: shapeshifter
+   Top 3 Expected Scores: primal_hunter: 79, owner: 76, service: 75
+Progress: 3/200 tests | Correct: 2 | Incorrect: 1 | Current: Test #3Progress: 4/200 tests | Correct: 3 | Incorrect: 1 | Current: Test #4Progress: 5/200 tests | Correct: 4 | Incorrect: 1 | Current: Test #5Progress: 6/200 tests | Correct: 5 | Incorrect: 1 | Current: Test #6Progress: 7/200 tests | Correct: 6 | Incorrect: 1 | Current: Test #7Progress: 8/200 tests | Correct: 7 | Incorrect: 1 | Current: Test #8Progress: 9/200 tests | Correct: 8 | Incorrect: 1 | Current: Test #9Progress: 10/200 tests | Correct: 9 | Incorrect: 1 | Current: Test #10
+Progress: 10/200 tests | Correct: 9 | Incorrect: 1 | Current: Test #10
+Progress: 11/200 tests | Correct: 10 | Incorrect: 1 | Current: Test #11Progress: 12/200 tests | Correct: 11 | Incorrect: 1 | Current: Test #12Progress: 13/200 tests | Correct: 12 | Incorrect: 1 | Current: Test #13Progress: 14/200 tests | Correct: 13 | Incorrect: 1 | Current: Test #14Progress: 15/200 tests | Correct: 14 | Incorrect: 1 | Current: Test #15
+❌ INCORRECT RESULT - Test #16
+   Expected Primary: chrysalis
+   Actual Primary: guardian
+   Top 3 Expected Scores: rope_bottom: 71, switch: 68, property: 66
+Progress: 16/200 tests | Correct: 14 | Incorrect: 2 | Current: Test #16Progress: 17/200 tests | Correct: 15 | Incorrect: 2 | Current: Test #17
+❌ INCORRECT RESULT - Test #18
+   Expected Primary: apex
+   Actual Primary: acolyte
+   Top 3 Expected Scores: primal_hunter: 85, dependent: 81, exhibitionist: 78
+Progress: 18/200 tests | Correct: 15 | Incorrect: 3 | Current: Test #18Progress: 19/200 tests | Correct: 16 | Incorrect: 3 | Current: Test #19Progress: 20/200 tests | Correct: 17 | Incorrect: 3 | Current: Test #20
+Progress: 20/200 tests | Correct: 17 | Incorrect: 3 | Current: Test #20
+Progress: 21/200 tests | Correct: 18 | Incorrect: 3 | Current: Test #21Progress: 22/200 tests | Correct: 19 | Incorrect: 3 | Current: Test #22Progress: 23/200 tests | Correct: 20 | Incorrect: 3 | Current: Test #23Progress: 24/200 tests | Correct: 21 | Incorrect: 3 | Current: Test #24Progress: 25/200 tests | Correct: 22 | Incorrect: 3 | Current: Test #25Progress: 26/200 tests | Correct: 23 | Incorrect: 3 | Current: Test #26Progress: 27/200 tests | Correct: 24 | Incorrect: 3 | Current: Test #27Progress: 28/200 tests | Correct: 25 | Incorrect: 3 | Current: Test #28Progress: 29/200 tests | Correct: 26 | Incorrect: 3 | Current: Test #29Progress: 30/200 tests | Correct: 27 | Incorrect: 3 | Current: Test #30
+Progress: 30/200 tests | Correct: 27 | Incorrect: 3 | Current: Test #30
+Progress: 31/200 tests | Correct: 28 | Incorrect: 3 | Current: Test #31Progress: 32/200 tests | Correct: 29 | Incorrect: 3 | Current: Test #32Progress: 33/200 tests | Correct: 30 | Incorrect: 3 | Current: Test #33Progress: 34/200 tests | Correct: 31 | Incorrect: 3 | Current: Test #34
+❌ INCORRECT RESULT - Test #35
+   Expected Primary: weaver
+   Actual Primary: shapeshifter
+   Top 3 Expected Scores: rigger: 81, caregiver: 81, exhibitionist: 80
+Progress: 35/200 tests | Correct: 31 | Incorrect: 4 | Current: Test #35Progress: 36/200 tests | Correct: 32 | Incorrect: 4 | Current: Test #36Progress: 37/200 tests | Correct: 33 | Incorrect: 4 | Current: Test #37Progress: 38/200 tests | Correct: 34 | Incorrect: 4 | Current: Test #38Progress: 39/200 tests | Correct: 35 | Incorrect: 4 | Current: Test #39Progress: 40/200 tests | Correct: 36 | Incorrect: 4 | Current: Test #40
+Progress: 40/200 tests | Correct: 36 | Incorrect: 4 | Current: Test #40
+Progress: 41/200 tests | Correct: 37 | Incorrect: 4 | Current: Test #41Test 42: Could not match question at position 9, skipping
+Test 42: Could not match question at position 10, skipping
+Test 42: Could not match question at position 11, skipping
+Test 42: Could not match question at position 12, skipping
+Test 42: Could not match question at position 13, skipping
+Test 42: Could not match question at position 14, skipping
+Test 42: Could not match question at position 15, skipping
+Test 42: Could not match question at position 16, skipping
+Test 42: Could not match question at position 17, skipping
+Test 42: Could not match question at position 18, skipping
+Test 42: Could not match question at position 19, skipping
+Test 42: Could not match question at position 20, skipping
+Test 42: Could not match question at position 21, skipping
+Test 42: Could not match question at position 22, skipping
+Test 42: Could not match question at position 23, skipping
+Test 42: Could not match question at position 24, skipping
+Test 42: Could not match question at position 25, skipping
+Test 42: Could not match question at position 26, skipping
+Test 42: Could not match question at position 27, skipping
+Test 42: Could not match question at position 28, skipping
+Test 42: Could not match question at position 29, skipping
+Test 42: Could not match question at position 30, skipping
+Test 42: Could not match question at position 31, skipping
+Test 42: Could not match question at position 32, skipping
+Test 42: Could not match question at position 33, skipping
+Test 42: Could not match question at position 34, skipping
+Test 42: Could not match question at position 35, skipping
+Test 42: Could not match question at position 36, skipping
+Test 42: Could not match question at position 37, skipping
+Test 42: Could not match question at position 38, skipping
+Test 42: Could not match question at position 39, skipping
+Test 42: Could not match question at position 40, skipping
+Test 42: Could not match question at position 41, skipping
+Test 42: Could not match question at position 42, skipping
+Test 42: Could not match question at position 43, skipping
+Test 42: Could not match question at position 44, skipping
+Test 42: Could not match question at position 45, skipping
+Test 42: Could not match question at position 46, skipping
+Test 42: Could not match question at position 47, skipping
+Test 42: Could not match question at position 48, skipping
+Test 42: Could not match question at position 49, skipping
+Test 42: Could not match question at position 50, skipping
+Test 42: Could not match question at position 51, skipping
+Test 42: Could not match question at position 52, skipping
+Test 42: Could not match question at position 53, skipping
+Test 42: Could not match question at position 54, skipping
+Test 42: Could not match question at position 55, skipping
+Test 42: Could not match question at position 56, skipping
+Test 42: Could not match question at position 57, skipping
+Test 42: Could not match question at position 58, skipping
+Test 42: Could not match question at position 59, skipping
+Test 42: Could not match question at position 60, skipping
+Test 42: Could not match question at position 61, skipping
+Test 42: Could not match question at position 62, skipping
+Test 42: Could not match question at position 63, skipping
+Test 42: Could not match question at position 64, skipping
+
+❌ INCORRECT RESULT - Test #42
+   Expected Primary: protector
+   Actual Primary: null
+   Top 3 Expected Scores: caregiver: 100, primal_prey: 80, owner: 80
+Progress: 42/200 tests | Correct: 37 | Incorrect: 5 | Current: Test #42Test 43: Could not match question at position 28, skipping
+Test 43: Could not match question at position 33, skipping
+Test 43: Could not match question at position 34, skipping
+Test 43: Could not match question at position 39, skipping
+Test 43: Could not match question at position 40, skipping
+Test 43: Could not match question at position 44, skipping
+Test 43: Could not match question at position 47, skipping
+Test 43: Could not match question at position 49, skipping
+Test 43: Could not match question at position 50, skipping
+Test 43: Could not match question at position 51, skipping
+Test 43: Could not match question at position 54, skipping
+Test 43: Could not match question at position 55, skipping
+Test 43: Could not match question at position 58, skipping
+Test 43: Could not match question at position 64, skipping
+Progress: 43/200 tests | Correct: 38 | Incorrect: 5 | Current: Test #43Progress: 44/200 tests | Correct: 39 | Incorrect: 5 | Current: Test #44
+❌ INCORRECT RESULT - Test #45
+   Expected Primary: protector
+   Actual Primary: weaver
+   Top 3 Expected Scores: caregiver: 93, switch: 87, rigger: 83
+Progress: 45/200 tests | Correct: 39 | Incorrect: 6 | Current: Test #45Test 46: Could not match question at position 15, skipping
+Test 46: Could not match question at position 18, skipping
+Test 46: Could not match question at position 19, skipping
+Test 46: Could not match question at position 25, skipping
+Test 46: Could not match question at position 40, skipping
+Test 46: Could not match question at position 42, skipping
+Test 46: Could not match question at position 45, skipping
+Test 46: Could not match question at position 47, skipping
+Test 46: Could not match question at position 54, skipping
+Test 46: Could not match question at position 57, skipping
+
+❌ INCORRECT RESULT - Test #46
+   Expected Primary: beloved
+   Actual Primary: weaver
+   Top 3 Expected Scores: property: 85, primal_prey: 81, submission: 79
+Progress: 46/200 tests | Correct: 39 | Incorrect: 7 | Current: Test #46Progress: 47/200 tests | Correct: 40 | Incorrect: 7 | Current: Test #47Progress: 48/200 tests | Correct: 41 | Incorrect: 7 | Current: Test #48Progress: 49/200 tests | Correct: 42 | Incorrect: 7 | Current: Test #49Progress: 50/200 tests | Correct: 43 | Incorrect: 7 | Current: Test #50
+Progress: 50/200 tests | Correct: 43 | Incorrect: 7 | Current: Test #50
+Progress: 51/200 tests | Correct: 44 | Incorrect: 7 | Current: Test #51Progress: 52/200 tests | Correct: 45 | Incorrect: 7 | Current: Test #52Progress: 53/200 tests | Correct: 46 | Incorrect: 7 | Current: Test #53Progress: 54/200 tests | Correct: 47 | Incorrect: 7 | Current: Test #54Progress: 55/200 tests | Correct: 48 | Incorrect: 7 | Current: Test #55Progress: 56/200 tests | Correct: 49 | Incorrect: 7 | Current: Test #56Test 57 error: Execution context was destroyed, most likely because of a navigation.
+Test 57 failed: Execution context was destroyed, most likely because of a navigation.
+Test 58: Could not match question at position 29, skipping
+Test 58: Could not match question at position 32, skipping
+Test 58: Could not match question at position 33, skipping
+Test 58: Could not match question at position 34, skipping
+Test 58: Could not match question at position 36, skipping
+Test 58: Could not match question at position 37, skipping
+Test 58: Could not match question at position 40, skipping
+Test 58: Could not match question at position 43, skipping
+Test 58: Could not match question at position 44, skipping
+Test 58: Could not match question at position 45, skipping
+Test 58: Could not match question at position 48, skipping
+Test 58: Could not match question at position 50, skipping
+Test 58: Could not match question at position 51, skipping
+Test 58: Could not match question at position 53, skipping
+Test 58: Could not match question at position 54, skipping
+Test 58: Could not match question at position 55, skipping
+Test 58: Could not match question at position 58, skipping
+Test 58: Could not match question at position 60, skipping
+Test 58: Could not match question at position 62, skipping
+Test 58: Could not match question at position 64, skipping
+
+❌ INCORRECT RESULT - Test #58
+   Expected Primary: acolyte
+   Actual Primary: innocent
+   Top 3 Expected Scores: service: 100, rigger: 89, switch: 80
+Progress: 58/200 tests | Correct: 49 | Incorrect: 8 | Current: Test #58Progress: 59/200 tests | Correct: 50 | Incorrect: 8 | Current: Test #59Test 60: Could not match question at position 53, skipping
+Test 60: Could not match question at position 54, skipping
+Test 60: Could not match question at position 55, skipping
+Test 60: Could not match question at position 56, skipping
+Test 60: Could not match question at position 58, skipping
+Test 60: Could not match question at position 59, skipping
+Test 60: Could not match question at position 60, skipping
+Test 60: Could not match question at position 61, skipping
+Test 60: Could not match question at position 62, skipping
+Test 60: Could not match question at position 63, skipping
+Test 60: Could not match question at position 64, skipping
+Progress: 60/200 tests | Correct: 51 | Incorrect: 8 | Current: Test #60
+Progress: 60/200 tests | Correct: 51 | Incorrect: 8 | Current: Test #60
+Progress: 61/200 tests | Correct: 52 | Incorrect: 8 | Current: Test #61Progress: 62/200 tests | Correct: 53 | Incorrect: 8 | Current: Test #62Progress: 63/200 tests | Correct: 54 | Incorrect: 8 | Current: Test #63Progress: 64/200 tests | Correct: 55 | Incorrect: 8 | Current: Test #64Progress: 65/200 tests | Correct: 56 | Incorrect: 8 | Current: Test #65Progress: 66/200 tests | Correct: 57 | Incorrect: 8 | Current: Test #66Progress: 67/200 tests | Correct: 58 | Incorrect: 8 | Current: Test #67Progress: 68/200 tests | Correct: 59 | Incorrect: 8 | Current: Test #68Progress: 69/200 tests | Correct: 60 | Incorrect: 8 | Current: Test #69Progress: 70/200 tests | Correct: 61 | Incorrect: 8 | Current: Test #70
+Progress: 70/200 tests | Correct: 61 | Incorrect: 8 | Current: Test #70
+Progress: 71/200 tests | Correct: 62 | Incorrect: 8 | Current: Test #71
+❌ INCORRECT RESULT - Test #72
+   Expected Primary: acolyte
+   Actual Primary: guardian
+   Top 3 Expected Scores: service: 73, owner: 69, dependent: 68
+Progress: 72/200 tests | Correct: 62 | Incorrect: 9 | Current: Test #72Progress: 73/200 tests | Correct: 63 | Incorrect: 9 | Current: Test #73Progress: 74/200 tests | Correct: 64 | Incorrect: 9 | Current: Test #74Progress: 75/200 tests | Correct: 65 | Incorrect: 9 | Current: Test #75Progress: 76/200 tests | Correct: 66 | Incorrect: 9 | Current: Test #76Progress: 77/200 tests | Correct: 67 | Incorrect: 9 | Current: Test #77Progress: 78/200 tests | Correct: 68 | Incorrect: 9 | Current: Test #78Progress: 79/200 tests | Correct: 69 | Incorrect: 9 | Current: Test #79Progress: 80/200 tests | Correct: 70 | Incorrect: 9 | Current: Test #80
+Progress: 80/200 tests | Correct: 70 | Incorrect: 9 | Current: Test #80
+Progress: 81/200 tests | Correct: 71 | Incorrect: 9 | Current: Test #81

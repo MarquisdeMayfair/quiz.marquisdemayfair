@@ -1,0 +1,585 @@
+// Automated Quiz Validation Test
+// Tests the quiz by comparing expected vs actual results
+
+import puppeteer from 'puppeteer';
+
+// Question structure - matches App.jsx
+const QUESTIONS = [
+  { id: 1, dimension: 'dominance', weight: 1.4, isReversed: false, text: "In my ideal scene (a BDSM encounter), I'm the one giving orders, deciding what happens and when." },
+  { id: 2, dimension: 'dominance', weight: 1.5, isReversed: false, text: "A sub (submissive partner) begging 'please may I cum?', with that power entirely mine to grant or deny, is intensely arousing." },
+  { id: 3, dimension: 'dominance', weight: 1.3, isReversed: false, text: "When someone offers me their submission, I feel a deep sense of responsibility for their wellbeing and growth." },
+  { id: 4, dimension: 'dominance', weight: 1.4, isReversed: false, text: "Directing a partner during sex, 'on your knees,' 'hands behind your back,' 'open wider', feels completely natural." },
+  { id: 5, dimension: 'dominance', weight: 1.2, isReversed: false, text: "I mentally design scenarios involving edging (bringing close to orgasm repeatedly), denial, and controlled release." },
+  { id: 6, dimension: 'submission', weight: 1.4, isReversed: false, text: "Surrendering control to a Dom (dominant partner), just feeling and obeying, creates profound relief in me." },
+  { id: 7, dimension: 'submission', weight: 1.5, isReversed: false, text: "Orgasm denial, being forbidden to touch or cum without permission, heightens my arousal rather than frustrating me." },
+  { id: 8, dimension: 'submission', weight: 1.3, isReversed: false, text: "Kneeling at my Dom's feet, looking up with genuine deference, feels like coming home." },
+  { id: 9, dimension: 'submission', weight: 1.2, isReversed: false, text: "Hearing 'good girl' or 'good boy' from the right person has the power to completely undo me." },
+  { id: 10, dimension: 'submission', weight: 1.4, isReversed: false, text: "Being used as a sex toy, my desires secondary to theirs, is a fantasy that deeply arouses me." },
+  { id: 11, dimension: 'sadism', weight: 1.4, isReversed: false, text: "During impact play (spanking, flogging), watching skin flush and hearing breath catch deeply satisfies me." },
+  { id: 12, dimension: 'sadism', weight: 1.3, isReversed: false, text: "The sounds my partner makes when pushed to their edge, gasps, moans, whimpers, are profoundly arousing." },
+  { id: 13, dimension: 'sadism', weight: 1.2, isReversed: false, text: "I'm drawn to mastering impact play, the skill of wielding a flogger, crop, or paddle with precision." },
+  { id: 14, dimension: 'sadism', weight: 1.3, isReversed: false, text: "Leaving marks on a willing partner, bruises or welts visible days later, creates pride and connection." },
+  { id: 15, dimension: 'sadism', weight: 1.5, isReversed: false, text: "Seeing my partner cry from intense sensation during play creates a deep bond for me." },
+  { id: 16, dimension: 'masochism', weight: 1.5, isReversed: false, text: "What others call pain, I experience as a doorway to subspace (trance-like euphoria) and release." },
+  { id: 17, dimension: 'masochism', weight: 1.3, isReversed: false, text: "The anticipation before impact, knowing the flogger or hand is coming, creates almost unbearable arousal." },
+  { id: 18, dimension: 'masochism', weight: 1.4, isReversed: false, text: "After intense play, I experience subspace, a euphoric, floating sensation that lasts for hours." },
+  { id: 19, dimension: 'masochism', weight: 1.4, isReversed: false, text: "Being spanked, flogged, or paddled during sex significantly intensifies my orgasms." },
+  { id: 20, dimension: 'masochism', weight: 1.2, isReversed: false, text: "When stressed, I crave intense sensation, impact play clears my mind like nothing else." },
+  { id: 21, dimension: 'rigger', weight: 1.4, isReversed: false, text: "Shibari (Japanese rope bondage) appeals to me, the geometry on skin, the tension, the artistry of each tie." },
+  { id: 22, dimension: 'rigger', weight: 1.5, isReversed: false, text: "Binding a partner, watching them surrender to helplessness with each wrap of rope, is meditative and arousing." },
+  { id: 23, dimension: 'rigger', weight: 1.2, isReversed: false, text: "I'd invest significant time learning bondage, rope safety, knots, circulation checks, suspension techniques." },
+  { id: 24, dimension: 'rigger', weight: 1.3, isReversed: false, text: "A bound partner, helpless, available, completely dependent on me, is intoxicating." },
+  { id: 25, dimension: 'rope_bottom', weight: 1.5, isReversed: false, text: "Being tied up quiets my mind. Bondage creates internal freedom through external restriction." },
+  { id: 26, dimension: 'rope_bottom', weight: 1.4, isReversed: false, text: "Complete immobilization, unable to resist even if I wanted, allows me to fully surrender to sensation." },
+  { id: 27, dimension: 'rope_bottom', weight: 1.3, isReversed: false, text: "Ropes progressively tightening around my body creates a sense of being held, contained, deeply safe." },
+  { id: 28, dimension: 'rope_bottom', weight: 1.4, isReversed: false, text: "Suspension bondage, being lifted and floating in rope, would be a transcendent experience for me." },
+  { id: 29, dimension: 'exhibitionist', weight: 1.5, isReversed: false, text: "Being watched during sex, knowing eyes are on my body and pleasure, intensifies everything." },
+  { id: 30, dimension: 'exhibitionist', weight: 1.4, isReversed: false, text: "Performing at a play party (a BDSM social event), fucking or being fucked before an audience, is a fantasy." },
+  { id: 31, dimension: 'exhibitionist', weight: 1.2, isReversed: false, text: "Wearing something revealing in public, feeling eyes on me, creates a pleasant arousal throughout my day." },
+  { id: 32, dimension: 'exhibitionist', weight: 1.3, isReversed: false, text: "Being displayed by my Dom, posed, presented, shown off to others, would make me feel valuable and desired." },
+  { id: 33, dimension: 'voyeur', weight: 1.4, isReversed: false, text: "Watching others fuck, with their consent, arouses me as much as participating might." },
+  { id: 34, dimension: 'voyeur', weight: 1.2, isReversed: false, text: "I study the dynamics between partners during a scene, their negotiation, responses, connection." },
+  { id: 35, dimension: 'voyeur', weight: 1.3, isReversed: false, text: "Being invited to watch a couple having sex is a real turn on to me." },
+  { id: 36, dimension: 'voyeur', weight: 1.1, isReversed: false, text: "Reading erotica turns me on more than watching porn." },
+  { id: 37, dimension: 'primal_hunter', weight: 1.5, isReversed: false, text: "During primal play, something ancient wakes in me: the chase, the hunt, the capture." },
+  { id: 38, dimension: 'primal_hunter', weight: 1.4, isReversed: false, text: "Growling, biting, scratching, wrestling, these raw expressions feel authentically sexual to me." },
+  { id: 39, dimension: 'primal_hunter', weight: 1.4, isReversed: false, text: "Pinning my prey down, feeling them struggle even as they want to be caught, deeply satisfies me." },
+  { id: 40, dimension: 'primal_hunter', weight: 1.3, isReversed: false, text: "I feel most sexually alive when civilized restraint drops and something rawer emerges." },
+  { id: 41, dimension: 'primal_prey', weight: 1.5, isReversed: false, text: "Being hunted, the adrenaline of the chase, the thrill of inevitable capture, awakens something primal in me." },
+  { id: 42, dimension: 'primal_prey', weight: 1.4, isReversed: false, text: "The moment of capture, struggling against strength I can't overcome, creates an intense rush." },
+  { id: 43, dimension: 'primal_prey', weight: 1.3, isReversed: false, text: "CNC (consensual non-consent), resisting even though I want to be taken, is arousing to me." },
+  { id: 44, dimension: 'primal_prey', weight: 1.2, isReversed: false, text: "Bite marks and scratches from rough sex feel like evidence of real passion." },
+  { id: 45, dimension: 'owner', weight: 1.5, isReversed: false, text: "I'm drawn to 24/7 dynamics (full-time power exchange), protocols, rules, ongoing authority beyond the bedroom." },
+  { id: 46, dimension: 'owner', weight: 1.4, isReversed: false, text: "Owning someone completely, their training, development, and wellbeing my responsibility, fulfills a deep need." },
+  { id: 47, dimension: 'owner', weight: 1.3, isReversed: false, text: "Collaring a partner (a BDSM commitment symbol), having them wear my mark of ownership, satisfies me fundamentally." },
+  { id: 48, dimension: 'owner', weight: 1.3, isReversed: false, text: "Training a sub, shaping their behaviors, protocols, and service to my preferences, appeals to me." },
+  { id: 49, dimension: 'property', weight: 1.5, isReversed: false, text: "TPE (Total Power Exchange), being completely owned, my autonomy willingly given, feels like ultimate freedom." },
+  { id: 50, dimension: 'property', weight: 1.4, isReversed: false, text: "Wearing my Owner's collar would feel like belonging, not a constraint, but a homecoming." },
+  { id: 51, dimension: 'property', weight: 1.3, isReversed: false, text: "Living under protocols, daily rules structuring my behavior for my Owner's pleasure, would help me thrive." },
+  { id: 52, dimension: 'property', weight: 1.3, isReversed: false, text: "Being a treasured possession, cared for, displayed, used according to my Owner's wishes, appeals deeply to me." },
+  { id: 53, dimension: 'caregiver', weight: 1.4, isReversed: false, text: "As a Daddy/Mommy Dom (nurturing dominant), caring for a partner in littlespace (a younger headspace) feels sacred." },
+  { id: 54, dimension: 'caregiver', weight: 1.3, isReversed: false, text: "Setting bedtimes, rules, and gentle punishments, creating loving structure, appeals to my protective instincts." },
+  { id: 55, dimension: 'caregiver', weight: 1.2, isReversed: false, text: "Firm authority combined with tender affection feels natural to how I'd lead a D/s relationship." },
+  { id: 56, dimension: 'dependent', weight: 1.4, isReversed: false, text: "Littlespace (accessing a younger, playful headspace) emerges naturally when I feel safe and cared for." },
+  { id: 57, dimension: 'dependent', weight: 1.3, isReversed: false, text: "Being held and praised by a Daddy/Mommy Dom, comforted like a treasured little, would feel deeply healing." },
+  { id: 58, dimension: 'dependent', weight: 1.3, isReversed: false, text: "Age play activities, coloring, stuffies, being tucked in, in an intimate D/s context appeal to me." },
+  { id: 59, dimension: 'switch', weight: 1.5, isReversed: false, text: "I'm a switch, sometimes craving to dominate, sometimes to submit, and both feel authentically me." },
+  { id: 60, dimension: 'switch', weight: 1.3, isReversed: false, text: "Labeling myself strictly as Dom or sub doesn't fit, I contain both and express them contextually." },
+  { id: 61, dimension: 'switch', weight: 1.3, isReversed: false, text: "With different partners or moods, I inhabit completely different positions on the power spectrum." },
+  { id: 62, dimension: 'service', weight: 1.3, isReversed: false, text: "As a service sub, anticipating my Dom's needs, the perfect drink, the drawn bath, deeply satisfies me." },
+  { id: 63, dimension: 'service', weight: 1.4, isReversed: false, text: "My pleasure comes second, ensuring my partner is completely satisfied and cared for comes first." },
+  { id: 64, dimension: 'service', weight: 1.2, isReversed: false, text: "Acts of service, completing tasks, running errands, making their life easier, are how I express devotion." },
+];
+
+const ARCHETYPE_MAPPING = {
+  dominance: 'sovereign',
+  submission: 'devotee',
+  sadism: 'artisan',
+  masochism: 'phoenix',
+  rigger: 'weaver',
+  rope_bottom: 'chrysalis',
+  exhibitionist: 'luminary',
+  voyeur: 'oracle',
+  primal_hunter: 'apex',
+  primal_prey: 'wild_heart',
+  owner: 'guardian',
+  property: 'beloved',
+  caregiver: 'protector',
+  dependent: 'innocent',
+  switch: 'shapeshifter',
+  service: 'acolyte',
+};
+
+function calculateExpectedScores(answers) {
+  const dimensionScores = {};
+  const dimensionMaxScores = {};
+  
+  const dimensions = [...new Set(QUESTIONS.map(q => q.dimension))];
+  dimensions.forEach(dim => {
+    dimensionScores[dim] = 0;
+    dimensionMaxScores[dim] = 0;
+  });
+
+  QUESTIONS.forEach((question) => {
+    const answer = answers[question.id];
+    dimensionMaxScores[question.dimension] += 5 * question.weight;
+    
+    if (answer !== undefined) {
+      let score = answer;
+      if (question.isReversed) {
+        score = 6 - score;
+      }
+      dimensionScores[question.dimension] += score * question.weight;
+    }
+  });
+
+  const normalized = {};
+  dimensions.forEach(dim => {
+    const answered = QUESTIONS.filter(q => 
+      q.dimension === dim && answers[q.id] !== undefined
+    );
+    if (answered.length > 0) {
+      const maxPossible = answered.reduce((sum, q) => sum + (5 * q.weight), 0);
+      normalized[dim] = Math.round((dimensionScores[dim] / maxPossible) * 100);
+    } else {
+      normalized[dim] = 0;
+    }
+  });
+
+  return normalized;
+}
+
+// Helper function for delays
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Dimension priority order for tie-breaking - MUST match Object.keys(DIMENSIONS) order from App.jsx
+// This is the exact order dimensions are declared in the DIMENSIONS object
+const DIMENSION_PRIORITY = [
+  'dominance',      // 0 - The Sovereign (index 0)
+  'submission',     // 1 - The Devotee (index 1)
+  'sadism',         // 2 - The Artisan (index 2)
+  'masochism',      // 3 - The Phoenix (index 3)
+  'rigger',         // 4 - The Weaver (index 4)
+  'rope_bottom',    // 5 - The Chrysalis (index 5)
+  'exhibitionist',  // 6 - The Luminary (index 6)
+  'voyeur',         // 7 - The Oracle (index 7)
+  'primal_hunter',  // 8 - The Apex (index 8)
+  'primal_prey',    // 9 - The Wild Heart (index 9)
+  'owner',          // 10 - The Guardian (index 10)
+  'property',       // 11 - The Beloved (index 11)
+  'caregiver',      // 12 - The Protector (index 12)
+  'dependent',      // 13 - The Innocent (index 13)
+  'switch',         // 14 - The Shapeshifter (index 14)
+  'service'         // 15 - The Acolyte (index 15)
+];
+
+function getDimensionPriority(dim) {
+  const index = DIMENSION_PRIORITY.indexOf(dim);
+  return index >= 0 ? index : 999; // Unknown dimensions go to end
+}
+
+function determineExpectedArchetypes(scores) {
+  // Sort by score (descending), then by priority (ascending) for ties
+  const sorted = Object.entries(scores)
+    .sort(([dimA, scoreA], [dimB, scoreB]) => {
+      // First sort by score (higher is better)
+      if (scoreB !== scoreA) {
+        return scoreB - scoreA;
+      }
+      // If scores are equal, sort by priority (lower index wins)
+      const priorityA = getDimensionPriority(dimA);
+      const priorityB = getDimensionPriority(dimB);
+      return priorityA - priorityB;
+    });
+  
+  if (sorted.length < 2) return { primary: null, secondary: null };
+  
+  const primaryDim = sorted[0][0];
+  const secondaryDim = sorted[1][0];
+
+  return {
+    primary: ARCHETYPE_MAPPING[primaryDim] || null,
+    secondary: ARCHETYPE_MAPPING[secondaryDim] || null,
+    primaryDim,
+    secondaryDim
+  };
+}
+
+// Generate random answers
+function generateRandomAnswers() {
+  const answers = {};
+  QUESTIONS.forEach(q => {
+    answers[q.id] = Math.floor(Math.random() * 5) + 1; // 1-5
+  });
+  return answers;
+}
+
+// Run a single test
+async function runSingleTest(browser, testNumber) {
+  const page = await browser.newPage();
+  const answers = generateRandomAnswers();
+  
+  try {
+    await page.goto('http://localhost:3000', { waitUntil: 'networkidle0' });
+    
+    // Click start assessment - find button by text content
+    await page.evaluate(() => {
+      const buttons = Array.from(document.querySelectorAll('button'));
+      const startBtn = buttons.find(btn => btn.textContent.includes('Start the Assessment') || btn.textContent.includes('Start'));
+      if (startBtn) startBtn.click();
+    });
+    await delay(500);
+    
+    // Track which question IDs we've already answered (to avoid duplicates)
+    const answeredQuestionIds = new Set();
+    const questionOrderMap = new Map(); // Maps position index to question ID
+    
+    // Answer all 64 questions
+    for (let i = 0; i < 64; i++) {
+      await delay(300); // Slightly longer delay for page to stabilize
+      
+      // Get current question text - use the specific selector from the app
+      const questionText = await page.evaluate(() => {
+        // Try the specific question-text class first
+        const questionEl = document.querySelector('.question-text');
+        if (questionEl) {
+          return questionEl.textContent?.trim() || '';
+        }
+        
+        // Fallback: look for paragraph with question-like content
+        const paragraphs = Array.from(document.querySelectorAll('p'));
+        for (const p of paragraphs) {
+          const text = p.textContent?.trim() || '';
+          if (text.length > 50 && text.length < 500 && 
+              (text.includes('I') || text.includes('my') || text.includes('feel'))) {
+            return text;
+          }
+        }
+        
+        // Last resort: get any long text content
+        const allText = document.body.textContent || '';
+        return allText;
+      });
+      
+      // Find matching question ID by text content with improved matching
+      let questionId = null;
+      
+      if (questionText && questionText.length > 20) {
+        // Normalize text for comparison (remove extra whitespace, lowercase)
+        const normalizedQuestionText = questionText.toLowerCase().replace(/\s+/g, ' ').trim();
+        
+        // Try to find best match by comparing longer segments
+        let bestMatch = null;
+        let bestMatchScore = 0;
+        
+        for (const q of QUESTIONS) {
+          // Skip if we've already answered this question
+          if (answeredQuestionIds.has(q.id)) {
+            continue;
+          }
+          
+          const normalizedQText = q.text.toLowerCase().replace(/\s+/g, ' ').trim();
+          
+          // Try multiple matching strategies
+          // Strategy 1: Check if question text contains a significant portion of the question
+          const qWords = normalizedQText.split(' ').slice(0, 10); // First 10 words
+          const qPhrase = qWords.join(' ');
+          if (normalizedQuestionText.includes(qPhrase) && qPhrase.length > 30) {
+            const matchScore = qPhrase.length;
+            if (matchScore > bestMatchScore) {
+              bestMatch = q.id;
+              bestMatchScore = matchScore;
+            }
+          }
+          
+          // Strategy 2: Check if question text starts with same words
+          const qStart = normalizedQText.substring(0, 60);
+          if (normalizedQuestionText.includes(qStart) && qStart.length > 40) {
+            const matchScore = qStart.length;
+            if (matchScore > bestMatchScore) {
+              bestMatch = q.id;
+              bestMatchScore = matchScore;
+            }
+          }
+          
+          // Strategy 3: Check for unique phrases (longer than 20 chars)
+          const uniquePhrases = [
+            normalizedQText.substring(0, 50),
+            normalizedQText.substring(Math.max(0, normalizedQText.length - 50)),
+            qWords.slice(0, 8).join(' ')
+          ];
+          
+          for (const phrase of uniquePhrases) {
+            if (phrase && phrase.length > 20 && normalizedQuestionText.includes(phrase)) {
+              const matchScore = phrase.length;
+              if (matchScore > bestMatchScore) {
+                bestMatch = q.id;
+                bestMatchScore = matchScore;
+              }
+            }
+          }
+          
+          // Strategy 4: Word overlap scoring (more lenient)
+          const questionWords = new Set(normalizedQuestionText.split(' ').filter(w => w.length > 3));
+          const qWordsSet = new Set(normalizedQText.split(' ').filter(w => w.length > 3));
+          const overlap = [...questionWords].filter(w => qWordsSet.has(w)).length;
+          const totalWords = Math.max(questionWords.size, qWordsSet.size);
+          const overlapRatio = totalWords > 0 ? overlap / totalWords : 0;
+          
+          if (overlapRatio > 0.3 && overlap > 3) {
+            const matchScore = overlap * 10 + overlapRatio * 50;
+            if (matchScore > bestMatchScore) {
+              bestMatch = q.id;
+              bestMatchScore = matchScore;
+            }
+          }
+        }
+        
+        // Lower threshold to catch more matches, but require at least some confidence
+        if (bestMatch && bestMatchScore > 20) {
+          questionId = bestMatch;
+        }
+      }
+      
+      // If we still can't match, check if we've seen this position before
+      if (!questionId && questionOrderMap.has(i)) {
+        questionId = questionOrderMap.get(i);
+      }
+      
+      // If we still don't have a match, we can't proceed accurately
+      // Skip this question and continue (better than using wrong ID)
+      if (!questionId) {
+        console.warn(`Test ${testNumber}: Could not match question at position ${i + 1}, skipping`);
+        // Still click an answer to advance, but don't track it
+        await page.evaluate(() => {
+          const buttons = Array.from(document.querySelectorAll('button'));
+          const answerBtn = buttons.find(btn => {
+            const text = btn.textContent.trim();
+            return /^[1-5]$/.test(text);
+          });
+          if (answerBtn) answerBtn.click();
+        });
+        await delay(300);
+        continue;
+      }
+      
+      // Track this question ID for this position and mark as answered
+      questionOrderMap.set(i, questionId);
+      answeredQuestionIds.add(questionId);
+      
+      // Get the answer value for this question ID
+      let answerValue = answers[questionId];
+      if (!answerValue) {
+        console.warn(`Test ${testNumber}: No answer found for question ID ${questionId}, using random`);
+        // Use random answer if we don't have one pre-generated
+        answerValue = Math.floor(Math.random() * 5) + 1;
+        answers[questionId] = answerValue; // Store it for later calculation
+      }
+      const buttonIndex = answerValue - 1; // 0-4
+      
+      // Click the answer button - find buttons with numbers 1-5
+      await page.evaluate((value) => {
+        const buttons = Array.from(document.querySelectorAll('button'));
+        const answerBtn = buttons.find(btn => {
+          const text = btn.textContent.trim();
+          return /^[1-5]$/.test(text) && parseInt(text) === value;
+        });
+        if (answerBtn) {
+          answerBtn.click();
+        } else {
+          // Fallback: click first numeric button
+          const numericBtn = buttons.find(btn => /^[1-5]$/.test(btn.textContent.trim()));
+          if (numericBtn) numericBtn.click();
+        }
+      }, answerValue);
+      
+      await delay(300);
+      
+      // Check if we need to click next (might auto-advance)
+      const nextButton = await page.evaluate(() => {
+        const buttons = Array.from(document.querySelectorAll('button'));
+        return buttons.find(btn => btn.textContent.includes('Next'));
+      });
+      if (nextButton) {
+        const isDisabled = await page.evaluate((btn) => {
+          const buttons = Array.from(document.querySelectorAll('button'));
+          const nextBtn = buttons.find(b => b.textContent.includes('Next'));
+          return nextBtn?.disabled || false;
+        });
+        if (!isDisabled && i < 63) {
+          await page.evaluate(() => {
+            const buttons = Array.from(document.querySelectorAll('button'));
+            const nextBtn = buttons.find(b => b.textContent.includes('Next'));
+            if (nextBtn) nextBtn.click();
+          });
+          await delay(200);
+        }
+      }
+    }
+    
+    // Wait for results page to appear
+    try {
+      await page.waitForSelector('h1, h2, h3, [class*="archetype"]', { timeout: 10000 });
+    } catch (e) {
+      // Results might be loading
+    }
+    await delay(3000); // Additional wait for calculation
+    
+    // Extract results - look for archetype name in the results page
+    const results = await page.evaluate(() => {
+      // Look for archetype name - check h3 first (based on code structure)
+      let primaryText = '';
+      
+      // Try h3 first (where archetype name is displayed)
+      const h3s = Array.from(document.querySelectorAll('h3'));
+      for (const h3 of h3s) {
+        const text = h3.textContent?.trim() || '';
+        if (text.startsWith('The ')) {
+          primaryText = text;
+          break;
+        }
+      }
+      
+      // Fallback to other headings
+      if (!primaryText) {
+        const headings = Array.from(document.querySelectorAll('h1, h2, h3'));
+        for (const h of headings) {
+          const text = h.textContent?.trim() || '';
+          if (text.includes('The ') && text.length < 30) {
+            primaryText = text;
+            break;
+          }
+        }
+      }
+      
+      // Last resort: search all text content
+      if (!primaryText) {
+        const allText = document.body.textContent || '';
+        const matches = allText.match(/The (Sovereign|Devotee|Artisan|Phoenix|Weaver|Chrysalis|Luminary|Oracle|Apex|Wild Heart|Guardian|Beloved|Protector|Innocent|Shapeshifter|Acolyte)/);
+        if (matches) {
+          primaryText = matches[0];
+        }
+      }
+      
+      // Map full names to keys
+      const nameMap = {
+        'The Sovereign': 'sovereign',
+        'The Devotee': 'devotee',
+        'The Artisan': 'artisan',
+        'The Phoenix': 'phoenix',
+        'The Weaver': 'weaver',
+        'The Chrysalis': 'chrysalis',
+        'The Luminary': 'luminary',
+        'The Oracle': 'oracle',
+        'The Apex': 'apex',
+        'The Wild Heart': 'wild_heart',
+        'The Guardian': 'guardian',
+        'The Beloved': 'beloved',
+        'The Protector': 'protector',
+        'The Innocent': 'innocent',
+        'The Shapeshifter': 'shapeshifter',
+        'The Acolyte': 'acolyte'
+      };
+      
+      let foundArchetype = null;
+      for (const [fullName, key] of Object.entries(nameMap)) {
+        if (primaryText.includes(fullName) || primaryText.toLowerCase().includes(key)) {
+          foundArchetype = key;
+          break;
+        }
+      }
+      
+      return { primary: foundArchetype, text: primaryText };
+    });
+    
+    // Calculate expected results - only use answers we actually submitted
+    // Filter answers to only include questions we successfully matched
+    const actualAnswers = {};
+    for (const qId of answeredQuestionIds) {
+      if (answers[qId] !== undefined) {
+        actualAnswers[qId] = answers[qId];
+      }
+    }
+    
+    const expectedScores = calculateExpectedScores(actualAnswers);
+    const expected = determineExpectedArchetypes(expectedScores);
+    
+    // Compare
+    const isCorrect = results.primary === expected.primary;
+    
+    return {
+      testNumber,
+      isCorrect,
+      expectedPrimary: expected.primary,
+      actualPrimary: results.primary,
+      expectedScores,
+      answers
+    };
+    
+  } catch (error) {
+    console.error(`Test ${testNumber} error:`, error.message);
+    return { testNumber, error: error.message };
+  } finally {
+    await page.close();
+  }
+}
+
+// Main test runner
+async function runTests() {
+  const browser = await puppeteer.launch({ headless: true });
+  
+  let completedTests = 0;
+  let correctResults = 0;
+  let incorrectResults = 0;
+  const incorrectDetails = [];
+  
+  console.log('Starting quiz validation tests...\n');
+  
+  const maxTests = process.env.MAX_TESTS ? parseInt(process.env.MAX_TESTS) : 200;
+  for (let i = 1; i <= maxTests; i++) {
+    const result = await runSingleTest(browser, i);
+    
+    if (result.error) {
+      console.error(`Test ${i} failed: ${result.error}`);
+      continue;
+    }
+    
+    completedTests++;
+    
+    if (result.isCorrect) {
+      correctResults++;
+    } else {
+      incorrectResults++;
+      incorrectDetails.push({
+        testNumber: result.testNumber,
+        expected: result.expectedPrimary,
+        actual: result.actualPrimary,
+        expectedScores: result.expectedScores
+      });
+      
+      // Output incorrect result immediately
+      console.log(`\n❌ INCORRECT RESULT - Test #${result.testNumber}`);
+      console.log(`   Expected Primary: ${result.expectedPrimary}`);
+      console.log(`   Actual Primary: ${result.actualPrimary}`);
+      console.log(`   Top 3 Expected Scores:`, 
+        Object.entries(result.expectedScores)
+          .sort(([,a], [,b]) => b - a)
+          .slice(0, 3)
+          .map(([dim, score]) => `${dim}: ${score}`)
+          .join(', '));
+    }
+    
+    // Output progress - use stderr for unbuffered real-time updates
+    const progressMsg = `Progress: ${i}/${maxTests} tests | Correct: ${correctResults} | Incorrect: ${incorrectResults} | Current: Test #${i}`;
+    
+    // Write to stderr for immediate visibility (unbuffered)
+    process.stderr.write(`\r${progressMsg}`);
+    
+    // Also output every 10 tests with newline for readability
+    if (i % 10 === 0) {
+      process.stderr.write(`\n${progressMsg}\n`);
+    }
+  }
+  
+  await browser.close();
+  
+  console.log(`\n\n=== Final Test Summary ===`);
+  console.log(`Total tests completed: ${completedTests}`);
+  console.log(`Correct results: ${correctResults}`);
+  console.log(`Incorrect results: ${incorrectResults}`);
+  
+  if (incorrectDetails.length > 0) {
+    console.log(`\n=== Incorrect Results Details ===`);
+    incorrectDetails.forEach(detail => {
+      console.log(`\nTest #${detail.testNumber}:`);
+      console.log(`  Expected: ${detail.expected}`);
+      console.log(`  Actual: ${detail.actual}`);
+    });
+  }
+}
+
+// Run tests
+runTests().catch(console.error);
+
