@@ -90,19 +90,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* reCAPTCHA Badge - Hidden by default, shown only on email capture sections */
+/* reCAPTCHA Badge - Hidden by default globally */
 .grecaptcha-badge {
+  display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
+  position: fixed !important;
+  bottom: -9999px !important;
+  right: -9999px !important;
+  z-index: -9999 !important;
 }
 
-/* Show reCAPTCHA badge only when email forms are visible */
-.results-page .grecaptcha-badge,
-.unlock-section:hover .grecaptcha-badge {
+/* Show reCAPTCHA badge only when explicitly enabled via body class */
+body.show-recaptcha .grecaptcha-badge {
+  display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+  position: fixed !important;
+  bottom: 14px !important;
+  right: 14px !important;
+  z-index: 9999 !important;
 }
 
 /* ============================================================================

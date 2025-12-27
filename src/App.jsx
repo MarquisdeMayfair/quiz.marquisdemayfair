@@ -1816,6 +1816,59 @@ export default function MarquisPersonaTest() {
   }, []);
 
   // Timer for AI generation progress with status messages
+  // Control reCAPTCHA badge visibility - only show when on results page and interacting with email form
+  useEffect(() => {
+    if (phase !== 'results') {
+      document.body.classList.remove('show-recaptcha');
+      return;
+    }
+
+    const handleEmailInteraction = () => {
+      document.body.classList.add('show-recaptcha');
+    };
+
+    const handleEmailBlur = () => {
+      // Small delay to allow for hover state
+      setTimeout(() => {
+        const emailInputs = document.querySelectorAll('.email-input');
+        const isAnyFocused = Array.from(emailInputs).some(input => input === document.activeElement);
+        const unlockSection = document.querySelector('.unlock-section');
+        const isHovering = unlockSection && unlockSection.matches(':hover');
+        
+        if (!isAnyFocused && !isHovering) {
+          document.body.classList.remove('show-recaptcha');
+        }
+      }, 100);
+    };
+
+    const emailInputs = document.querySelectorAll('.email-input');
+    const unlockSection = document.querySelector('.unlock-section');
+
+    emailInputs.forEach(input => {
+      input.addEventListener('focus', handleEmailInteraction);
+      input.addEventListener('blur', handleEmailBlur);
+      input.addEventListener('mouseenter', handleEmailInteraction);
+    });
+
+    if (unlockSection) {
+      unlockSection.addEventListener('mouseenter', handleEmailInteraction);
+      unlockSection.addEventListener('mouseleave', handleEmailBlur);
+    }
+
+    return () => {
+      emailInputs.forEach(input => {
+        input.removeEventListener('focus', handleEmailInteraction);
+        input.removeEventListener('blur', handleEmailBlur);
+        input.removeEventListener('mouseenter', handleEmailInteraction);
+      });
+      if (unlockSection) {
+        unlockSection.removeEventListener('mouseenter', handleEmailInteraction);
+        unlockSection.removeEventListener('mouseleave', handleEmailBlur);
+      }
+      document.body.classList.remove('show-recaptcha');
+    };
+  }, [phase]);
+
   useEffect(() => {
     let interval;
     const statusMessages = [
