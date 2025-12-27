@@ -1214,7 +1214,7 @@ const ReportSlideshow = ({
   const touchStartX = useRef(0);
   const slideshowRef = useRef(null);
   
-  // Parse AI analysis into sections by ## headers
+  // Parse AI analysis into sections by ## headers or split by paragraphs
   const parseReportSections = useCallback((text) => {
     if (!text) return [];
     const sections = [];
@@ -1222,6 +1222,7 @@ const ReportSlideshow = ({
     let currentSection = null;
     let currentContent = [];
     
+    // First try parsing by ## headers
     for (const line of lines) {
       if (line.startsWith('## ')) {
         if (currentSection) {
@@ -1236,9 +1237,52 @@ const ReportSlideshow = ({
     if (currentSection) {
       sections.push({ title: currentSection, content: currentContent.join('\n') });
     }
+    
+    // If no ## sections found, split by double newlines into paragraphs
     if (sections.length === 0 && text.trim()) {
-      sections.push({ title: 'Your Detailed Assessment Report', content: text });
+      const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 50);
+      
+      if (paragraphs.length > 1) {
+        // Create sections from paragraphs with generated titles
+        const sectionTitles = [
+          'Your Core Identity',
+          'Psychological Profile',
+          'Dominant Traits',
+          'Hidden Depths',
+          'Relationship Dynamics',
+          'Desires & Motivations',
+          'Power Exchange Style',
+          'Recommendations'
+        ];
+        
+        paragraphs.forEach((para, idx) => {
+          sections.push({
+            title: sectionTitles[idx] || `Insight ${idx + 1}`,
+            content: para.trim()
+          });
+        });
+      } else {
+        // Single block - split into chunks of ~300 words
+        const words = text.split(/\s+/);
+        const chunkSize = 300;
+        const sectionTitles = [
+          'Your Detailed Assessment',
+          'Psychological Insights',
+          'Deep Analysis',
+          'Further Revelations'
+        ];
+        
+        for (let i = 0; i < words.length; i += chunkSize) {
+          const chunk = words.slice(i, i + chunkSize).join(' ');
+          const sectionIdx = Math.floor(i / chunkSize);
+          sections.push({
+            title: sectionTitles[sectionIdx] || `Part ${sectionIdx + 1}`,
+            content: chunk
+          });
+        }
+      }
     }
+    
     return sections;
   }, []);
   
@@ -1268,14 +1312,14 @@ const ReportSlideshow = ({
   // 3 to 3+beforeProducts-1: Sections before products
   // productsIdx: Products (Curated For You)
   // productsIdx+1 to +afterProducts: Sections after products
-  // Then: Chart, Farewell, Voucher2, Share, Invite
+  // Then: Chart, Farewell, Invite, Voucher2, Share (Share is last)
   const productsSlideIndex = 3 + sectionsBeforeProducts.length;
   const chartSlideIndex = productsSlideIndex + 1 + sectionsAfterProducts.length;
   const farewellSlideIndex = chartSlideIndex + 1;
-  const voucher2SlideIndex = farewellSlideIndex + 1;
+  const inviteSlideIndex = farewellSlideIndex + 1;
+  const voucher2SlideIndex = inviteSlideIndex + 1;
   const shareSlideIndex = voucher2SlideIndex + 1;
-  const inviteSlideIndex = shareSlideIndex + 1;
-  const totalSlides = inviteSlideIndex + 1;
+  const totalSlides = shareSlideIndex + 1;
   
   // Navigation
   const nextSlide = () => {
@@ -1501,46 +1545,6 @@ const ReportSlideshow = ({
           </div>
         </div>
         
-        {/* VOUCHER REPEAT SLIDE */}
-        <div className={getSlideClass(voucher2SlideIndex) + ' voucher-slide voucher-repeat'}>
-          <h3 className="slide-title centered">Don't Forget Your Reward</h3>
-          <div className="voucher-card">
-            <span className="voucher-amount">10% OFF</span>
-            <span className="voucher-text">Your entire order at Marquis de Mayfair</span>
-            <div className="voucher-code-box">
-              <span className="voucher-code">PERSONA10</span>
-              <button onClick={() => { navigator.clipboard.writeText('PERSONA10'); alert('Code copied!'); }}>Copy</button>
-            </div>
-            <a href="https://www.marquisdemayfair.com" target="_blank" rel="noopener noreferrer" className="voucher-shop-btn">
-              Shop Now →
-            </a>
-          </div>
-        </div>
-        
-        {/* SHARE SLIDE */}
-        <div className={getSlideClass(shareSlideIndex) + ' share-slide'}>
-          <h3 className="slide-title">Share Your Archetype</h3>
-          {primaryArchetype?.image && (
-            <img src={primaryArchetype.image} alt={primaryArchetype.name} className="share-archetype-image" />
-          )}
-          <h4 className="share-archetype-name">{primaryArchetype?.name}</h4>
-          <p className="share-archetype-title">{primaryArchetype?.title}</p>
-          
-          <div className="share-buttons-final">
-            <button className="share-btn twitter" onClick={() => 
-              window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`)}`, '_blank')
-            }>Share on X</button>
-            <button className="share-btn copy" onClick={() => {
-              navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
-              alert('Copied to clipboard!');
-            }}>Copy Result</button>
-            <button className="share-btn fetlife" onClick={() => {
-              navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
-              alert('Copied for FetLife!');
-            }}>Copy for FetLife</button>
-          </div>
-        </div>
-        
         {/* INVITE FRIEND SLIDE */}
         <div className={getSlideClass(inviteSlideIndex) + ' invite-slide'}>
           <img src="/logo.png" alt="Marquis de Mayfair" className="invite-logo" />
@@ -1575,6 +1579,46 @@ const ReportSlideshow = ({
               </div>
             </div>
           )}
+        </div>
+        
+        {/* VOUCHER REPEAT SLIDE */}
+        <div className={getSlideClass(voucher2SlideIndex) + ' voucher-slide voucher-repeat'}>
+          <h3 className="slide-title centered">Don't Forget Your Reward</h3>
+          <div className="voucher-card">
+            <span className="voucher-amount">10% OFF</span>
+            <span className="voucher-text">Your entire order at Marquis de Mayfair</span>
+            <div className="voucher-code-box">
+              <span className="voucher-code">PERSONA10</span>
+              <button onClick={() => { navigator.clipboard.writeText('PERSONA10'); alert('Code copied!'); }}>Copy</button>
+            </div>
+            <a href="https://www.marquisdemayfair.com" target="_blank" rel="noopener noreferrer" className="voucher-shop-btn">
+              Shop Now →
+            </a>
+          </div>
+        </div>
+        
+        {/* SHARE SLIDE (LAST) */}
+        <div className={getSlideClass(shareSlideIndex) + ' share-slide'}>
+          <h3 className="slide-title">Share Your Archetype</h3>
+          {primaryArchetype?.image && (
+            <img src={primaryArchetype.image} alt={primaryArchetype.name} className="share-archetype-image" />
+          )}
+          <h4 className="share-archetype-name">{primaryArchetype?.name}</h4>
+          <p className="share-archetype-title">{primaryArchetype?.title}</p>
+          
+          <div className="share-buttons-final">
+            <button className="share-btn twitter" onClick={() => 
+              window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`)}`, '_blank')
+            }>Share on X</button>
+            <button className="share-btn copy" onClick={() => {
+              navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
+              alert('Copied to clipboard!');
+            }}>Copy Result</button>
+            <button className="share-btn fetlife" onClick={() => {
+              navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
+              alert('Copied for FetLife!');
+            }}>Copy for FetLife</button>
+          </div>
         </div>
       </div>
       
@@ -1991,6 +2035,8 @@ export default function MarquisPersonaTest() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [leadCount, setLeadCount] = useState(0);
     const [recentLeads, setRecentLeads] = useState([]);
+    const [inviteCount, setInviteCount] = useState(0);
+    const [recentInvites, setRecentInvites] = useState([]);
 
     // Check if running locally (development mode)
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -1998,6 +2044,7 @@ export default function MarquisPersonaTest() {
     // Fetch lead stats when authenticated (only on production)
     useEffect(() => {
       if (isAuthenticated && adminPassword && !isLocalDev) {
+        // Fetch leads
         fetch('/api/leads-count', {
           headers: { 'X-Admin-Password': adminPassword }
         })
@@ -2006,9 +2053,18 @@ export default function MarquisPersonaTest() {
             setLeadCount(data.count || 0);
             setRecentLeads(data.recent || []);
           })
-          .catch(() => {
-            // API not available - silently fail
-          });
+          .catch(() => {});
+        
+        // Fetch invites/referrals
+        fetch('/api/invites-count', {
+          headers: { 'X-Admin-Password': adminPassword }
+        })
+          .then(res => res.ok ? res.json() : Promise.reject())
+          .then(data => {
+            setInviteCount(data.count || 0);
+            setRecentInvites(data.recent || []);
+          })
+          .catch(() => {});
       }
     }, [isAuthenticated, adminPassword, isLocalDev]);
 
@@ -2106,6 +2162,30 @@ export default function MarquisPersonaTest() {
       }
     };
 
+    const exportInvitesCSV = async () => {
+      if (isLocalDev) {
+        alert('Invite export is only available when deployed to Vercel.');
+        return;
+      }
+      try {
+        const response = await fetch(`/api/export-invites?password=${encodeURIComponent(adminPassword)}`);
+        if (!response.ok) {
+          const error = await response.json();
+          alert(`Export failed: ${error.error || 'Unknown error'}`);
+          return;
+        }
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `marquis-invites-${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        alert('Export failed. Please try again.');
+      }
+    };
+
     // Login screen
     if (!isAuthenticated) {
       return (
@@ -2167,6 +2247,35 @@ export default function MarquisPersonaTest() {
                   <div key={idx} className="recent-lead">
                     <span className="lead-email">{lead.email}</span>
                     <span className="lead-archetype">{lead.archetype}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          )}
+        </div>
+
+        {/* Referral Invites Section */}
+        <div className="admin-leads-section admin-invites-section">
+          <h3>Referral Invites</h3>
+          {isLocalDev ? (
+            <div className="local-dev-notice">
+              <p>Referral data only available when deployed.</p>
+            </div>
+          ) : (
+          <div className="leads-overview">
+            <div className="stat lead-stat invite-stat">
+              <span className="stat-number">{inviteCount}</span>
+              <span className="stat-label">Total Invites</span>
+            </div>
+            <button onClick={exportInvitesCSV} className="admin-btn export invite-export">Export Invites CSV</button>
+            {recentInvites.length > 0 && (
+              <div className="recent-leads recent-invites">
+                <h4>Recent Referrals:</h4>
+                {recentInvites.map((invite, idx) => (
+                  <div key={idx} className="recent-lead recent-invite">
+                    <span className="lead-email">{invite.invitedEmail}</span>
+                    <span className="lead-referrer">from: {invite.referrerEmail}</span>
                   </div>
                 ))}
               </div>

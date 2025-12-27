@@ -362,4 +362,90 @@ Test 137: Could not match question at position 55, skipping
 Test 137: Could not match question at position 56, skipping
 Test 137: Could not match question at position 57, skipping
 Test 137: Could not match question at position 60, skipping
-Progress: 137/200 tests | Correct: 122 | Incorrect: 14 | Current: Test #137Progress: 138/200 tests | Correct: 123 | Incorrect: 14 | Current: Test #138
+Progress: 137/200 tests | Correct: 122 | Incorrect: 14 | Current: Test #137Progress: 138/200 tests | Correct: 123 | Incorrect: 14 | Current: Test #138Test 139: Could not match question at position 49, skipping
+Test 139: Could not match question at position 50, skipping
+Test 139: Could not match question at position 52, skipping
+Test 139: Could not match question at position 53, skipping
+Test 139: Could not match question at position 54, skipping
+Test 139: Could not match question at position 55, skipping
+Test 139: Could not match question at position 56, skipping
+Test 139: Could not match question at position 60, skipping
+Test 139: Could not match question at position 62, skipping
+Progress: 139/200 tests | Correct: 124 | Incorrect: 14 | Current: Test #139Progress: 140/200 tests | Correct: 125 | Incorrect: 14 | Current: Test #140
+Progress: 140/200 tests | Correct: 125 | Incorrect: 14 | Current: Test #140
+Progress: 141/200 tests | Correct: 126 | Incorrect: 14 | Current: Test #141Progress: 142/200 tests | Correct: 127 | Incorrect: 14 | Current: Test #142Progress: 143/200 tests | Correct: 128 | Incorrect: 14 | Current: Test #143Progress: 144/200 tests | Correct: 129 | Incorrect: 14 | Current: Test #144Progress: 145/200 tests | Correct: 130 | Incorrect: 14 | Current: Test #145Progress: 146/200 tests | Correct: 131 | Incorrect: 14 | Current: Test #146Progress: 147/200 tests | Correct: 132 | Incorrect: 14 | Current: Test #147Progress: 148/200 tests | Correct: 133 | Incorrect: 14 | Current: Test #148Progress: 149/200 tests | Correct: 134 | Incorrect: 14 | Current: Test #149Progress: 150/200 tests | Correct: 135 | Incorrect: 14 | Current: Test #150
+Progress: 150/200 tests | Correct: 135 | Incorrect: 14 | Current: Test #150
+Progress: 151/200 tests | Correct: 136 | Incorrect: 14 | Current: Test #151
+❌ INCORRECT RESULT - Test #152
+   Expected Primary: beloved
+   Actual Primary: artisan
+   Top 3 Expected Scores: property: 76, sadism: 73, submission: 72
+Progress: 152/200 tests | Correct: 136 | Incorrect: 15 | Current: Test #152Progress: 153/200 tests | Correct: 137 | Incorrect: 15 | Current: Test #153Progress: 154/200 tests | Correct: 138 | Incorrect: 15 | Current: Test #154Progress: 155/200 tests | Correct: 139 | Incorrect: 15 | Current: Test #155Progress: 156/200 tests | Correct: 140 | Incorrect: 15 | Current: Test #156Progress: 157/200 tests | Correct: 141 | Incorrect: 15 | Current: Test #157Progress: 158/200 tests | Correct: 142 | Incorrect: 15 | Current: Test #158Progress: 159/200 tests | Correct: 143 | Incorrect: 15 | Current: Test #159Progress: 160/200 tests | Correct: 144 | Incorrect: 15 | Current: Test #160
+Progress: 160/200 tests | Correct: 144 | Incorrect: 15 | Current: Test #160
+Progress: 161/200 tests | Correct: 145 | Incorrect: 15 | Current: Test #161Test 162: Could not match question at position 39, skipping
+Test 162: Could not match question at position 40, skipping
+Test 162: Could not match question at position 42, skipping
+Test 162: Could not match question at position 43, skipping
+Test 162: Could not match question at position 44, skipping
+Test 162: Could not match question at position 45, skipping
+Test 162: Could not match question at position 46, skipping
+Test 162: Could not match question at position 47, skipping
+Test 162: Could not match question at position 48, skipping
+Test 162: Could not match question at position 51, skipping
+Test 162: Could not match question at position 54, skipping
+Test 162: Could not match question at position 58, skipping
+Test 162: Could not match question at position 60, skipping
+Test 162: Could not match question at position 61, skipping
+Test 162: Could not match question at position 64, skipping
+Progress: 162/200 tests | Correct: 146 | Incorrect: 15 | Current: Test #162Test 163: Could not match question at position 41, skipping
+Test 163: Could not match question at position 45, skipping
+Test 163: Could not match question at position 46, skipping
+Test 163: Could not match question at position 48, skipping
+Test 163: Could not match question at position 49, skipping
+Test 163: Could not match question at position 54, skipping
+Test 163: Could not match question at position 56, skipping
+Test 163: Could not match question at position 57, skipping
+Test 163: Could not match question at position 58, skipping
+Test 163: Could not match question at position 59, skipping
+Test 163: Could not match question at position 62, skipping
+Progress: 163/200 tests | Correct: 147 | Incorrect: 15 | Current: Test #163Test 164: Could not match question at position 32, skipping
+Test 164: Could not match question at position 40, skipping
+Test 164: Could not match question at position 42, skipping
+Test 164: Could not match question at position 45, skipping
+Test 164: Could not match question at position 47, skipping
+Test 164: Could not match question at position 49, skipping
+Test 164: Could not match question at position 50, skipping
+Test 164: Could not match question at position 51, skipping
+Test 164: Could not match question at position 52, skipping
+Test 164: Could not match question at position 55, skipping
+Test 164: Could not match question at position 56, skipping
+Test 164: Could not match question at position 63, skipping
+Test 164: Could not match question at position 64, skipping
+Progress: 164/200 tests | Correct: 148 | Incorrect: 15 | Current: Test #164Test 165: Could not match question at position 31, skipping
+Test 165: Could not match question at position 33, skipping
+Test 165: Could not match question at position 34, skipping
+Test 165: Could not match question at position 35, skipping
+Test 165: Could not match question at position 38, skipping
+Test 165: Could not match question at position 41, skipping
+Test 165: Could not match question at position 42, skipping
+Test 165: Could not match question at position 43, skipping
+Test 165: Could not match question at position 44, skipping
+Test 165: Could not match question at position 46, skipping
+Test 165: Could not match question at position 48, skipping
+Test 165: Could not match question at position 49, skipping
+Test 165: Could not match question at position 50, skipping
+Test 165: Could not match question at position 51, skipping
+Test 165: Could not match question at position 52, skipping
+Test 165: Could not match question at position 53, skipping
+Test 165: Could not match question at position 55, skipping
+Test 165: Could not match question at position 58, skipping
+Test 165: Could not match question at position 60, skipping
+Test 165: Could not match question at position 63, skipping
+
+❌ INCORRECT RESULT - Test #165
+   Expected Primary: acolyte
+   Actual Primary: sovereign
+   Top 3 Expected Scores: service: 94, primal_prey: 90, dominance: 81
+Progress: 165/200 tests | Correct: 148 | Incorrect: 16 | Current: Test #165Progress: 166/200 tests | Correct: 149 | Incorrect: 16 | Current: Test #166Progress: 167/200 tests | Correct: 150 | Incorrect: 16 | Current: Test #167Progress: 168/200 tests | Correct: 151 | Incorrect: 16 | Current: Test #168Progress: 169/200 tests | Correct: 152 | Incorrect: 16 | Current: Test #169Progress: 170/200 tests | Correct: 153 | Incorrect: 16 | Current: Test #170
+Progress: 170/200 tests | Correct: 153 | Incorrect: 16 | Current: Test #170
+Progress: 171/200 tests | Correct: 154 | Incorrect: 16 | Current: Test #171

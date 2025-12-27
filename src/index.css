@@ -2621,6 +2621,33 @@ body {
   margin-top: var(--space-sm);
 }
 
+/* Admin Invites Section */
+.admin-invites-section {
+  border-top: 1px solid var(--gold-dark);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+}
+
+.invite-stat {
+  background: linear-gradient(135deg, rgba(139, 21, 56, 0.2), transparent);
+}
+
+.invite-export {
+  margin-top: var(--space-sm);
+}
+
+.recent-invite {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lead-referrer {
+  font-size: 0.75rem;
+  color: var(--gold-muted);
+  font-style: italic;
+}
+
 /* Centered title */
 .slide-title.centered {
   text-align: center;
