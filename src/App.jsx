@@ -1190,6 +1190,8 @@ Your devotion is your art. You find deep satisfaction in the accumulation of sma
 
 // ============================================================================
 // REPORT SLIDESHOW COMPONENT
+// Structure: Video → Parallels → Voucher → Reading → Products → Reading → 
+//            Bar Chart → Farewell → Voucher2 → Image+Share
 // ============================================================================
 
 const ReportSlideshow = ({ 
@@ -1199,64 +1201,51 @@ const ReportSlideshow = ({
   secondaryArchetype, 
   scores, 
   dimensions,
-  email 
+  email,
+  videoHasPlayed,
+  setVideoHasPlayed,
+  getShareUrl
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const summaryRef = useRef(null);
+  const chartRef = useRef(null);
   const touchStartX = useRef(0);
+  const slideshowRef = useRef(null);
   
   // Parse AI analysis into sections by ## headers
   const parseReportSections = useCallback((text) => {
     if (!text) return [];
-    
     const sections = [];
     const lines = text.split('\n');
     let currentSection = null;
     let currentContent = [];
-    let introContent = []; // Content before first ##
     
     for (const line of lines) {
       if (line.startsWith('## ')) {
-        // Save previous section
         if (currentSection) {
-          sections.push({
-            title: currentSection,
-            content: currentContent.join('\n')
-          });
+          sections.push({ title: currentSection, content: currentContent.join('\n') });
         }
-        // Start new section
         currentSection = line.replace('## ', '').replace(/^\d+\.\s*/, '');
         currentContent = [];
       } else if (currentSection) {
         currentContent.push(line);
-      } else {
-        // Content before any ## header
-        introContent.push(line);
       }
     }
-    
-    // Don't forget the last section
     if (currentSection) {
-      sections.push({
-        title: currentSection,
-        content: currentContent.join('\n')
-      });
+      sections.push({ title: currentSection, content: currentContent.join('\n') });
     }
-    
-    // If no sections found, treat the whole text as one section
     if (sections.length === 0 && text.trim()) {
-      sections.push({
-        title: 'Your Personal Reading',
-        content: text
-      });
+      sections.push({ title: 'Your Personal Reading', content: text });
     }
-    
     return sections;
   }, []);
   
-  const sections = useMemo(() => parseReportSections(aiAnalysis), [aiAnalysis, parseReportSections]);
+  const reportSections = useMemo(() => parseReportSections(aiAnalysis), [aiAnalysis, parseReportSections]);
   
-  // Get dimension priority for consistent sorting
+  // Split report sections for product insertion
+  const firstHalfSections = reportSections.slice(0, Math.ceil(reportSections.length / 2));
+  const secondHalfSections = reportSections.slice(Math.ceil(reportSections.length / 2));
+  
+  // Get sorted scores for bar chart
   const dimensionPriority = Object.keys(dimensions);
   const sortedScores = Object.entries(scores)
     .filter(([dim]) => dimensions[dim])
@@ -1265,15 +1254,33 @@ const ReportSlideshow = ({
       return dimensionPriority.indexOf(dimA) - dimensionPriority.indexOf(dimB);
     });
   
-  // Total slides = parsed sections + 1 summary slide (summary at the END)
-  const totalSlides = sections.length + 1;
+  // Build slide indices:
+  // 0: Video, 1: Parallels, 2: Voucher
+  // 3 to 3+firstHalf-1: First reading
+  // productsIdx: Products
+  // productsIdx+1 to +secondHalf: Second reading
+  // chartIdx: Bar Chart, farewellIdx: Farewell, voucher2Idx: Voucher repeat, shareIdx: Image+Share
+  const productsSlideIndex = 3 + firstHalfSections.length;
+  const chartSlideIndex = productsSlideIndex + 1 + secondHalfSections.length;
+  const farewellSlideIndex = chartSlideIndex + 1;
+  const voucher2SlideIndex = farewellSlideIndex + 1;
+  const shareSlideIndex = voucher2SlideIndex + 1;
+  const totalSlides = shareSlideIndex + 1;
   
-  // Navigation functions
-  const nextSlide = () => setCurrentSlide(prev => Math.min(prev + 1, totalSlides - 1));
-  const prevSlide = () => setCurrentSlide(prev => Math.max(prev - 1, 0));
-  const goToSlide = (idx) => setCurrentSlide(idx);
+  // Navigation
+  const nextSlide = () => {
+    setCurrentSlide(prev => Math.min(prev + 1, totalSlides - 1));
+    slideshowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  const prevSlide = () => {
+    setCurrentSlide(prev => Math.max(prev - 1, 0));
+    slideshowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  const goToSlide = (idx) => {
+    setCurrentSlide(idx);
+    slideshowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
   
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
@@ -1283,182 +1290,227 @@ const ReportSlideshow = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
   
-  // Touch swipe handling
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX.current - touchEndX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextSlide();
-      else prevSlide();
-    }
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
   };
   
-  // Download summary as PNG
-  const downloadSummary = async () => {
-    if (!summaryRef.current) return;
+  // Download bar chart as PNG
+  const downloadChart = async () => {
+    if (!chartRef.current) return;
     try {
-      const canvas = await html2canvas(summaryRef.current, {
+      const canvas = await html2canvas(chartRef.current, {
         backgroundColor: '#0a0a14',
         scale: 2,
         useCORS: true
       });
       const link = document.createElement('a');
-      const filename = firstName 
-        ? `${firstName}-${primaryArchetype?.name?.replace(/\s+/g, '-')}-report.png`
-        : `${primaryArchetype?.name?.replace(/\s+/g, '-')}-report.png`;
-      link.download = filename;
+      link.download = `bdsm-psychometric-profile.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err) {
       console.error('Download failed:', err);
-      alert('Download failed. Please try again.');
     }
   };
   
-  // Render content with markdown parsing
+  // Render markdown content
   const renderContent = (content) => {
     if (!content) return null;
     return content.split('\n').map((line, idx) => {
-      if (line.startsWith('### ')) {
-        return <h4 key={idx} className="slide-subheader">{line.replace('### ', '')}</h4>;
-      }
-      if (line.startsWith('---')) {
-        return <hr key={idx} className="slide-divider" />;
-      }
-      if (line.startsWith('- ')) {
-        return <li key={idx} className="slide-list-item">{line.replace('- ', '')}</li>;
-      }
+      if (line.startsWith('### ')) return <h4 key={idx} className="slide-subheader">{line.replace('### ', '')}</h4>;
+      if (line.startsWith('---')) return <hr key={idx} className="slide-divider" />;
+      if (line.startsWith('- ')) return <li key={idx} className="slide-list-item">{line.replace('- ', '')}</li>;
       if (line.trim() === '') return null;
       const boldParsed = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       return <p key={idx} dangerouslySetInnerHTML={{ __html: boldParsed }} />;
     });
   };
   
-  // Section icons - letter/report focused
-  const sectionIcons = ['✉️', '🧠', '💫', '🌗', '🎁'];
+  const getSlideClass = (idx) => `slide ${currentSlide === idx ? 'active' : ''} ${currentSlide > idx ? 'prev' : ''}`;
   
-  // Personalized greeting
-  const greeting = firstName ? `${firstName}, ` : '';
+  // Personalized farewell
+  const farewellName = firstName ? `My dear ${firstName}` : `My dear ${primaryArchetype?.name}`;
   
   return (
-    <div 
-      className="report-slideshow"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      {/* Slide Navigation Dots */}
+    <div ref={slideshowRef} className="report-slideshow" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className="slide-dots">
         {Array.from({ length: totalSlides }).map((_, idx) => (
-          <button
-            key={idx}
-            className={`slide-dot ${currentSlide === idx ? 'active' : ''}`}
-            onClick={() => goToSlide(idx)}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
+          <button key={idx} className={`slide-dot ${currentSlide === idx ? 'active' : ''}`} onClick={() => goToSlide(idx)} />
         ))}
       </div>
       
-      {/* Slides Container */}
       <div className="slides-container">
-        {/* Content Slides */}
-        {sections.map((section, idx) => (
-          <div 
-            key={idx}
-            className={`slide ${currentSlide === idx ? 'active' : ''} ${currentSlide > idx ? 'prev' : ''}`}
-          >
-            <div className="slide-header">
-              <span className="slide-icon">{sectionIcons[idx] || '✧'}</span>
-              <span className="slide-number">Section {idx + 1} of {totalSlides}</span>
+        {/* SLIDE 0: Video */}
+        <div className={getSlideClass(0) + ' video-slide'}>
+          {primaryArchetype?.video && (
+            <video autoPlay={!videoHasPlayed} muted playsInline className="slide-video"
+              onEnded={(e) => { e.target.currentTime = 0; setVideoHasPlayed(true); }}>
+              <source src={primaryArchetype.video} type="video/mp4" />
+            </video>
+          )}
+          {!primaryArchetype?.video && primaryArchetype?.image && (
+            <img src={primaryArchetype.image} alt={primaryArchetype.name} className="slide-image" />
+          )}
+          <h2 className="video-slide-title">{primaryArchetype?.name}</h2>
+          <p className="video-slide-subtitle">{primaryArchetype?.title}</p>
+        </div>
+        
+        {/* SLIDE 1: Parallels */}
+        <div className={getSlideClass(1) + ' parallels-slide'}>
+          <h3 className="slide-title">Your Archetypal Connections</h3>
+          <div className="parallels-grid">
+            <div className="parallel-card">
+              <span className="parallel-label">Historical Parallel</span>
+              <span className="parallel-value">{primaryArchetype?.historical}</span>
             </div>
-            <h3 className="slide-title">
-              {idx === 0 && greeting}{section.title}
-            </h3>
-            <div className="slide-content">
-              {renderContent(section.content)}
+            <div className="parallel-card">
+              <span className="parallel-label">Mythological Echo</span>
+              <span className="parallel-value">{primaryArchetype?.mythological}</span>
             </div>
+            <div className="parallel-card secondary">
+              <span className="parallel-label">Secondary Archetype</span>
+              <span className="parallel-value">{secondaryArchetype?.name}</span>
+              <span className="parallel-subtitle">{secondaryArchetype?.title}</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* SLIDE 2: Voucher */}
+        <div className={getSlideClass(2) + ' voucher-slide'}>
+          <h3 className="slide-title">Your Exclusive Reward</h3>
+          <div className="voucher-card">
+            <span className="voucher-amount">10% OFF</span>
+            <span className="voucher-text">Your entire order at Marquis de Mayfair</span>
+            <div className="voucher-code-box">
+              <span className="voucher-code">PERSONA10</span>
+              <button onClick={() => { navigator.clipboard.writeText('PERSONA10'); alert('Code copied!'); }}>Copy</button>
+            </div>
+            <p className="voucher-note">Use with email: {email}</p>
+            <a href="https://www.marquisdemayfair.com" target="_blank" rel="noopener noreferrer" className="voucher-shop-btn">
+              Shop Now →
+            </a>
+          </div>
+        </div>
+        
+        {/* READING SLIDES: First half */}
+        {firstHalfSections.map((section, idx) => (
+          <div key={`first-${idx}`} className={getSlideClass(3 + idx)}>
+            <div className="slide-header"><span className="slide-number">Reading {idx + 1}</span></div>
+            <h3 className="slide-title">{section.title}</h3>
+            <div className="slide-content">{renderContent(section.content)}</div>
           </div>
         ))}
         
-        {/* Summary Slide with Chart - LAST SLIDE */}
-        <div 
-          className={`slide summary-slide ${currentSlide === sections.length ? 'active' : ''} ${currentSlide > sections.length ? 'prev' : ''}`}
-        >
-          <div className="slide-header">
-            <span className="slide-icon">📊</span>
-            <span className="slide-number">Your Profile Summary</span>
+        {/* PRODUCTS SLIDE */}
+        <div className={getSlideClass(productsSlideIndex) + ' products-slide'}>
+          <h3 className="slide-title">Curated For You</h3>
+          <p className="products-intro">Products matched to your archetype</p>
+          <div className="products-mini-grid">
+            {primaryArchetype?.suggestedProducts?.map((product, idx) => (
+              <a key={idx} href={`https://www.marquisdemayfair.com${product.url}`} target="_blank" rel="noopener noreferrer" className="product-mini-card">
+                <span className="product-name">{product.name}</span>
+                <span className="product-cta">View →</span>
+              </a>
+            ))}
           </div>
-          
-          {/* Share & Download Actions at TOP */}
-          <div className="summary-actions-top">
-            <button 
-              className="summary-share-btn"
-              onClick={() => {
-                const shareText = `I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: https://quiz.marquisdemayfair.com`;
-                if (navigator.share) {
-                  navigator.share({ title: 'My BDSM Archetype', text: shareText });
-                } else {
-                  navigator.clipboard.writeText(shareText);
-                  alert('Copied to clipboard!');
-                }
-              }}
-            >
-              Share Result
-            </button>
-            <button className="summary-download-btn" onClick={downloadSummary}>
-              Download
-            </button>
+        </div>
+        
+        {/* READING SLIDES: Second half */}
+        {secondHalfSections.map((section, idx) => (
+          <div key={`second-${idx}`} className={getSlideClass(productsSlideIndex + 1 + idx)}>
+            <div className="slide-header"><span className="slide-number">Reading {firstHalfSections.length + idx + 1}</span></div>
+            <h3 className="slide-title">{section.title}</h3>
+            <div className="slide-content">{renderContent(section.content)}</div>
           </div>
-          
-          <div ref={summaryRef} className="summary-content-compact">
-            <div className="summary-archetype-compact">
-              <span className="summary-label">You are</span>
-              <h4 className="summary-archetype-name">{primaryArchetype?.name}</h4>
+        ))}
+        
+        {/* BAR CHART SLIDE */}
+        <div className={getSlideClass(chartSlideIndex) + ' chart-slide'}>
+          <h3 className="slide-title">Your Psychometric Profile</h3>
+          <div ref={chartRef} className="chart-download-area">
+            <div className="chart-header">
+              <span className="chart-archetype">{primaryArchetype?.name}</span>
+              <span className="chart-subtitle">{primaryArchetype?.title}</span>
             </div>
-            
-            {/* Compact Bar Chart - Top 5 only */}
-            <div className="summary-chart-compact">
-              {sortedScores.slice(0, 5).map(([dimension, score], index) => {
-                const colors = ['#f6c541', '#d4af37', '#7cb342', '#059669', '#0891b2'];
+            <div className="chart-bars">
+              {sortedScores.slice(0, 8).map(([dimension, score], index) => {
+                const colors = ['#f6c541', '#d4af37', '#7cb342', '#059669', '#0891b2', '#6366f1', '#8b5cf6', '#ec4899'];
                 return (
-                  <div key={dimension} className="summary-bar-compact">
-                    <div className="summary-bar-info">
-                      <span className="summary-bar-name">{dimensions[dimension]?.name}</span>
-                      <span className="summary-bar-value">{score}%</span>
+                  <div key={dimension} className="chart-bar-row">
+                    <span className="chart-bar-label">{dimensions[dimension]?.name}</span>
+                    <div className="chart-bar-track">
+                      <div className="chart-bar-fill" style={{ width: `${score}%`, backgroundColor: colors[index] }} />
                     </div>
-                    <div className="summary-bar-track-compact">
-                      <div 
-                        className="summary-bar-fill"
-                        style={{ width: `${score}%`, backgroundColor: colors[index] }}
-                      />
-                    </div>
+                    <span className="chart-bar-value">{score}%</span>
                   </div>
                 );
               })}
             </div>
+            <div className="chart-footer">quiz.marquisdemayfair.com</div>
+          </div>
+          <button className="chart-download-btn" onClick={downloadChart}>📥 Download Profile</button>
+        </div>
+        
+        {/* FAREWELL SLIDE */}
+        <div className={getSlideClass(farewellSlideIndex) + ' farewell-slide'}>
+          <div className="farewell-content">
+            <p className="farewell-greeting">{farewellName},</p>
+            <p className="farewell-text">
+              This report is but the beginning. You are a being of untamed power and profound devotion, 
+              and the world of BDSM offers you a canvas to paint with every shade of your soul. 
+              Walk this path with courage, and know that I am here to witness and guide you.
+            </p>
+            <div className="farewell-signature">
+              <span className="signature-line">— The Marquis de Mayfair</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* VOUCHER REPEAT SLIDE */}
+        <div className={getSlideClass(voucher2SlideIndex) + ' voucher-slide voucher-repeat'}>
+          <h3 className="slide-title">Don't Forget Your Reward</h3>
+          <div className="voucher-card">
+            <span className="voucher-amount">10% OFF</span>
+            <span className="voucher-text">Your entire order at Marquis de Mayfair</span>
+            <div className="voucher-code-box">
+              <span className="voucher-code">PERSONA10</span>
+              <button onClick={() => { navigator.clipboard.writeText('PERSONA10'); alert('Code copied!'); }}>Copy</button>
+            </div>
+            <a href="https://www.marquisdemayfair.com" target="_blank" rel="noopener noreferrer" className="voucher-shop-btn">
+              Shop Now →
+            </a>
+          </div>
+        </div>
+        
+        {/* FINAL SHARE SLIDE */}
+        <div className={getSlideClass(shareSlideIndex) + ' share-slide'}>
+          <h3 className="slide-title">Share Your Archetype</h3>
+          {primaryArchetype?.image && (
+            <img src={primaryArchetype.image} alt={primaryArchetype.name} className="share-archetype-image" />
+          )}
+          <h4 className="share-archetype-name">{primaryArchetype?.name}</h4>
+          <p className="share-archetype-title">{primaryArchetype?.title}</p>
+          
+          <div className="share-buttons-final">
+            <button className="share-btn twitter" onClick={() => 
+              window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`)}`, '_blank')
+            }>Share on X</button>
+            <button className="share-btn copy" onClick={() => {
+              navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
+              alert('Copied to clipboard!');
+            }}>Copy Result</button>
+            <button className="share-btn fetlife" onClick={() => {
+              navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
+              alert('Copied for FetLife!');
+            }}>Copy for FetLife</button>
           </div>
         </div>
       </div>
       
-      {/* Navigation Arrows */}
       <div className="slide-nav">
-        <button 
-          className="slide-nav-btn prev"
-          onClick={prevSlide}
-          disabled={currentSlide === 0}
-        >
-          ← Previous
-        </button>
-        <button 
-          className="slide-nav-btn next"
-          onClick={nextSlide}
-          disabled={currentSlide === totalSlides - 1}
-        >
-          Next →
-        </button>
+        <button className="slide-nav-btn prev" onClick={prevSlide} disabled={currentSlide === 0}>← Previous</button>
+        <button className="slide-nav-btn next" onClick={nextSlide} disabled={currentSlide === totalSlides - 1}>Next →</button>
       </div>
     </div>
   );
@@ -1499,6 +1551,9 @@ export default function MarquisPersonaTest() {
   const [furthestQuestion, setFurthestQuestion] = useState(0); // Track furthest point reached
   const [videoHasPlayed, setVideoHasPlayed] = useState(false); // Track if archetype video has played
   const [reportVideoHasPlayed, setReportVideoHasPlayed] = useState(false); // Track if report page video has played
+  
+  // Ref for loading section scroll
+  const loadingRef = useRef(null);
 
   // Shuffle questions on mount for validity
   useEffect(() => {
@@ -1677,6 +1732,11 @@ export default function MarquisPersonaTest() {
     setElapsedTime(0);
     setLoadingStatus('Securing your data...');
     
+    // Scroll to loading section to show counter
+    setTimeout(() => {
+      loadingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+    
     console.log("Starting AI Analysis generation...");
     
     try {
@@ -1721,6 +1781,8 @@ export default function MarquisPersonaTest() {
     setIsGeneratingAI(false);
     setGenerationStartTime(null);
     setPhase('archetype');
+    // Scroll to top when report is ready
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   // Generate share URL slug from archetype key
@@ -2700,7 +2762,7 @@ Where:
                   <p className="recaptcha-notice">Protected by reCAPTCHA</p>
                 </div>
               ) : (
-                <div className="generating-notice">
+                <div ref={loadingRef} className="generating-notice">
                   <div className="generating-spinner"></div>
                   <p className="loading-status">{loadingStatus || 'Generating your personalized analysis...'}</p>
                   <p className="loading-timer">{elapsedTime} seconds</p>
@@ -2722,62 +2784,18 @@ Where:
     return (
       <div className="app-container">
         <div className="archetype-page">
-          <div className="archetype-header">
-            {primaryArchetype?.video && (
-              <div className="archetype-video-container archetype-page-video">
-                <video 
-                  autoPlay={!reportVideoHasPlayed}
-                  muted 
-                  playsInline
-                  className="archetype-video"
-                  onEnded={(e) => { 
-                    e.target.currentTime = 0; 
-                    setReportVideoHasPlayed(true);
-                  }}
-                >
-                  <source src={primaryArchetype.video} type="video/mp4" />
-                </video>
+          {isGeneratingAI ? (
+            <div className="analysis-loading-fullscreen">
+              <div className="loading-quill">✒</div>
+              <p>The Marquis is crafting your report...</p>
+              <div className="generation-timer">
+                <span className="timer-elapsed">{elapsedTime}s</span>
               </div>
-            )}
-            {!primaryArchetype?.video && primaryArchetype?.image && (
-              <div className="archetype-image-container archetype-page-image">
-                <img 
-                  src={primaryArchetype.image} 
-                  alt={primaryArchetype.name}
-                  className="archetype-image"
-                />
+              <div className="loading-progress">
+                <div className="loading-progress-bar" style={{ width: `${Math.min((elapsedTime / 45) * 100, 95)}%` }}></div>
               </div>
-            )}
-            <h1 className="archetype-title">{primaryArchetype?.name}</h1>
-            <p className="archetype-subtitle">{primaryArchetype?.title}</p>
-          </div>
-
-          <div className="parallels-section">
-            <div className="parallel historical">
-              <span className="parallel-label">Historical Parallel</span>
-              <span className="parallel-name">{primaryArchetype?.historical}</span>
             </div>
-            <div className="parallel mythological">
-              <span className="parallel-label">Mythological Echo</span>
-              <span className="parallel-name">{primaryArchetype?.mythological}</span>
-            </div>
-          </div>
-
-          <div className="analysis-section">
-            <h2>Your Comprehensive Personal Report</h2>
-            {isGeneratingAI ? (
-              <div className="analysis-loading">
-                <div className="loading-quill">✒</div>
-                <p>The Marquis is crafting your comprehensive report...</p>
-                <div className="generation-timer">
-                  <span className="timer-elapsed">{elapsedTime} seconds</span>
-                  <span className="timer-note">Comprehensive reports typically take 30-60 seconds</span>
-                </div>
-                <div className="loading-progress">
-                  <div className="loading-progress-bar" style={{ width: `${Math.min((elapsedTime / 45) * 100, 95)}%` }}></div>
-                </div>
-              </div>
-            ) : (
+          ) : (
               <ReportSlideshow
                 aiAnalysis={aiAnalysis || primaryArchetype?.coldReading || ''}
                 firstName={firstName}
@@ -2786,94 +2804,11 @@ Where:
                 scores={scores}
                 dimensions={DIMENSIONS}
                 email={email}
+                videoHasPlayed={reportVideoHasPlayed}
+                setVideoHasPlayed={setReportVideoHasPlayed}
+                getShareUrl={getShareUrl}
               />
-            )}
-          </div>
-
-          {/* Quick Product Links Section */}
-          <div className="products-section products-quick-links">
-            <h2>Quick Links: Your Recommended Collection</h2>
-            <p className="products-intro">Direct links to the products mentioned in your report:</p>
-            
-            <div className="products-grid">
-              {primaryArchetype?.suggestedProducts?.map((product, idx) => (
-                <a 
-                  key={idx} 
-                  href={`https://www.marquisdemayfair.com${product.url}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="product-card"
-                >
-                  <h4>{product.name}</h4>
-                  <span className="product-cta">Shop Now →</span>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Exclusive Discount Code Section */}
-          <div className="discount-code-section">
-            <div className="discount-code-card">
-              <h3>Your Exclusive Reward</h3>
-              <p className="discount-intro">As a thank you for completing your Persona Assessment, enjoy:</p>
-              <div className="discount-code-display">
-                <span className="discount-amount">10% OFF</span>
-                <span className="discount-label">your entire order</span>
-              </div>
-              <div className="discount-code-box">
-                <span className="code-label">Your Code:</span>
-                <span className="code-value">PERSONA10</span>
-                <button 
-                  className="copy-code-btn"
-                  onClick={() => {
-                    navigator.clipboard.writeText('PERSONA10');
-                    alert('Code copied! Use PERSONA10 at checkout.');
-                  }}
-                >
-                  Copy
-                </button>
-              </div>
-              <p className="discount-note">Use the same email address ({email}) at checkout to redeem your discount.</p>
-              <a 
-                href="https://www.marquisdemayfair.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="shop-now-btn"
-              >
-                Shop Now & Save 10%
-              </a>
-            </div>
-          </div>
-
-          <div className="share-section">
-            <h3>Share Your Archetype</h3>
-            <div className="share-buttons">
-              <button 
-                className="share-button twitter"
-                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`)}`, '_blank')}
-              >
-                Share on X
-              </button>
-              <button 
-                className="share-button copy"
-                onClick={() => {
-                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
-                  alert('Copied to clipboard!');
-                }}
-              >
-                Copy Result
-              </button>
-              <button 
-                className="share-button fetlife"
-                onClick={() => {
-                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
-                  alert('Copied to clipboard! Paste on FetLife.');
-                }}
-              >
-                Copy for FetLife
-              </button>
-            </div>
-          </div>
+          )}
 
           <div className="methodology-link-section">
             <button className="text-link" onClick={() => setPhase('methodology')}>
