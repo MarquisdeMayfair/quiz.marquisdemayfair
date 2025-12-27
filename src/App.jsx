@@ -1433,12 +1433,12 @@ const ReportSlideshow = ({
   // 3 to 3+beforeProducts-1: Sections before products
   // productsIdx: Products (Curated For You)
   // productsIdx+1 to +afterProducts: Sections after products
-  // Then: Chart, Farewell, Invite, Voucher2, Share (Share is last)
+  // Then: Invite, Chart, Farewell, Voucher2, Share (Share is last)
   const productsSlideIndex = 3 + sectionsBeforeProducts.length;
-  const chartSlideIndex = productsSlideIndex + 1 + sectionsAfterProducts.length;
+  const inviteSlideIndex = productsSlideIndex + 1 + sectionsAfterProducts.length;
+  const chartSlideIndex = inviteSlideIndex + 1;
   const farewellSlideIndex = chartSlideIndex + 1;
-  const inviteSlideIndex = farewellSlideIndex + 1;
-  const voucher2SlideIndex = inviteSlideIndex + 1;
+  const voucher2SlideIndex = farewellSlideIndex + 1;
   const shareSlideIndex = voucher2SlideIndex + 1;
   const totalSlides = shareSlideIndex + 1;
   
@@ -1626,6 +1626,42 @@ const ReportSlideshow = ({
           </div>
         ))}
         
+        {/* INVITE FRIEND SLIDE */}
+        <div className={getSlideClass(inviteSlideIndex) + ' invite-slide'}>
+          <img src="/logo.png" alt="Marquis de Mayfair" className="invite-logo" />
+          <h3 className="slide-title centered">Invite a Friend</h3>
+          <p className="invite-intro">Know someone who'd enjoy discovering their archetype?</p>
+          <p className="invite-bonus">Get an additional <strong>5% discount</strong> when they take the test!</p>
+          
+          {!inviteSubmitted ? (
+            <form onSubmit={handleInviteSubmit} className="invite-form">
+              <input
+                type="email"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                placeholder="Friend's email address"
+                required
+                className="invite-input"
+              />
+              <button type="submit" className="invite-submit-btn" disabled={inviteSubmitting}>
+                {inviteSubmitting ? 'Sending...' : 'Send Invite'}
+              </button>
+            </form>
+          ) : (
+            <div className="invite-success">
+              <p className="invite-success-text">✓ Invite sent!</p>
+              <div className="friend-code-reveal">
+                <p>Your bonus code:</p>
+                <div className="voucher-code-box">
+                  <span className="voucher-code">FRIEND5</span>
+                  <button onClick={() => { navigator.clipboard.writeText('FRIEND5'); alert('Code copied!'); }}>Copy</button>
+                </div>
+                <p className="friend-code-note">5% off your next order</p>
+              </div>
+            </div>
+          )}
+        </div>
+        
         {/* BAR CHART SLIDE - ALL BARS */}
         <div className={getSlideClass(chartSlideIndex) + ' chart-slide'}>
           <h3 className="slide-title">Download Your BDSM Analysis</h3>
@@ -1664,42 +1700,6 @@ const ReportSlideshow = ({
               <span className="signature-line">— The Marquis de Mayfair</span>
             </div>
           </div>
-        </div>
-        
-        {/* INVITE FRIEND SLIDE */}
-        <div className={getSlideClass(inviteSlideIndex) + ' invite-slide'}>
-          <img src="/logo.png" alt="Marquis de Mayfair" className="invite-logo" />
-          <h3 className="slide-title centered">Invite a Friend</h3>
-          <p className="invite-intro">Know someone who'd enjoy discovering their archetype?</p>
-          <p className="invite-bonus">Get an additional <strong>5% discount</strong> when they take the test!</p>
-          
-          {!inviteSubmitted ? (
-            <form onSubmit={handleInviteSubmit} className="invite-form">
-              <input
-                type="email"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                placeholder="Friend's email address"
-                required
-                className="invite-input"
-              />
-              <button type="submit" className="invite-submit-btn" disabled={inviteSubmitting}>
-                {inviteSubmitting ? 'Sending...' : 'Send Invite'}
-              </button>
-            </form>
-          ) : (
-            <div className="invite-success">
-              <p className="invite-success-text">✓ Invite sent!</p>
-              <div className="friend-code-reveal">
-                <p>Your bonus code:</p>
-                <div className="voucher-code-box">
-                  <span className="voucher-code">FRIEND5</span>
-                  <button onClick={() => { navigator.clipboard.writeText('FRIEND5'); alert('Code copied!'); }}>Copy</button>
-                </div>
-                <p className="friend-code-note">5% off your next order</p>
-              </div>
-            </div>
-          )}
         </div>
         
         {/* VOUCHER REPEAT SLIDE */}
