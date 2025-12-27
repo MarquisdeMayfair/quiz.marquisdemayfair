@@ -1,74 +1,3 @@
 Starting quiz validation tests...
 
-
-❌ INCORRECT RESULT - Test #3
-   Expected Primary: acolyte
-   Actual Primary: weaver
-   Top 3 Expected Scores: service: 80, sadism: 73, primal_prey: 73
-
-❌ INCORRECT RESULT - Test #5
-   Expected Primary: apex
-   Actual Primary: innocent
-   Top 3 Expected Scores: primal_hunter: 81, exhibitionist: 79, property: 75
-
-❌ INCORRECT RESULT - Test #7
-   Expected Primary: wild_heart
-   Actual Primary: weaver
-   Top 3 Expected Scores: primal_prey: 95, primal_hunter: 90, rigger: 89
-Test 10 error: Execution context was destroyed, most likely because of a navigation.
-Test 10 failed: Execution context was destroyed, most likely because of a navigation.
-
-❌ INCORRECT RESULT - Test #11
-   Expected Primary: phoenix
-   Actual Primary: wild_heart
-   Top 3 Expected Scores: masochism: 85, primal_hunter: 81, owner: 81
-
-❌ INCORRECT RESULT - Test #15
-   Expected Primary: phoenix
-   Actual Primary: oracle
-   Top 3 Expected Scores: masochism: 76, rigger: 72, sadism: 67
-Progress: 20/200 tests | Correct: 14 | Incorrect: 5
-❌ INCORRECT RESULT - Test #21
-   Expected Primary: devotee
-   Actual Primary: sovereign
-   Top 3 Expected Scores: submission: 87, dominance: 84, primal_hunter: 76
-
-❌ INCORRECT RESULT - Test #22
-   Expected Primary: sovereign
-   Actual Primary: apex
-   Top 3 Expected Scores: dominance: 76, sadism: 76, primal_hunter: 74
-
-❌ INCORRECT RESULT - Test #23
-   Expected Primary: luminary
-   Actual Primary: shapeshifter
-   Top 3 Expected Scores: exhibitionist: 84, voyeur: 82, switch: 81
-
-❌ INCORRECT RESULT - Test #24
-   Expected Primary: artisan
-   Actual Primary: shapeshifter
-   Top 3 Expected Scores: sadism: 92, switch: 85, primal_hunter: 76
-
-❌ INCORRECT RESULT - Test #25
-   Expected Primary: weaver
-   Actual Primary: innocent
-   Top 3 Expected Scores: rigger: 86, primal_hunter: 81, switch: 75
-
-❌ INCORRECT RESULT - Test #28
-   Expected Primary: apex
-   Actual Primary: shapeshifter
-   Top 3 Expected Scores: primal_hunter: 80, switch: 80, caregiver: 78
-
-❌ INCORRECT RESULT - Test #29
-   Expected Primary: innocent
-   Actual Primary: acolyte
-   Top 3 Expected Scores: dependent: 94, service: 88, sadism: 85
-Progress: 30/200 tests | Correct: 17 | Incorrect: 12
-❌ INCORRECT RESULT - Test #31
-   Expected Primary: sovereign
-   Actual Primary: apex
-   Top 3 Expected Scores: dominance: 72, masochism: 72, submission: 71
-
-❌ INCORRECT RESULT - Test #32
-   Expected Primary: beloved
-   Actual Primary: innocent
-   Top 3 Expected Scores: property: 79, voyeur: 76, exhibitionist: 74
+Progress: 1/200 tests | Correct: 1 | Incorrect: 0 | Current: Test #1Progress: 2/200 tests | Correct: 2 | Incorrect: 0 | Current: Test #2Progress: 3/200 tests | Correct: 3 | Incorrect: 0 | Current: Test #3Progress: 4/200 tests | Correct: 4 | Incorrect: 0 | Current: Test #4Progress: 5/200 tests | Correct: 5 | Incorrect: 0 | Current: Test #5Progress: 6/200 tests | Correct: 6 | Incorrect: 0 | Current: Test #6Progress: 7/200 tests | Correct: 7 | Incorrect: 0 | Current: Test #7Progress: 8/200 tests | Correct: 8 | Incorrect: 0 | Current: Test #8

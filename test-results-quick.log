@@ -1,0 +1,30 @@
+Starting quiz validation tests...
+
+Progress: 1/10 tests | Correct: 1 | Incorrect: 0 | Current: Test #1Progress: 2/10 tests | Correct: 2 | Incorrect: 0 | Current: Test #2Progress: 3/10 tests | Correct: 3 | Incorrect: 0 | Current: Test #3Progress: 4/10 tests | Correct: 4 | Incorrect: 0 | Current: Test #4Progress: 5/10 tests | Correct: 5 | Incorrect: 0 | Current: Test #5
+❌ INCORRECT RESULT - Test #6
+   Expected Primary: chrysalis
+   Actual Primary: acolyte
+   Top 3 Expected Scores: rope_bottom: 76, property: 75, primal_hunter: 69
+Progress: 6/10 tests | Correct: 5 | Incorrect: 1 | Current: Test #6Progress: 7/10 tests | Correct: 6 | Incorrect: 1 | Current: Test #7
+❌ INCORRECT RESULT - Test #8
+   Expected Primary: luminary
+   Actual Primary: acolyte
+   Top 3 Expected Scores: exhibitionist: 89, service: 87, switch: 75
+Progress: 8/10 tests | Correct: 6 | Incorrect: 2 | Current: Test #8Progress: 9/10 tests | Correct: 7 | Incorrect: 2 | Current: Test #9Progress: 10/10 tests | Correct: 8 | Incorrect: 2 | Current: Test #10
+Progress: 10/10 tests | Correct: 8 | Incorrect: 2 | Current: Test #10
+
+
+=== Final Test Summary ===
+Total tests completed: 10
+Correct results: 8
+Incorrect results: 2
+
+=== Incorrect Results Details ===
+
+Test #6:
+  Expected: chrysalis
+  Actual: acolyte
+
+Test #8:
+  Expected: luminary
+  Actual: acolyte

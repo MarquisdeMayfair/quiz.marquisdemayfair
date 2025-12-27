@@ -448,4 +448,24 @@ Test 165: Could not match question at position 63, skipping
    Top 3 Expected Scores: service: 94, primal_prey: 90, dominance: 81
 Progress: 165/200 tests | Correct: 148 | Incorrect: 16 | Current: Test #165Progress: 166/200 tests | Correct: 149 | Incorrect: 16 | Current: Test #166Progress: 167/200 tests | Correct: 150 | Incorrect: 16 | Current: Test #167Progress: 168/200 tests | Correct: 151 | Incorrect: 16 | Current: Test #168Progress: 169/200 tests | Correct: 152 | Incorrect: 16 | Current: Test #169Progress: 170/200 tests | Correct: 153 | Incorrect: 16 | Current: Test #170
 Progress: 170/200 tests | Correct: 153 | Incorrect: 16 | Current: Test #170
-Progress: 171/200 tests | Correct: 154 | Incorrect: 16 | Current: Test #171
+Progress: 171/200 tests | Correct: 154 | Incorrect: 16 | Current: Test #171Test 172: Could not match question at position 60, skipping
+Test 172: Could not match question at position 61, skipping
+Test 172: Could not match question at position 62, skipping
+Test 172: Could not match question at position 63, skipping
+Test 172: Could not match question at position 64, skipping
+Progress: 172/200 tests | Correct: 155 | Incorrect: 16 | Current: Test #172Progress: 173/200 tests | Correct: 156 | Incorrect: 16 | Current: Test #173Progress: 174/200 tests | Correct: 157 | Incorrect: 16 | Current: Test #174Progress: 175/200 tests | Correct: 158 | Incorrect: 16 | Current: Test #175Progress: 176/200 tests | Correct: 159 | Incorrect: 16 | Current: Test #176Progress: 177/200 tests | Correct: 160 | Incorrect: 16 | Current: Test #177Progress: 178/200 tests | Correct: 161 | Incorrect: 16 | Current: Test #178Progress: 179/200 tests | Correct: 162 | Incorrect: 16 | Current: Test #179Progress: 180/200 tests | Correct: 163 | Incorrect: 16 | Current: Test #180
+Progress: 180/200 tests | Correct: 163 | Incorrect: 16 | Current: Test #180
+Progress: 181/200 tests | Correct: 164 | Incorrect: 16 | Current: Test #181Progress: 182/200 tests | Correct: 165 | Incorrect: 16 | Current: Test #182Progress: 183/200 tests | Correct: 166 | Incorrect: 16 | Current: Test #183Progress: 184/200 tests | Correct: 167 | Incorrect: 16 | Current: Test #184Progress: 185/200 tests | Correct: 168 | Incorrect: 16 | Current: Test #185Progress: 186/200 tests | Correct: 169 | Incorrect: 16 | Current: Test #186Progress: 187/200 tests | Correct: 170 | Incorrect: 16 | Current: Test #187Progress: 188/200 tests | Correct: 171 | Incorrect: 16 | Current: Test #188Progress: 189/200 tests | Correct: 172 | Incorrect: 16 | Current: Test #189Progress: 190/200 tests | Correct: 173 | Incorrect: 16 | Current: Test #190
+Progress: 190/200 tests | Correct: 173 | Incorrect: 16 | Current: Test #190
+Progress: 191/200 tests | Correct: 174 | Incorrect: 16 | Current: Test #191Progress: 192/200 tests | Correct: 175 | Incorrect: 16 | Current: Test #192
+❌ INCORRECT RESULT - Test #193
+   Expected Primary: shapeshifter
+   Actual Primary: weaver
+   Top 3 Expected Scores: switch: 86, rigger: 80, owner: 76
+Progress: 193/200 tests | Correct: 175 | Incorrect: 17 | Current: Test #193Progress: 194/200 tests | Correct: 176 | Incorrect: 17 | Current: Test #194Progress: 195/200 tests | Correct: 177 | Incorrect: 17 | Current: Test #195Progress: 196/200 tests | Correct: 178 | Incorrect: 17 | Current: Test #196Progress: 197/200 tests | Correct: 179 | Incorrect: 17 | Current: Test #197Test 198 error: Attempted to use detached Frame '316B4395F07D6FEFC55AF5FC2CA51158'.
+ConnectionClosedError: Connection closed.
+    at Connection._rawSend (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Connection.js:102:35)
+    at Connection.send (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Connection.js:95:21)
+    at CdpPage.close (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Page.js:872:34)
+    at async runSingleTest (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/automate-quiz-tests.js:504:5)
+    at async runTests (file:///Users/nik/Downloads/Quiz.marquisdemayfair.com/files/marquis-v2/automate-quiz-tests.js:521:20)

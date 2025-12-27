@@ -1214,76 +1214,197 @@ const ReportSlideshow = ({
   const touchStartX = useRef(0);
   const slideshowRef = useRef(null);
   
-  // Parse AI analysis into sections by ## headers or split by paragraphs
+  // Parse AI analysis into 4-5 meaningful sections
   const parseReportSections = useCallback((text) => {
     if (!text) return [];
-    const sections = [];
-    const lines = text.split('\n');
-    let currentSection = null;
-    let currentContent = [];
     
-    // First try parsing by ## headers
-    for (const line of lines) {
-      if (line.startsWith('## ')) {
-        if (currentSection) {
-          sections.push({ title: currentSection, content: currentContent.join('\n') });
+    const MIN_CONTENT_LENGTH = 150; // Minimum chars for a valid section
+    const TARGET_SECTIONS = 5; // Aim for 4-5 sections
+    
+    // Clean up text - normalize line breaks and remove excessive whitespace
+    const cleanText = text.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+    
+    // Try to find sections by various header patterns
+    // Pattern 1: ## headers (markdown h2)
+    // Pattern 2: **1. TITLE** or **TITLE** (bold headers)
+    // Pattern 3: # headers (markdown h1)
+    // Pattern 4: Numbered sections like "1. YOUR CORE IDENTITY"
+    
+    const headerRegex = /^(?:#{1,2}\s*\d*\.?\s*|(?:\*\*\d+\.\s*)?|\d+\.\s+)([A-Z][A-Z\s&:]+(?:\([^)]+\))?)/gm;
+    
+    let rawSections = [];
+    let lastIndex = 0;
+    let match;
+    
+    // Reset regex
+    headerRegex.lastIndex = 0;
+    const matches = [...cleanText.matchAll(/^(?:#{1,2}\s*)?(\d+\.\s+)?([A-Z][A-Z\s&:,]+(?:\([^)]+\))?)\s*$/gm)];
+    
+    if (matches.length >= 3) {
+      // We found structured headers - split by them
+      for (let i = 0; i < matches.length; i++) {
+        const match = matches[i];
+        const nextMatch = matches[i + 1];
+        const title = match[2].replace(/^#+\s*/, '').replace(/^\d+\.\s*/, '').replace(/\*\*/g, '').trim();
+        const startIdx = match.index + match[0].length;
+        const endIdx = nextMatch ? nextMatch.index : cleanText.length;
+        const content = cleanText.slice(startIdx, endIdx).trim();
+        
+        if (title && content.length > 30) {
+          rawSections.push({ title, content });
         }
-        currentSection = line.replace('## ', '').replace(/^\d+\.\s*/, '');
-        currentContent = [];
-      } else if (currentSection) {
-        currentContent.push(line);
       }
     }
-    if (currentSection) {
-      sections.push({ title: currentSection, content: currentContent.join('\n') });
-    }
     
-    // If no ## sections found, split by double newlines into paragraphs
-    if (sections.length === 0 && text.trim()) {
-      const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 50);
+    // Fallback: Split by ## headers (standard markdown)
+    if (rawSections.length < 3) {
+      rawSections = [];
+      const lines = cleanText.split('\n');
+      let currentTitle = null;
+      let currentContent = [];
       
-      if (paragraphs.length > 1) {
-        // Create sections from paragraphs with generated titles
-        const sectionTitles = [
-          'Your Core Identity',
-          'Psychological Profile',
-          'Dominant Traits',
-          'Hidden Depths',
-          'Relationship Dynamics',
-          'Desires & Motivations',
-          'Power Exchange Style',
-          'Recommendations'
-        ];
+      for (const line of lines) {
+        // Check for header patterns
+        const headerMatch = line.match(/^#{1,2}\s*\d*\.?\s*(.+)$/) ||
+                           line.match(/^\*\*\d*\.?\s*(.+)\*\*$/) ||
+                           line.match(/^(\d+\.)\s+([A-Z][A-Z\s&:]+.*)$/);
         
-        paragraphs.forEach((para, idx) => {
-          sections.push({
-            title: sectionTitles[idx] || `Insight ${idx + 1}`,
-            content: para.trim()
-          });
-        });
-      } else {
-        // Single block - split into chunks of ~300 words
-        const words = text.split(/\s+/);
-        const chunkSize = 300;
-        const sectionTitles = [
-          'Your Detailed Assessment',
-          'Psychological Insights',
-          'Deep Analysis',
-          'Further Revelations'
-        ];
-        
-        for (let i = 0; i < words.length; i += chunkSize) {
-          const chunk = words.slice(i, i + chunkSize).join(' ');
-          const sectionIdx = Math.floor(i / chunkSize);
-          sections.push({
-            title: sectionTitles[sectionIdx] || `Part ${sectionIdx + 1}`,
-            content: chunk
-          });
+        if (headerMatch) {
+          // Save previous section
+          if (currentTitle && currentContent.length > 0) {
+            rawSections.push({ 
+              title: currentTitle, 
+              content: currentContent.join('\n').trim() 
+            });
+          }
+          // Extract title - clean up numbering and markdown
+          currentTitle = (headerMatch[2] || headerMatch[1] || '')
+            .replace(/^#+\s*/, '')
+            .replace(/^\d+\.\s*/, '')
+            .replace(/\*\*/g, '')
+            .replace(/:\s*$/, '')
+            .trim();
+          currentContent = [];
+        } else if (currentTitle !== null) {
+          currentContent.push(line);
+        } else if (line.trim()) {
+          // Content before first header - start a default section
+          if (!currentTitle) {
+            currentTitle = 'Your Personal Reading';
+          }
+          currentContent.push(line);
         }
+      }
+      
+      // Don't forget the last section
+      if (currentTitle && currentContent.length > 0) {
+        rawSections.push({ 
+          title: currentTitle, 
+          content: currentContent.join('\n').trim() 
+        });
       }
     }
     
-    return sections;
+    // Final fallback: Split by double newlines if no headers found
+    if (rawSections.length < 2) {
+      const paragraphs = cleanText.split(/\n\n+/).filter(p => p.trim().length > 100);
+      const fallbackTitles = [
+        'Your Core Identity',
+        'Psychological Profile', 
+        'Relationship Dynamics',
+        'Shadow & Growth',
+        'Your Path Forward'
+      ];
+      
+      rawSections = paragraphs.map((para, idx) => ({
+        title: fallbackTitles[idx] || `Insight ${idx + 1}`,
+        content: para.trim()
+      }));
+    }
+    
+    // Now merge short sections and filter
+    const mergedSections = [];
+    let pendingContent = '';
+    let pendingTitle = '';
+    
+    for (const section of rawSections) {
+      const contentLength = section.content.replace(/\s+/g, ' ').trim().length;
+      
+      if (contentLength < MIN_CONTENT_LENGTH) {
+        // Section too short - merge with pending or save for next
+        if (pendingContent) {
+          pendingContent += '\n\n' + section.content;
+        } else {
+          pendingTitle = section.title;
+          pendingContent = section.content;
+        }
+      } else {
+        // Good section - first flush any pending content
+        if (pendingContent) {
+          // Merge pending into this section or create separate
+          if (pendingContent.length < MIN_CONTENT_LENGTH / 2) {
+            // Prepend to current section
+            section.content = pendingContent + '\n\n' + section.content;
+          } else {
+            // Create separate section for pending
+            mergedSections.push({
+              title: pendingTitle || 'Additional Insights',
+              content: pendingContent
+            });
+          }
+          pendingContent = '';
+          pendingTitle = '';
+        }
+        mergedSections.push(section);
+      }
+    }
+    
+    // Handle any remaining pending content
+    if (pendingContent) {
+      if (mergedSections.length > 0) {
+        // Append to last section
+        mergedSections[mergedSections.length - 1].content += '\n\n' + pendingContent;
+      } else {
+        mergedSections.push({
+          title: pendingTitle || 'Your Reading',
+          content: pendingContent
+        });
+      }
+    }
+    
+    // If we still have too many sections, merge to target
+    while (mergedSections.length > TARGET_SECTIONS + 1) {
+      // Find shortest section and merge with adjacent
+      let shortestIdx = 0;
+      let shortestLen = Infinity;
+      
+      for (let i = 0; i < mergedSections.length; i++) {
+        const len = mergedSections[i].content.length;
+        if (len < shortestLen) {
+          shortestLen = len;
+          shortestIdx = i;
+        }
+      }
+      
+      // Merge with previous or next
+      if (shortestIdx > 0) {
+        mergedSections[shortestIdx - 1].content += '\n\n' + mergedSections[shortestIdx].content;
+        mergedSections.splice(shortestIdx, 1);
+      } else if (mergedSections.length > 1) {
+        mergedSections[1].content = mergedSections[0].content + '\n\n' + mergedSections[1].content;
+        mergedSections[1].title = mergedSections[0].title;
+        mergedSections.splice(0, 1);
+      }
+    }
+    
+    // Clean up section titles
+    return mergedSections.map((section, idx) => ({
+      title: section.title
+        .replace(/^YOUR\s+/i, '')
+        .replace(/\s*:\s*$/, '')
+        .trim() || `Section ${idx + 1}`,
+      content: section.content.trim()
+    })).filter(s => s.content.length > 50);
   }, []);
   
   const reportSections = useMemo(() => parseReportSections(aiAnalysis), [aiAnalysis, parseReportSections]);
@@ -1669,11 +1790,21 @@ export default function MarquisPersonaTest() {
   // Ref for loading section scroll
   const loadingRef = useRef(null);
 
-  // Shuffle questions on mount for validity
+  // Check for test mode (disables question shuffling for deterministic testing)
+  const isTestMode = new URLSearchParams(window.location.search).get('testMode') === 'true';
+
+  // Shuffle questions on mount for validity (skip shuffle in test mode)
   useEffect(() => {
-    const shuffled = [...editableQuestions].sort(() => Math.random() - 0.5);
-    setShuffledQuestions(shuffled);
-  }, [editableQuestions]);
+    if (isTestMode) {
+      // Test mode: preserve original question order for deterministic testing
+      setShuffledQuestions([...editableQuestions]);
+      console.log('TEST MODE: Question shuffling disabled');
+    } else {
+      // Production: shuffle questions randomly
+      const shuffled = [...editableQuestions].sort(() => Math.random() - 0.5);
+      setShuffledQuestions(shuffled);
+    }
+  }, [editableQuestions, isTestMode]);
 
   // Check for /admin path on mount
   useEffect(() => {
@@ -1756,6 +1887,9 @@ export default function MarquisPersonaTest() {
 
   // Determine archetypes from scores with deterministic tie-breaking
   const determineArchetypes = useCallback((scores) => {
+    // Check for test mode (for debug logging)
+    const testMode = new URLSearchParams(window.location.search).get('testMode') === 'true';
+    
     // Get dimension priority order from DIMENSIONS declaration
     // Earlier = higher priority (dominant traits before submissive)
     const dimensionPriority = Object.keys(DIMENSIONS);
@@ -1775,13 +1909,28 @@ export default function MarquisPersonaTest() {
       return dimensionPriority.indexOf(dimA) - dimensionPriority.indexOf(dimB);
     });
     
-    if (sorted.length < 2) return { primary: null, secondary: null };
+    // Null safety: handle edge case where less than 2 dimensions have scores
+    if (sorted.length < 2) {
+      console.warn('Warning: Less than 2 dimensions with scores');
+      return { 
+        primary: Object.values(ARCHETYPES)[0], 
+        secondary: Object.values(ARCHETYPES)[1] 
+      };
+    }
     
     const primaryDim = sorted[0][0];
     const secondaryDim = sorted[1][0];
 
     const primary = Object.values(ARCHETYPES).find(a => a.primaryDimension === primaryDim);
     const secondary = Object.values(ARCHETYPES).find(a => a.primaryDimension === secondaryDim);
+
+    // Debug logging for test mode
+    if (testMode) {
+      console.log('DEBUG: All scores:', scores);
+      console.log('DEBUG: Top 5 sorted dimensions:', sorted.slice(0, 5).map(([dim, score]) => `${dim}: ${score}`));
+      console.log('DEBUG: Primary dimension:', primaryDim, '→', primary?.name || 'NOT FOUND');
+      console.log('DEBUG: Secondary dimension:', secondaryDim, '→', secondary?.name || 'NOT FOUND');
+    }
 
     return { primary: primary || Object.values(ARCHETYPES)[0], secondary };
   }, []);

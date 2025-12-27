@@ -90,6 +90,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* reCAPTCHA Badge - Hidden by default, shown only on email capture sections */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Show reCAPTCHA badge only when email forms are visible */
+.results-page .grecaptcha-badge,
+.unlock-section:hover .grecaptcha-badge {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
 /* ============================================================================
    APP CONTAINER
    ============================================================================ */
@@ -1791,9 +1806,11 @@ body {
 
 /* Slide Content */
 .slide-content {
-  max-height: 350px;
+  max-height: 450px;
   overflow-y: auto;
   padding-right: var(--space-sm);
+  /* Ensure text is visible */
+  color: var(--cream-dark);
 }
 
 .slide-content::-webkit-scrollbar {
@@ -2745,11 +2762,11 @@ body {
 /* Mobile Responsive Slideshow */
 @media (max-width: 768px) {
   .report-slideshow {
-    min-height: 400px;
+    min-height: 450px;
   }
   
   .slides-container {
-    min-height: 350px;
+    min-height: 400px;
   }
   
   .slide {
@@ -2761,11 +2778,15 @@ body {
   }
   
   .slide-content {
-    max-height: 280px;
+    max-height: 380px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   }
   
   .slide-content p {
     font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: var(--space-sm);
   }
   
   .summary-archetype-name {

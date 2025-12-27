@@ -202,7 +202,8 @@ async function runSingleTest(browser, testNumber) {
   const answers = generateRandomAnswers();
   
   try {
-    await page.goto('http://localhost:3000', { waitUntil: 'networkidle0' });
+    // Use testMode=true to disable question shuffling for deterministic testing
+    await page.goto('http://localhost:3000?testMode=true', { waitUntil: 'networkidle0' });
     
     // Click start assessment - find button by text content
     await page.evaluate(() => {
@@ -212,152 +213,18 @@ async function runSingleTest(browser, testNumber) {
     });
     await delay(500);
     
-    // Track which question IDs we've already answered (to avoid duplicates)
-    const answeredQuestionIds = new Set();
-    const questionOrderMap = new Map(); // Maps position index to question ID
+    // In test mode, questions are NOT shuffled, so question ID = position + 1
+    // This eliminates the unreliable text matching that caused ~10% of test failures
     
     // Answer all 64 questions
     for (let i = 0; i < 64; i++) {
-      await delay(300); // Slightly longer delay for page to stabilize
+      await delay(200); // Shorter delay since we don't need text matching
       
-      // Get current question text - use the specific selector from the app
-      const questionText = await page.evaluate(() => {
-        // Try the specific question-text class first
-        const questionEl = document.querySelector('.question-text');
-        if (questionEl) {
-          return questionEl.textContent?.trim() || '';
-        }
-        
-        // Fallback: look for paragraph with question-like content
-        const paragraphs = Array.from(document.querySelectorAll('p'));
-        for (const p of paragraphs) {
-          const text = p.textContent?.trim() || '';
-          if (text.length > 50 && text.length < 500 && 
-              (text.includes('I') || text.includes('my') || text.includes('feel'))) {
-            return text;
-          }
-        }
-        
-        // Last resort: get any long text content
-        const allText = document.body.textContent || '';
-        return allText;
-      });
-      
-      // Find matching question ID by text content with improved matching
-      let questionId = null;
-      
-      if (questionText && questionText.length > 20) {
-        // Normalize text for comparison (remove extra whitespace, lowercase)
-        const normalizedQuestionText = questionText.toLowerCase().replace(/\s+/g, ' ').trim();
-        
-        // Try to find best match by comparing longer segments
-        let bestMatch = null;
-        let bestMatchScore = 0;
-        
-        for (const q of QUESTIONS) {
-          // Skip if we've already answered this question
-          if (answeredQuestionIds.has(q.id)) {
-            continue;
-          }
-          
-          const normalizedQText = q.text.toLowerCase().replace(/\s+/g, ' ').trim();
-          
-          // Try multiple matching strategies
-          // Strategy 1: Check if question text contains a significant portion of the question
-          const qWords = normalizedQText.split(' ').slice(0, 10); // First 10 words
-          const qPhrase = qWords.join(' ');
-          if (normalizedQuestionText.includes(qPhrase) && qPhrase.length > 30) {
-            const matchScore = qPhrase.length;
-            if (matchScore > bestMatchScore) {
-              bestMatch = q.id;
-              bestMatchScore = matchScore;
-            }
-          }
-          
-          // Strategy 2: Check if question text starts with same words
-          const qStart = normalizedQText.substring(0, 60);
-          if (normalizedQuestionText.includes(qStart) && qStart.length > 40) {
-            const matchScore = qStart.length;
-            if (matchScore > bestMatchScore) {
-              bestMatch = q.id;
-              bestMatchScore = matchScore;
-            }
-          }
-          
-          // Strategy 3: Check for unique phrases (longer than 20 chars)
-          const uniquePhrases = [
-            normalizedQText.substring(0, 50),
-            normalizedQText.substring(Math.max(0, normalizedQText.length - 50)),
-            qWords.slice(0, 8).join(' ')
-          ];
-          
-          for (const phrase of uniquePhrases) {
-            if (phrase && phrase.length > 20 && normalizedQuestionText.includes(phrase)) {
-              const matchScore = phrase.length;
-              if (matchScore > bestMatchScore) {
-                bestMatch = q.id;
-                bestMatchScore = matchScore;
-              }
-            }
-          }
-          
-          // Strategy 4: Word overlap scoring (more lenient)
-          const questionWords = new Set(normalizedQuestionText.split(' ').filter(w => w.length > 3));
-          const qWordsSet = new Set(normalizedQText.split(' ').filter(w => w.length > 3));
-          const overlap = [...questionWords].filter(w => qWordsSet.has(w)).length;
-          const totalWords = Math.max(questionWords.size, qWordsSet.size);
-          const overlapRatio = totalWords > 0 ? overlap / totalWords : 0;
-          
-          if (overlapRatio > 0.3 && overlap > 3) {
-            const matchScore = overlap * 10 + overlapRatio * 50;
-            if (matchScore > bestMatchScore) {
-              bestMatch = q.id;
-              bestMatchScore = matchScore;
-            }
-          }
-        }
-        
-        // Lower threshold to catch more matches, but require at least some confidence
-        if (bestMatch && bestMatchScore > 20) {
-          questionId = bestMatch;
-        }
-      }
-      
-      // If we still can't match, check if we've seen this position before
-      if (!questionId && questionOrderMap.has(i)) {
-        questionId = questionOrderMap.get(i);
-      }
-      
-      // If we still don't have a match, we can't proceed accurately
-      // Skip this question and continue (better than using wrong ID)
-      if (!questionId) {
-        console.warn(`Test ${testNumber}: Could not match question at position ${i + 1}, skipping`);
-        // Still click an answer to advance, but don't track it
-        await page.evaluate(() => {
-          const buttons = Array.from(document.querySelectorAll('button'));
-          const answerBtn = buttons.find(btn => {
-            const text = btn.textContent.trim();
-            return /^[1-5]$/.test(text);
-          });
-          if (answerBtn) answerBtn.click();
-        });
-        await delay(300);
-        continue;
-      }
-      
-      // Track this question ID for this position and mark as answered
-      questionOrderMap.set(i, questionId);
-      answeredQuestionIds.add(questionId);
+      // In test mode, question ID is simply i + 1 (sequential order)
+      const questionId = i + 1;
       
       // Get the answer value for this question ID
-      let answerValue = answers[questionId];
-      if (!answerValue) {
-        console.warn(`Test ${testNumber}: No answer found for question ID ${questionId}, using random`);
-        // Use random answer if we don't have one pre-generated
-        answerValue = Math.floor(Math.random() * 5) + 1;
-        answers[questionId] = answerValue; // Store it for later calculation
-      }
-      const buttonIndex = answerValue - 1; // 0-4
+      const answerValue = answers[questionId];
       
       // Click the answer button - find buttons with numbers 1-5
       await page.evaluate((value) => {
@@ -474,16 +341,9 @@ async function runSingleTest(browser, testNumber) {
       return { primary: foundArchetype, text: primaryText };
     });
     
-    // Calculate expected results - only use answers we actually submitted
-    // Filter answers to only include questions we successfully matched
-    const actualAnswers = {};
-    for (const qId of answeredQuestionIds) {
-      if (answers[qId] !== undefined) {
-        actualAnswers[qId] = answers[qId];
-      }
-    }
-    
-    const expectedScores = calculateExpectedScores(actualAnswers);
+    // Calculate expected results using all answers
+    // In test mode, questions are in sequential order so all answers are correctly mapped
+    const expectedScores = calculateExpectedScores(answers);
     const expected = determineExpectedArchetypes(expectedScores);
     
     // Compare
