@@ -2970,6 +2970,8 @@ Where:
             </div>
           </div>
 
+          <h2 className="your-results-heading">Your Results</h2>
+
           <div className="scores-grid">
             {sortedScores.map(([dimension, score], index) => {
               // Color gradient: Gold (top) → Green → Teal → Red (bottom)
@@ -3009,7 +3011,7 @@ Where:
 
           <div className="unlock-section">
             <div className="unlock-card">
-              <h2>FREE 1,500-Word Personalised Sexual Archetype Report</h2>
+              <h2>FREE 1,500-Word Personalised Sexual Archetype Report Based on Your Results</h2>
               <p className="unlock-tagline">Written for you. Decoded by AI. Curated by the Marquis.</p>
               
               <h3 className="unlock-intro">You are not random. Your desires follow patterns.<br />This free 1,500-word report reveals exactly how yours are wired.</h3>
@@ -3078,12 +3080,12 @@ Where:
                       className={`unlock-button gold-shine ${!marketingOptIn || isSubmitting ? 'disabled' : ''}`} 
                       disabled={!marketingOptIn || isSubmitting}
                     >
-                      <span>{isSubmitting ? 'Verifying...' : 'Reveal My Archetype'}</span>
+                      <span>{isSubmitting ? 'Verifying...' : 'Get My Detailed Report'}</span>
                     </button>
                   </form>
                   
                   <div className="discount-callout">
-                    <span className="discount-badge">EXCLUSIVE OFFER</span>
+                    <span className="discount-label">EXCLUSIVE OFFER</span>
                     <p className="discount-text">Contains a <strong>10% discount code</strong> for Marquis de Mayfair</p>
                   </div>
                   
