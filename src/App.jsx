@@ -1190,8 +1190,8 @@ Your devotion is your art. You find deep satisfaction in the accumulation of sma
 
 // ============================================================================
 // REPORT SLIDESHOW COMPONENT
-// Structure: Video → Parallels → Voucher → Reading → Products → Reading → 
-//            Bar Chart → Farewell → Voucher2 → Image+Share
+// Structure: Video → Parallels → Voucher → Reading sections (with Products before Equipment) → 
+//            Chart → Farewell → Voucher2 → Share → Invite Friend
 // ============================================================================
 
 const ReportSlideshow = ({ 
@@ -1207,6 +1207,9 @@ const ReportSlideshow = ({
   getShareUrl
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteSubmitted, setInviteSubmitted] = useState(false);
+  const [inviteSubmitting, setInviteSubmitting] = useState(false);
   const chartRef = useRef(null);
   const touchStartX = useRef(0);
   const slideshowRef = useRef(null);
@@ -1234,18 +1237,24 @@ const ReportSlideshow = ({
       sections.push({ title: currentSection, content: currentContent.join('\n') });
     }
     if (sections.length === 0 && text.trim()) {
-      sections.push({ title: 'Your Personal Reading', content: text });
+      sections.push({ title: 'Your Detailed Assessment Report', content: text });
     }
     return sections;
   }, []);
   
   const reportSections = useMemo(() => parseReportSections(aiAnalysis), [aiAnalysis, parseReportSections]);
   
-  // Split report sections for product insertion
-  const firstHalfSections = reportSections.slice(0, Math.ceil(reportSections.length / 2));
-  const secondHalfSections = reportSections.slice(Math.ceil(reportSections.length / 2));
+  // Find the equipment matching section index (to insert products before it)
+  const equipmentSectionIdx = reportSections.findIndex(s => 
+    s.title.toLowerCase().includes('equipment') || s.title.toLowerCase().includes('bdsm')
+  );
+  const productsInsertIdx = equipmentSectionIdx > 0 ? equipmentSectionIdx : Math.ceil(reportSections.length / 2);
   
-  // Get sorted scores for bar chart
+  // Split sections: before products, products, after products
+  const sectionsBeforeProducts = reportSections.slice(0, productsInsertIdx);
+  const sectionsAfterProducts = reportSections.slice(productsInsertIdx);
+  
+  // Get sorted scores for bar chart - ALL scores
   const dimensionPriority = Object.keys(dimensions);
   const sortedScores = Object.entries(scores)
     .filter(([dim]) => dimensions[dim])
@@ -1254,18 +1263,19 @@ const ReportSlideshow = ({
       return dimensionPriority.indexOf(dimA) - dimensionPriority.indexOf(dimB);
     });
   
-  // Build slide indices:
+  // Build slide indices
   // 0: Video, 1: Parallels, 2: Voucher
-  // 3 to 3+firstHalf-1: First reading
-  // productsIdx: Products
-  // productsIdx+1 to +secondHalf: Second reading
-  // chartIdx: Bar Chart, farewellIdx: Farewell, voucher2Idx: Voucher repeat, shareIdx: Image+Share
-  const productsSlideIndex = 3 + firstHalfSections.length;
-  const chartSlideIndex = productsSlideIndex + 1 + secondHalfSections.length;
+  // 3 to 3+beforeProducts-1: Sections before products
+  // productsIdx: Products (Curated For You)
+  // productsIdx+1 to +afterProducts: Sections after products
+  // Then: Chart, Farewell, Voucher2, Share, Invite
+  const productsSlideIndex = 3 + sectionsBeforeProducts.length;
+  const chartSlideIndex = productsSlideIndex + 1 + sectionsAfterProducts.length;
   const farewellSlideIndex = chartSlideIndex + 1;
   const voucher2SlideIndex = farewellSlideIndex + 1;
   const shareSlideIndex = voucher2SlideIndex + 1;
-  const totalSlides = shareSlideIndex + 1;
+  const inviteSlideIndex = shareSlideIndex + 1;
+  const totalSlides = inviteSlideIndex + 1;
   
   // Navigation
   const nextSlide = () => {
@@ -1296,7 +1306,7 @@ const ReportSlideshow = ({
     if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
   };
   
-  // Download bar chart as PNG
+  // Download chart as PNG with ALL bars
   const downloadChart = async () => {
     if (!chartRef.current) return;
     try {
@@ -1306,12 +1316,35 @@ const ReportSlideshow = ({
         useCORS: true
       });
       const link = document.createElement('a');
-      link.download = `bdsm-psychometric-profile.png`;
+      link.download = `bdsm-analysis-profile.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err) {
       console.error('Download failed:', err);
     }
+  };
+  
+  // Submit invite email
+  const handleInviteSubmit = async (e) => {
+    e.preventDefault();
+    if (!inviteEmail || !inviteEmail.includes('@')) return;
+    
+    setInviteSubmitting(true);
+    try {
+      await fetch('/api/invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          invitedEmail: inviteEmail,
+          referrerEmail: email,
+          referrerArchetype: primaryArchetype?.name
+        })
+      });
+      setInviteSubmitted(true);
+    } catch (err) {
+      console.error('Invite submission failed:', err);
+    }
+    setInviteSubmitting(false);
   };
   
   // Render markdown content
@@ -1331,6 +1364,9 @@ const ReportSlideshow = ({
   
   // Personalized farewell
   const farewellName = firstName ? `My dear ${firstName}` : `My dear ${primaryArchetype?.name}`;
+  
+  // Bar colors cycling
+  const barColors = ['#f6c541', '#d4af37', '#7cb342', '#059669', '#0891b2', '#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316'];
   
   return (
     <div ref={slideshowRef} className="report-slideshow" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
@@ -1393,16 +1429,16 @@ const ReportSlideshow = ({
           </div>
         </div>
         
-        {/* READING SLIDES: First half */}
-        {firstHalfSections.map((section, idx) => (
-          <div key={`first-${idx}`} className={getSlideClass(3 + idx)}>
-            <div className="slide-header"><span className="slide-number">Reading {idx + 1}</span></div>
+        {/* READING SLIDES: Before Products */}
+        {sectionsBeforeProducts.map((section, idx) => (
+          <div key={`before-${idx}`} className={getSlideClass(3 + idx)}>
+            <div className="slide-header"><span className="slide-number">Section {idx + 1}</span></div>
             <h3 className="slide-title">{section.title}</h3>
             <div className="slide-content">{renderContent(section.content)}</div>
           </div>
         ))}
         
-        {/* PRODUCTS SLIDE */}
+        {/* PRODUCTS SLIDE (Curated For You) */}
         <div className={getSlideClass(productsSlideIndex) + ' products-slide'}>
           <h3 className="slide-title">Curated For You</h3>
           <p className="products-intro">Products matched to your archetype</p>
@@ -1416,40 +1452,38 @@ const ReportSlideshow = ({
           </div>
         </div>
         
-        {/* READING SLIDES: Second half */}
-        {secondHalfSections.map((section, idx) => (
-          <div key={`second-${idx}`} className={getSlideClass(productsSlideIndex + 1 + idx)}>
-            <div className="slide-header"><span className="slide-number">Reading {firstHalfSections.length + idx + 1}</span></div>
+        {/* READING SLIDES: After Products */}
+        {sectionsAfterProducts.map((section, idx) => (
+          <div key={`after-${idx}`} className={getSlideClass(productsSlideIndex + 1 + idx)}>
+            <div className="slide-header"><span className="slide-number">Section {sectionsBeforeProducts.length + idx + 1}</span></div>
             <h3 className="slide-title">{section.title}</h3>
             <div className="slide-content">{renderContent(section.content)}</div>
           </div>
         ))}
         
-        {/* BAR CHART SLIDE */}
+        {/* BAR CHART SLIDE - ALL BARS */}
         <div className={getSlideClass(chartSlideIndex) + ' chart-slide'}>
-          <h3 className="slide-title">Your Psychometric Profile</h3>
-          <div ref={chartRef} className="chart-download-area">
+          <h3 className="slide-title">Download Your BDSM Analysis</h3>
+          <p className="chart-intro">To keep and share</p>
+          <div ref={chartRef} className="chart-download-area chart-full">
             <div className="chart-header">
               <span className="chart-archetype">{primaryArchetype?.name}</span>
               <span className="chart-subtitle">{primaryArchetype?.title}</span>
             </div>
             <div className="chart-bars">
-              {sortedScores.slice(0, 8).map(([dimension, score], index) => {
-                const colors = ['#f6c541', '#d4af37', '#7cb342', '#059669', '#0891b2', '#6366f1', '#8b5cf6', '#ec4899'];
-                return (
-                  <div key={dimension} className="chart-bar-row">
-                    <span className="chart-bar-label">{dimensions[dimension]?.name}</span>
-                    <div className="chart-bar-track">
-                      <div className="chart-bar-fill" style={{ width: `${score}%`, backgroundColor: colors[index] }} />
-                    </div>
-                    <span className="chart-bar-value">{score}%</span>
+              {sortedScores.map(([dimension, score], index) => (
+                <div key={dimension} className="chart-bar-row">
+                  <span className="chart-bar-label">{dimensions[dimension]?.name}</span>
+                  <div className="chart-bar-track">
+                    <div className="chart-bar-fill" style={{ width: `${score}%`, backgroundColor: barColors[index % barColors.length] }} />
                   </div>
-                );
-              })}
+                  <span className="chart-bar-value">{score}%</span>
+                </div>
+              ))}
             </div>
             <div className="chart-footer">quiz.marquisdemayfair.com</div>
           </div>
-          <button className="chart-download-btn" onClick={downloadChart}>📥 Download Profile</button>
+          <button className="chart-download-btn" onClick={downloadChart}>📥 Download Analysis</button>
         </div>
         
         {/* FAREWELL SLIDE */}
@@ -1469,7 +1503,7 @@ const ReportSlideshow = ({
         
         {/* VOUCHER REPEAT SLIDE */}
         <div className={getSlideClass(voucher2SlideIndex) + ' voucher-slide voucher-repeat'}>
-          <h3 className="slide-title">Don't Forget Your Reward</h3>
+          <h3 className="slide-title centered">Don't Forget Your Reward</h3>
           <div className="voucher-card">
             <span className="voucher-amount">10% OFF</span>
             <span className="voucher-text">Your entire order at Marquis de Mayfair</span>
@@ -1483,7 +1517,7 @@ const ReportSlideshow = ({
           </div>
         </div>
         
-        {/* FINAL SHARE SLIDE */}
+        {/* SHARE SLIDE */}
         <div className={getSlideClass(shareSlideIndex) + ' share-slide'}>
           <h3 className="slide-title">Share Your Archetype</h3>
           {primaryArchetype?.image && (
@@ -1505,6 +1539,42 @@ const ReportSlideshow = ({
               alert('Copied for FetLife!');
             }}>Copy for FetLife</button>
           </div>
+        </div>
+        
+        {/* INVITE FRIEND SLIDE */}
+        <div className={getSlideClass(inviteSlideIndex) + ' invite-slide'}>
+          <img src="/logo.png" alt="Marquis de Mayfair" className="invite-logo" />
+          <h3 className="slide-title centered">Invite a Friend</h3>
+          <p className="invite-intro">Know someone who'd enjoy discovering their archetype?</p>
+          <p className="invite-bonus">Get an additional <strong>5% discount</strong> when they take the test!</p>
+          
+          {!inviteSubmitted ? (
+            <form onSubmit={handleInviteSubmit} className="invite-form">
+              <input
+                type="email"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                placeholder="Friend's email address"
+                required
+                className="invite-input"
+              />
+              <button type="submit" className="invite-submit-btn" disabled={inviteSubmitting}>
+                {inviteSubmitting ? 'Sending...' : 'Send Invite'}
+              </button>
+            </form>
+          ) : (
+            <div className="invite-success">
+              <p className="invite-success-text">✓ Invite sent!</p>
+              <div className="friend-code-reveal">
+                <p>Your bonus code:</p>
+                <div className="voucher-code-box">
+                  <span className="voucher-code">FRIEND5</span>
+                  <button onClick={() => { navigator.clipboard.writeText('FRIEND5'); alert('Code copied!'); }}>Copy</button>
+                </div>
+                <p className="friend-code-note">5% off your next order</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       
