@@ -2203,7 +2203,7 @@ Where:
             
             <div className="social-share-buttons">
               <a 
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`)}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="share-button share-x"
@@ -2216,7 +2216,7 @@ Where:
               
               <button 
                 onClick={() => {
-                  const text = `${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`;
+                  const text = `I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`;
                   navigator.clipboard.writeText(text);
                   alert('Copied to clipboard! Paste in Instagram.');
                 }}
@@ -2230,7 +2230,7 @@ Where:
               
               <button 
                 onClick={() => {
-                  const text = `${primaryArchetype?.shareText}\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`;
+                  const text = `I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`;
                   navigator.clipboard.writeText(text);
                   alert('Copied to clipboard! Paste on FetLife.');
                 }}
@@ -2502,14 +2502,14 @@ Where:
             <div className="share-buttons">
               <button 
                 className="share-button twitter"
-                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`)}`, '_blank')}
+                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`)}`, '_blank')}
               >
                 Share on X
               </button>
               <button 
                 className="share-button copy"
                 onClick={() => {
-                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}. My historical parallel is ${primaryArchetype?.historical}, and my mythological echo is ${primaryArchetype?.mythological}.\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`);
+                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
                   alert('Copied to clipboard!');
                 }}
               >
@@ -2518,7 +2518,7 @@ Where:
               <button 
                 className="share-button fetlife"
                 onClick={() => {
-                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\n🔥 Discover your BDSM personality: ${getShareUrl()}`);
+                  navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
                   alert('Copied to clipboard! Paste on FetLife.');
                 }}
               >

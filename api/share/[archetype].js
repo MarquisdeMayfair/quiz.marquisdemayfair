@@ -156,7 +156,7 @@ export default async function handler(req, res) {
   const baseUrl = 'https://quiz.marquisdemayfair.com';
   const imageUrl = `${baseUrl}/archetype-images/${archetype.image}`;
   const pageTitle = `${archetype.name} - ${archetype.title}`;
-  const description = `${archetype.shareText} Discover your BDSM personality at Marquis de Mayfair.`;
+  const description = `I am ${archetype.name} - ${archetype.title}. Discover your BDSM archetype at Marquis de Mayfair.`;
   
   // Generate HTML with OG tags and instant redirect
   const html = `<!DOCTYPE html>
