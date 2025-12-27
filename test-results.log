@@ -11,4 +11,18 @@ Progress: 10/200 tests | Correct: 10 | Incorrect: 0 | Current: Test #10
 Progress: 20/200 tests | Correct: 19 | Incorrect: 1 | Current: Test #20
 Progress: 21/200 tests | Correct: 20 | Incorrect: 1 | Current: Test #21Progress: 22/200 tests | Correct: 21 | Incorrect: 1 | Current: Test #22Progress: 23/200 tests | Correct: 22 | Incorrect: 1 | Current: Test #23Progress: 24/200 tests | Correct: 23 | Incorrect: 1 | Current: Test #24Progress: 25/200 tests | Correct: 24 | Incorrect: 1 | Current: Test #25Progress: 26/200 tests | Correct: 25 | Incorrect: 1 | Current: Test #26Progress: 27/200 tests | Correct: 26 | Incorrect: 1 | Current: Test #27Progress: 28/200 tests | Correct: 27 | Incorrect: 1 | Current: Test #28Progress: 29/200 tests | Correct: 28 | Incorrect: 1 | Current: Test #29Progress: 30/200 tests | Correct: 29 | Incorrect: 1 | Current: Test #30
 Progress: 30/200 tests | Correct: 29 | Incorrect: 1 | Current: Test #30
-Progress: 31/200 tests | Correct: 30 | Incorrect: 1 | Current: Test #31Progress: 32/200 tests | Correct: 31 | Incorrect: 1 | Current: Test #32Progress: 33/200 tests | Correct: 32 | Incorrect: 1 | Current: Test #33Progress: 34/200 tests | Correct: 33 | Incorrect: 1 | Current: Test #34Progress: 35/200 tests | Correct: 34 | Incorrect: 1 | Current: Test #35
+Progress: 31/200 tests | Correct: 30 | Incorrect: 1 | Current: Test #31Progress: 32/200 tests | Correct: 31 | Incorrect: 1 | Current: Test #32Progress: 33/200 tests | Correct: 32 | Incorrect: 1 | Current: Test #33Progress: 34/200 tests | Correct: 33 | Incorrect: 1 | Current: Test #34Progress: 35/200 tests | Correct: 34 | Incorrect: 1 | Current: Test #35Progress: 36/200 tests | Correct: 35 | Incorrect: 1 | Current: Test #36Progress: 37/200 tests | Correct: 36 | Incorrect: 1 | Current: Test #37Progress: 38/200 tests | Correct: 37 | Incorrect: 1 | Current: Test #38Progress: 39/200 tests | Correct: 38 | Incorrect: 1 | Current: Test #39Progress: 40/200 tests | Correct: 39 | Incorrect: 1 | Current: Test #40
+Progress: 40/200 tests | Correct: 39 | Incorrect: 1 | Current: Test #40
+
+❌ INCORRECT RESULT - Test #41
+   Expected Primary: apex
+   Actual Primary: acolyte
+   Top 3 Expected Scores: primal_hunter: 84, dominance: 80, sadism: 77
+Progress: 41/200 tests | Correct: 39 | Incorrect: 2 | Current: Test #41Progress: 42/200 tests | Correct: 40 | Incorrect: 2 | Current: Test #42Progress: 43/200 tests | Correct: 41 | Incorrect: 2 | Current: Test #43Progress: 44/200 tests | Correct: 42 | Incorrect: 2 | Current: Test #44Progress: 45/200 tests | Correct: 43 | Incorrect: 2 | Current: Test #45Progress: 46/200 tests | Correct: 44 | Incorrect: 2 | Current: Test #46Progress: 47/200 tests | Correct: 45 | Incorrect: 2 | Current: Test #47Progress: 48/200 tests | Correct: 46 | Incorrect: 2 | Current: Test #48
+❌ INCORRECT RESULT - Test #49
+   Expected Primary: protector
+   Actual Primary: acolyte
+   Top 3 Expected Scores: caregiver: 87, masochism: 76, service: 75
+Progress: 49/200 tests | Correct: 46 | Incorrect: 3 | Current: Test #49Progress: 50/200 tests | Correct: 47 | Incorrect: 3 | Current: Test #50
+Progress: 50/200 tests | Correct: 47 | Incorrect: 3 | Current: Test #50
+Progress: 51/200 tests | Correct: 48 | Incorrect: 3 | Current: Test #51Progress: 52/200 tests | Correct: 49 | Incorrect: 3 | Current: Test #52Progress: 53/200 tests | Correct: 50 | Incorrect: 3 | Current: Test #53Progress: 54/200 tests | Correct: 51 | Incorrect: 3 | Current: Test #54Progress: 55/200 tests | Correct: 52 | Incorrect: 3 | Current: Test #55Progress: 56/200 tests | Correct: 53 | Incorrect: 3 | Current: Test #56Progress: 57/200 tests | Correct: 54 | Incorrect: 3 | Current: Test #57Progress: 58/200 tests | Correct: 55 | Incorrect: 3 | Current: Test #58

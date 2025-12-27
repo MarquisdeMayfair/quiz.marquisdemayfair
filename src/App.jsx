@@ -1530,8 +1530,15 @@ const ReportSlideshow = ({
   // Personalized farewell
   const farewellName = firstName ? `My dear ${firstName}` : `My dear ${primaryArchetype?.name}`;
   
-  // Bar colors cycling
-  const barColors = ['#f6c541', '#d4af37', '#7cb342', '#059669', '#0891b2', '#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316'];
+  // Color gradient function: Gold (top) → Green → Teal → Red (bottom) - matches results page
+  const getRankColor = (idx, total) => {
+    const ratio = idx / (total - 1);
+    if (ratio < 0.2) return '#f6c541'; // Gold (top scores)
+    if (ratio < 0.4) return '#7cb342'; // Light green
+    if (ratio < 0.6) return '#059669'; // Green/Teal
+    if (ratio < 0.8) return '#0891b2'; // Teal/Blue
+    return '#8B1538'; // Burgundy/Red (lowest)
+  };
   
   return (
     <div ref={slideshowRef} className="report-slideshow" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
@@ -1631,7 +1638,7 @@ const ReportSlideshow = ({
           <img src="/logo.png" alt="Marquis de Mayfair" className="invite-logo" />
           <h3 className="slide-title centered">Invite a Friend</h3>
           <p className="invite-intro">Know someone who'd enjoy discovering their archetype?</p>
-          <p className="invite-bonus">Get an additional <strong>5% discount</strong> when they take the test!</p>
+          <p className="invite-bonus">Get an additional <strong>5% discount voucher for you both</strong> when they complete the test.</p>
           
           {!inviteSubmitted ? (
             <form onSubmit={handleInviteSubmit} className="invite-form">
@@ -1650,14 +1657,6 @@ const ReportSlideshow = ({
           ) : (
             <div className="invite-success">
               <p className="invite-success-text">✓ Invite sent!</p>
-              <div className="friend-code-reveal">
-                <p>Your bonus code:</p>
-                <div className="voucher-code-box">
-                  <span className="voucher-code">FRIEND5</span>
-                  <button onClick={() => { navigator.clipboard.writeText('FRIEND5'); alert('Code copied!'); }}>Copy</button>
-                </div>
-                <p className="friend-code-note">5% off your next order</p>
-              </div>
             </div>
           )}
         </div>
@@ -1672,15 +1671,18 @@ const ReportSlideshow = ({
               <span className="chart-subtitle">{primaryArchetype?.title}</span>
             </div>
             <div className="chart-bars">
-              {sortedScores.map(([dimension, score], index) => (
-                <div key={dimension} className="chart-bar-row">
-                  <span className="chart-bar-label">{dimensions[dimension]?.name}</span>
-                  <div className="chart-bar-track">
-                    <div className="chart-bar-fill" style={{ width: `${score}%`, backgroundColor: barColors[index % barColors.length] }} />
+              {sortedScores.map(([dimension, score], index) => {
+                const barColor = getRankColor(index, sortedScores.length);
+                return (
+                  <div key={dimension} className="chart-bar-row">
+                    <span className="chart-bar-label">{DIMENSIONS[dimension]?.name}</span>
+                    <div className="chart-bar-track">
+                      <div className="chart-bar-fill" style={{ width: `${score}%`, backgroundColor: barColor }} />
+                    </div>
+                    <span className="chart-bar-value">{score}%</span>
                   </div>
-                  <span className="chart-bar-value">{score}%</span>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="chart-footer">quiz.marquisdemayfair.com</div>
           </div>
@@ -3011,7 +3013,7 @@ Where:
 
           <div className="unlock-section">
             <div className="unlock-card">
-              <h2>FREE 1,500-Word Personalised Sexual Archetype Report Based on Your Results</h2>
+              <h2>FREE 1,500-Word Sexual Archetype Report Based on Your Results</h2>
               <p className="unlock-tagline">Written for you. Decoded by AI. Curated by the Marquis.</p>
               
               <h3 className="unlock-intro">You are not random. Your desires follow patterns.<br />This free 1,500-word report reveals exactly how yours are wired.</h3>
