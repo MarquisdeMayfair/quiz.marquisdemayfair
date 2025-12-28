@@ -1740,7 +1740,6 @@ const ReportSlideshow = ({
         
         {/* INVITE FRIEND SLIDE */}
         <div className={getSlideClass(inviteSlideIndex) + ' invite-slide'}>
-          <img src="/logo.png" alt="Marquis de Mayfair" className="invite-logo" />
           <h3 className="slide-title centered">Invite a Friend</h3>
           <p className="invite-intro">Know someone who'd enjoy discovering their archetype?</p>
           <p className="invite-bonus">Get an additional <strong>5% discount voucher for you both</strong> when they complete the test.</p>
@@ -3368,7 +3367,7 @@ export default function MarquisPersonaTest() {
           </p>
           <p>
             This <strong>bondage quiz</strong> features 64 original questions developed from peer-reviewed academic research. 
-            Each question is carefully weighted and scored to produce meaningful results—not generic entertainment. 
+            Each question is carefully weighted and scored to produce meaningful results - not generic entertainment. 
             Upon completion, you'll discover which of our <strong>16 unique BDSM archetypes</strong> best reflects your 
             intimate psychology, from The Sovereign's natural authority to The Devotee's sacred surrender.
           </p>
@@ -3376,13 +3375,13 @@ export default function MarquisPersonaTest() {
           <h3>What Makes This Kink Test Different</h3>
           <ul>
             <li><strong>Academic Foundation:</strong> Built on peer-reviewed research from journals including Psychology & Sexuality and the Journal of Sexual Medicine</li>
-            <li><strong>Original Questions:</strong> All 64 questions are original—not recycled from other assessments</li>
+            <li><strong>Original Questions:</strong> All 64 questions are original - not recycled from other assessments</li>
             <li><strong>16 Archetypes:</strong> Discover nuanced results across dominant, submissive, switch, and specialised orientations</li>
             <li><strong>AI-Powered Reports:</strong> Receive a free 1,500-word personalised analysis generated specifically for your results</li>
             <li><strong>Complete Privacy:</strong> No account required, results processed client-side</li>
           </ul>
           
-          <h3>The 17 BDSM Archetypes</h3>
+          <h3>The 16 BDSM Archetypes</h3>
           <p>
             Our <strong>kink test</strong> identifies your primary and secondary archetypes from 16 possible outcomes: 
             The Sovereign, The Devotee, The Artisan, The Phoenix, The Weaver, The Chrysalis, The Luminary, The Oracle, 
@@ -3533,6 +3532,28 @@ Where:
             Free 1,500-word AI report • No account required • Complete privacy
           </p>
         </section>
+
+        <div className="marquis-bio">
+          <h3>Who is the Marquis de Mayfair?</h3>
+          <p>
+            The Marquis emerged from an unlikely journey - a former pastor who discovered that the principles 
+            of devotion, trust, and transformation apply as profoundly in the dungeon as they do in the sanctuary. 
+            After two decades exploring the depths of power exchange, he arrived in central London and found 
+            himself frustrated: why did luxury stop at the bedroom door?
+          </p>
+          <p>
+            "Style shouldn't end when we undress," became his founding principle. What began as personal philosophy 
+            evolved into <a href="https://www.marquisdemayfair.com" target="_blank" rel="noopener noreferrer">Marquis de Mayfair</a> - a 
+            luxury house crafting exquisite pieces from fine Italian leather, gold hardware, and precious materials. 
+            With a showroom in the heart of Mayfair, the brand serves those who believe intimacy deserves 
+            the same elegance as any other art form.
+          </p>
+          <p>
+            This assessment is an extension of that vision: proving that understanding your desires can be 
+            as sophisticated as indulging them. The Marquis believes in BDSM as personal development - a path 
+            to confidence, authenticity, and the celebration of who you truly are.
+          </p>
+        </div>
 
         <div className="methodology-footer">
           <p>© 2025 Marquis de Mayfair Ltd. All questions and methodology are original intellectual property.</p>
