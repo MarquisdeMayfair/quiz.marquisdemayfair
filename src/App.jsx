@@ -834,7 +834,8 @@ const ORIGINAL_QUESTIONS = [
 // ARCHETYPE DEFINITIONS WITH PRODUCT MATCHING
 // ============================================================================
 
-const ARCHETYPES = {
+// Default archetypes - used for fallback/seeding, loaded from API on mount
+const DEFAULT_ARCHETYPES = {
   sovereign: {
     name: "The Sovereign",
     title: "Keeper of Sacred Authority",
@@ -1795,6 +1796,10 @@ export default function MarquisPersonaTest() {
   const [videoHasPlayed, setVideoHasPlayed] = useState(false); // Track if archetype video has played
   const [reportVideoHasPlayed, setReportVideoHasPlayed] = useState(false); // Track if report page video has played
   
+  // Dynamic archetypes loaded from API
+  const [archetypes, setArchetypes] = useState(DEFAULT_ARCHETYPES);
+  const [archetypesLoading, setArchetypesLoading] = useState(true);
+  
   // Ref for loading section scroll
   const loadingRef = useRef(null);
 
@@ -1819,6 +1824,27 @@ export default function MarquisPersonaTest() {
     if (window.location.pathname === '/admin') {
       setShowAdmin(true);
     }
+  }, []);
+
+  // Load archetypes from API on mount
+  useEffect(() => {
+    const loadArchetypes = async () => {
+      try {
+        const response = await fetch('/api/archetypes');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.archetypes) {
+            setArchetypes(data.archetypes);
+            console.log('Archetypes loaded from:', data.source);
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load archetypes from API, using defaults:', error.message);
+      } finally {
+        setArchetypesLoading(false);
+      }
+    };
+    loadArchetypes();
   }, []);
 
   // Timer for AI generation progress with status messages
@@ -1976,16 +2002,16 @@ export default function MarquisPersonaTest() {
     if (sorted.length < 2) {
       console.warn('Warning: Less than 2 dimensions with scores');
       return { 
-        primary: Object.values(ARCHETYPES)[0], 
-        secondary: Object.values(ARCHETYPES)[1] 
+        primary: Object.values(archetypes)[0], 
+        secondary: Object.values(archetypes)[1] 
       };
     }
     
     const primaryDim = sorted[0][0];
     const secondaryDim = sorted[1][0];
 
-    const primary = Object.values(ARCHETYPES).find(a => a.primaryDimension === primaryDim);
-    const secondary = Object.values(ARCHETYPES).find(a => a.primaryDimension === secondaryDim);
+    const primary = Object.values(archetypes).find(a => a.primaryDimension === primaryDim);
+    const secondary = Object.values(archetypes).find(a => a.primaryDimension === secondaryDim);
 
     // Debug logging for test mode
     if (testMode) {
@@ -1995,10 +2021,10 @@ export default function MarquisPersonaTest() {
       console.log('DEBUG: Secondary dimension:', secondaryDim, '→', secondary?.name || 'NOT FOUND');
     }
     
-    const finalPrimary = primary || Object.values(ARCHETYPES)[0];
+    const finalPrimary = primary || Object.values(archetypes)[0];
 
     return { primary: finalPrimary, secondary };
-  }, []);
+  }, [archetypes]);
 
   // Handle answer selection
   const handleAnswer = (value) => {
@@ -2124,8 +2150,8 @@ export default function MarquisPersonaTest() {
   // Get share URL for current archetype
   const getShareUrl = () => {
     if (!primaryArchetype) return 'https://quiz.marquisdemayfair.com';
-    // Find the archetype key from ARCHETYPES
-    const key = Object.keys(ARCHETYPES).find(k => ARCHETYPES[k].name === primaryArchetype.name);
+    // Find the archetype key from archetypes
+    const key = Object.keys(archetypes).find(k => archetypes[k].name === primaryArchetype.name);
     if (!key) return 'https://quiz.marquisdemayfair.com';
     return `https://quiz.marquisdemayfair.com/share/${getShareSlug(key)}`;
   };
@@ -2251,6 +2277,15 @@ export default function MarquisPersonaTest() {
     const [recentLeads, setRecentLeads] = useState([]);
     const [inviteCount, setInviteCount] = useState(0);
     const [recentInvites, setRecentInvites] = useState([]);
+    
+    // Tab navigation state
+    const [activeTab, setActiveTab] = useState('questions'); // 'questions' or 'archetypes'
+    
+    // Archetype editor state
+    const [selectedArchetypeKey, setSelectedArchetypeKey] = useState(Object.keys(archetypes)[0] || 'sovereign');
+    const [archetypeForm, setArchetypeForm] = useState(null);
+    const [archetypeSaving, setArchetypeSaving] = useState(false);
+    const [archetypeSaveStatus, setArchetypeSaveStatus] = useState('');
 
     // Check if running locally (development mode)
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -2284,7 +2319,18 @@ export default function MarquisPersonaTest() {
 
     const handleLogin = async (e) => {
       e.preventDefault();
-      // Validate password against server
+      
+      // For local dev, skip API and allow if password is 4+ chars
+      if (isLocalDev) {
+        if (adminPassword.length >= 4) {
+          setIsAuthenticated(true);
+        } else {
+          alert('Password must be at least 4 characters');
+        }
+        return;
+      }
+      
+      // Validate password against server (production)
       try {
         const response = await fetch('/api/admin-auth', {
           method: 'POST',
@@ -2299,12 +2345,7 @@ export default function MarquisPersonaTest() {
         }
       } catch (error) {
         console.error('Auth error:', error);
-        // For local dev, allow password if 4+ chars (API not available locally)
-        if (isLocalDev && adminPassword.length >= 4) {
-          setIsAuthenticated(true);
-        } else {
-          alert('Authentication failed. Please try again.');
-        }
+        alert('Authentication failed. Please try again.');
       }
     };
 
@@ -2400,6 +2441,109 @@ export default function MarquisPersonaTest() {
       }
     };
 
+    // Load archetype into form when selection changes
+    useEffect(() => {
+      if (selectedArchetypeKey && archetypes[selectedArchetypeKey]) {
+        setArchetypeForm({ ...archetypes[selectedArchetypeKey] });
+        setArchetypeSaveStatus('');
+      }
+    }, [selectedArchetypeKey, archetypes]);
+
+    // Save archetype changes
+    const handleArchetypeSave = async () => {
+      if (!archetypeForm || !selectedArchetypeKey) return;
+      
+      setArchetypeSaving(true);
+      setArchetypeSaveStatus('Saving...');
+      
+      try {
+        const response = await fetch('/api/archetypes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            password: adminPassword,
+            action: 'update_single',
+            archetypeKey: selectedArchetypeKey,
+            archetypeData: archetypeForm
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          setArchetypes(data.archetypes);
+          setArchetypeSaveStatus('✓ Saved successfully!');
+          setTimeout(() => setArchetypeSaveStatus(''), 3000);
+        } else {
+          setArchetypeSaveStatus(`✗ Error: ${data.error || 'Save failed'}`);
+        }
+      } catch (error) {
+        setArchetypeSaveStatus(`✗ Error: ${error.message}`);
+      } finally {
+        setArchetypeSaving(false);
+      }
+    };
+
+    // Reset single archetype to default
+    const handleArchetypeReset = async () => {
+      if (!window.confirm(`Reset "${archetypes[selectedArchetypeKey]?.name}" to default values? This cannot be undone.`)) return;
+      
+      setArchetypeSaving(true);
+      setArchetypeSaveStatus('Resetting...');
+      
+      try {
+        const response = await fetch('/api/archetypes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            password: adminPassword,
+            action: 'reset_single',
+            archetypeKey: selectedArchetypeKey
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          setArchetypes(data.archetypes);
+          setArchetypeForm({ ...data.archetypes[selectedArchetypeKey] });
+          setArchetypeSaveStatus('✓ Reset to default!');
+          setTimeout(() => setArchetypeSaveStatus(''), 3000);
+        } else {
+          setArchetypeSaveStatus(`✗ Error: ${data.error || 'Reset failed'}`);
+        }
+      } catch (error) {
+        setArchetypeSaveStatus(`✗ Error: ${error.message}`);
+      } finally {
+        setArchetypeSaving(false);
+      }
+    };
+
+    // Update product in form
+    const updateProduct = (index, field, value) => {
+      setArchetypeForm(prev => {
+        const newProducts = [...(prev.suggestedProducts || [])];
+        newProducts[index] = { ...newProducts[index], [field]: value };
+        return { ...prev, suggestedProducts: newProducts };
+      });
+    };
+
+    // Add new product
+    const addProduct = () => {
+      setArchetypeForm(prev => ({
+        ...prev,
+        suggestedProducts: [...(prev.suggestedProducts || []), { name: '', url: '', reason: '' }]
+      }));
+    };
+
+    // Remove product
+    const removeProduct = (index) => {
+      setArchetypeForm(prev => ({
+        ...prev,
+        suggestedProducts: prev.suggestedProducts.filter((_, i) => i !== index)
+      }));
+    };
+
     // Login screen
     if (!isAuthenticated) {
       return (
@@ -2430,14 +2574,39 @@ export default function MarquisPersonaTest() {
     return (
       <div className="admin-panel">
         <div className="admin-header">
-          <h2>Question Administration</h2>
-          <p>Edit questions while maintaining psychometric validity. Changes preserve scoring weights and dimension mappings.</p>
+          <h2>Admin Panel</h2>
           <div className="admin-actions">
-            <button onClick={exportQuestions} className="admin-btn export">Export Questions JSON</button>
-            <button onClick={exportLeadsCSV} className="admin-btn export">Export Leads CSV</button>
             <button onClick={() => setShowAdmin(false)} className="admin-btn close">Close Admin</button>
           </div>
         </div>
+
+        {/* Tab Navigation */}
+        <div className="admin-tabs">
+          <button 
+            className={`admin-tab ${activeTab === 'questions' ? 'active' : ''}`}
+            onClick={() => setActiveTab('questions')}
+          >
+            Questions
+          </button>
+          <button 
+            className={`admin-tab ${activeTab === 'archetypes' ? 'active' : ''}`}
+            onClick={() => setActiveTab('archetypes')}
+          >
+            Archetypes
+          </button>
+        </div>
+
+        {/* Questions Tab */}
+        {activeTab === 'questions' && (
+          <>
+            <div className="admin-tab-header">
+              <h3>Question Administration</h3>
+              <p>Edit questions while maintaining psychometric validity. Changes preserve scoring weights and dimension mappings.</p>
+              <div className="admin-actions">
+                <button onClick={exportQuestions} className="admin-btn export">Export Questions JSON</button>
+                <button onClick={exportLeadsCSV} className="admin-btn export">Export Leads CSV</button>
+              </div>
+            </div>
 
         {/* Lead Stats Section */}
         <div className="admin-leads-section">
@@ -2579,6 +2748,228 @@ export default function MarquisPersonaTest() {
             </div>
           ))}
         </div>
+          </>
+        )}
+
+        {/* Archetypes Tab */}
+        {activeTab === 'archetypes' && (
+          <div className="admin-archetypes">
+            <div className="admin-tab-header">
+              <h3>Archetype Editor</h3>
+              <p>Edit archetype names, descriptions, images, videos, and product recommendations.</p>
+            </div>
+
+            {/* Archetype Selector */}
+            <div className="archetype-selector">
+              <label>Select Archetype:</label>
+              <select 
+                value={selectedArchetypeKey} 
+                onChange={(e) => setSelectedArchetypeKey(e.target.value)}
+                className="archetype-select"
+              >
+                {Object.entries(archetypes).map(([key, arch]) => (
+                  <option key={key} value={key}>{arch.name} ({key})</option>
+                ))}
+              </select>
+            </div>
+
+            {archetypeForm && (
+              <div className="archetype-editor">
+                {/* Basic Info Section */}
+                <div className="editor-section">
+                  <h4>Basic Information</h4>
+                  <div className="editor-field">
+                    <label>Name:</label>
+                    <input
+                      type="text"
+                      value={archetypeForm.name || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, name: e.target.value }))}
+                      placeholder="e.g., The Sovereign"
+                    />
+                  </div>
+                  <div className="editor-field">
+                    <label>Title:</label>
+                    <input
+                      type="text"
+                      value={archetypeForm.title || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, title: e.target.value }))}
+                      placeholder="e.g., Keeper of Sacred Authority"
+                    />
+                  </div>
+                  <div className="editor-field">
+                    <label>Historical Parallel:</label>
+                    <input
+                      type="text"
+                      value={archetypeForm.historical || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, historical: e.target.value }))}
+                      placeholder="e.g., Catherine the Great"
+                    />
+                  </div>
+                  <div className="editor-field">
+                    <label>Mythological Parallel:</label>
+                    <input
+                      type="text"
+                      value={archetypeForm.mythological || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, mythological: e.target.value }))}
+                      placeholder="e.g., Zeus/Hera"
+                    />
+                  </div>
+                  <div className="editor-field">
+                    <label>Primary Dimension:</label>
+                    <select
+                      value={archetypeForm.primaryDimension || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, primaryDimension: e.target.value }))}
+                    >
+                      {Object.entries(DIMENSIONS).map(([key, dim]) => (
+                        <option key={key} value={key}>{dim.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Media Section */}
+                <div className="editor-section">
+                  <h4>Media</h4>
+                  <div className="editor-field">
+                    <label>Image Path:</label>
+                    <input
+                      type="text"
+                      value={archetypeForm.image || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, image: e.target.value }))}
+                      placeholder="/archetype-images/the_sovereign.png"
+                    />
+                  </div>
+                  <div className="editor-field">
+                    <label>Video Path:</label>
+                    <input
+                      type="text"
+                      value={archetypeForm.video || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, video: e.target.value }))}
+                      placeholder="/archetype-videos/the_sovereign.mp4"
+                    />
+                  </div>
+                </div>
+
+                {/* Share Text Section */}
+                <div className="editor-section">
+                  <h4>Share Text</h4>
+                  <div className="editor-field">
+                    <label>Social Media Share Text:</label>
+                    <textarea
+                      value={archetypeForm.shareText || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, shareText: e.target.value }))}
+                      placeholder="I'm The Sovereign - natural authority meets sacred responsibility..."
+                      rows={3}
+                    />
+                  </div>
+                </div>
+
+                {/* Cold Reading Section */}
+                <div className="editor-section">
+                  <h4>Cold Reading (Personality Description)</h4>
+                  <div className="editor-field">
+                    <label>Cold Reading Text:</label>
+                    <textarea
+                      value={archetypeForm.coldReading || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, coldReading: e.target.value }))}
+                      placeholder="You have always sensed a natural authority within yourself..."
+                      rows={8}
+                    />
+                  </div>
+                </div>
+
+                {/* Product Categories Section */}
+                <div className="editor-section">
+                  <h4>Product Categories</h4>
+                  <div className="editor-field">
+                    <label>Categories (comma-separated):</label>
+                    <input
+                      type="text"
+                      value={(archetypeForm.productCategories || []).join(', ')}
+                      onChange={(e) => setArchetypeForm(prev => ({ 
+                        ...prev, 
+                        productCategories: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
+                      }))}
+                      placeholder="impact, restraints, collars_leashes"
+                    />
+                  </div>
+                </div>
+
+                {/* Suggested Products Section */}
+                <div className="editor-section">
+                  <h4>Suggested Products</h4>
+                  {(archetypeForm.suggestedProducts || []).map((product, idx) => (
+                    <div key={idx} className="product-editor">
+                      <div className="product-header">
+                        <span>Product {idx + 1}</span>
+                        <button 
+                          type="button" 
+                          onClick={() => removeProduct(idx)} 
+                          className="remove-product-btn"
+                        >
+                          ✕ Remove
+                        </button>
+                      </div>
+                      <div className="editor-field">
+                        <label>Name:</label>
+                        <input
+                          type="text"
+                          value={product.name || ''}
+                          onChange={(e) => updateProduct(idx, 'name', e.target.value)}
+                          placeholder="Product name"
+                        />
+                      </div>
+                      <div className="editor-field">
+                        <label>URL:</label>
+                        <input
+                          type="text"
+                          value={product.url || ''}
+                          onChange={(e) => updateProduct(idx, 'url', e.target.value)}
+                          placeholder="/products/product-slug"
+                        />
+                      </div>
+                      <div className="editor-field">
+                        <label>Reason:</label>
+                        <input
+                          type="text"
+                          value={product.reason || ''}
+                          onChange={(e) => updateProduct(idx, 'reason', e.target.value)}
+                          placeholder="Why this product fits"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <button type="button" onClick={addProduct} className="add-product-btn">
+                    + Add Product
+                  </button>
+                </div>
+
+                {/* Save Actions */}
+                <div className="editor-actions">
+                  <button 
+                    onClick={handleArchetypeSave} 
+                    disabled={archetypeSaving}
+                    className="save-btn"
+                  >
+                    {archetypeSaving ? 'Saving...' : 'Save Changes'}
+                  </button>
+                  <button 
+                    onClick={handleArchetypeReset}
+                    disabled={archetypeSaving}
+                    className="reset-btn"
+                  >
+                    Reset to Default
+                  </button>
+                  {archetypeSaveStatus && (
+                    <span className={`save-status ${archetypeSaveStatus.includes('✓') ? 'success' : 'error'}`}>
+                      {archetypeSaveStatus}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     );
   };

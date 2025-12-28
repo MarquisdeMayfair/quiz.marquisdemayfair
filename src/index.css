@@ -3658,6 +3658,268 @@ body.show-recaptcha .grecaptcha-badge {
 }
 
 /* ============================================================================
+   ADMIN TABS & ARCHETYPE EDITOR
+   ============================================================================ */
+
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: var(--space-lg);
+  border-bottom: 2px solid var(--gold-dark);
+}
+
+.admin-tab {
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--gray-warm);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: -2px;
+}
+
+.admin-tab:hover {
+  color: var(--cream);
+}
+
+.admin-tab.active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold-bright);
+}
+
+.admin-tab-header {
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--black-lighter);
+}
+
+.admin-tab-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--gold-bright);
+  margin-bottom: var(--space-xs);
+}
+
+.admin-tab-header p {
+  font-family: var(--font-body);
+  color: var(--gray-warm);
+  font-size: 0.9rem;
+}
+
+.admin-archetypes {
+  padding: var(--space-md) 0;
+}
+
+.archetype-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--black-soft);
+  border: 1px solid var(--gold-dark);
+}
+
+.archetype-selector label {
+  font-family: var(--font-body);
+  color: var(--cream);
+  font-size: 0.9rem;
+}
+
+.archetype-select {
+  flex: 1;
+  max-width: 400px;
+  padding: 0.6rem 1rem;
+  background: var(--black-deep);
+  border: 1px solid var(--gold-dark);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.archetype-select:focus {
+  outline: none;
+  border-color: var(--gold-bright);
+}
+
+.archetype-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.editor-section {
+  background: var(--black-card);
+  border: 1px solid var(--black-lighter);
+  padding: var(--space-md);
+}
+
+.editor-section h4 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--gold-muted);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--black-lighter);
+}
+
+.editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: var(--space-md);
+}
+
+.editor-field:last-child {
+  margin-bottom: 0;
+}
+
+.editor-field label {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--gray-warm);
+}
+
+.editor-field input[type="text"],
+.editor-field textarea,
+.editor-field select {
+  width: 100%;
+  padding: 0.6rem;
+  background: var(--black-deep);
+  border: 1px solid var(--gold-dark);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease;
+}
+
+.editor-field input:focus,
+.editor-field textarea:focus,
+.editor-field select:focus {
+  outline: none;
+  border-color: var(--gold-bright);
+}
+
+.editor-field textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: var(--font-elegant);
+  line-height: 1.5;
+}
+
+.product-editor {
+  background: var(--black-soft);
+  border: 1px solid var(--black-lighter);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--black-lighter);
+}
+
+.product-header span {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--gold-muted);
+  font-weight: 500;
+}
+
+.remove-product-btn {
+  background: transparent;
+  border: 1px solid var(--error);
+  color: var(--error);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.remove-product-btn:hover {
+  background: var(--error);
+  color: white;
+}
+
+.add-product-btn {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  background: transparent;
+  border: 1px dashed var(--gold-dark);
+  color: var(--gold-muted);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-product-btn:hover {
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  border-style: solid;
+}
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--black-soft);
+  border: 1px solid var(--gold-dark);
+  flex-wrap: wrap;
+}
+
+.editor-actions .save-btn {
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+}
+
+.reset-btn {
+  padding: 0.6rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--warning);
+  color: var(--warning);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+  background: var(--warning);
+  color: var(--black-deep);
+}
+
+.reset-btn:disabled,
+.editor-actions .save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-status {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.save-status.success {
+  color: var(--success);
+}
+
+.save-status.error {
+  color: var(--error);
+}
+
+/* ============================================================================
    METHODOLOGY PAGE
    ============================================================================ */
 
