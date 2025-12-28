@@ -50,10 +50,10 @@ export default async function handler(req, res) {
       answerContext = significantAnswers.join('\n');
     }
 
-    // Build product recommendations section
+    // Build product recommendations section (names only, no URLs - products are shown on dedicated slide)
     const products = primaryArchetype?.suggestedProducts || [];
     const productContext = products.map(p => 
-      `- ${p.name}: ${p.reason} (URL: https://www.marquisdemayfair.com${p.url})`
+      `- ${p.name}: ${p.reason}`
     ).join('\n');
 
     const prompt = `You are the Marquis de Mayfair, an elegant, sophisticated psychologist specializing in BDSM power dynamics, intimate psychology, and sexual self-discovery. You write with the insight of a master therapist combined with the wit of a luxury brand—think Esther Perel meets Tom Ford, with the psychological depth of Carl Jung.
@@ -129,10 +129,10 @@ Every archetype has shadow aspects:
 ## 5. YOUR CURATED COLLECTION: Tools for Your Journey (200+ words)
 
 Introduce the products as sacred tools for their exploration. For EACH of the ${products.length} products:
-- Name the product and explain WHY it specifically suits their archetype
+- Simply name the product (do NOT include URLs or links - these are shown separately)
+- Explain WHY it specifically suits their archetype
 - How would someone with their psychological profile USE this item?
 - What experiences or states might it facilitate for them specifically?
-- Include the full URL for each product
 
 Products to recommend:
 ${productContext}
@@ -175,12 +175,12 @@ FORMATTING:
 - Break long paragraphs into digestible chunks (3-4 sentences max per paragraph)
 - Use clear section headers as specified
 - Add line breaks between paragraphs for readability
-- Format product URLs as clickable markdown links: [Product Name](URL)
+- Do NOT include URLs or links - products are displayed separately with proper links
 
 CRITICAL REQUIREMENTS:
 - AT LEAST 1500 words total
 - Reference specific dimension scores by name and percentage
-- Include ALL product recommendations with URLs formatted as markdown links
+- Mention ALL product recommendations BY NAME ONLY (no URLs, no links, no markdown)
 - Make it feel like a genuine psychological reading, not a template
 - Every paragraph should feel personally relevant to THIS user's results
 - Keep paragraphs short and scannable for mobile reading

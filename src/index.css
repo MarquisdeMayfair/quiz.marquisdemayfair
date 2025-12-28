@@ -2162,6 +2162,16 @@ body.show-recaptcha .grecaptcha-badge {
   display: block;
 }
 
+.parallel-link {
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.parallel-link:hover {
+  color: var(--gold-pale);
+  text-decoration: underline;
+}
+
 .parallel-subtitle {
   font-family: var(--font-elegant);
   font-size: 0.9rem;
@@ -2386,10 +2396,13 @@ body.show-recaptcha .grecaptcha-badge {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 
 .chart-slide .chart-download-area {
   margin-bottom: var(--space-lg); /* Space before nav buttons */
+  flex-shrink: 0; /* Prevent shrinking for screenshot */
 }
 
 .chart-download-area {

@@ -1229,7 +1229,7 @@ const ReportSlideshow = ({
   const [inviteSubmitted, setInviteSubmitted] = useState(false);
   const [inviteSubmitting, setInviteSubmitting] = useState(false);
   const [inviteMessage, setInviteMessage] = useState(
-    `Hey! I just took the Marquis de Mayfair personality test about my inner dom and sub - it was fascinating! We both get a 5% voucher if you take it too. Here's the link: quiz.marquisdemayfair.com`
+    `Hey! I just took the Marquis de Mayfair personality test about my inner dom and sub - it was fascinating! We both get a 5% voucher if you take it too. Here's the link: https://quiz.marquisdemayfair.com`
   );
   const [inviteCopied, setInviteCopied] = useState(false);
   const chartRef = useRef(null);
@@ -1642,11 +1642,33 @@ const ReportSlideshow = ({
           <div className="parallels-grid">
             <div className="parallel-card">
               <span className="parallel-label">Historical Parallel</span>
-              <span className="parallel-value">{primaryArchetype?.historical}</span>
+              {primaryArchetype?.historicalUrl ? (
+                <a 
+                  href={primaryArchetype.historicalUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="parallel-value parallel-link"
+                >
+                  {primaryArchetype?.historical} →
+                </a>
+              ) : (
+                <span className="parallel-value">{primaryArchetype?.historical}</span>
+              )}
             </div>
             <div className="parallel-card">
               <span className="parallel-label">Mythological Echo</span>
-              <span className="parallel-value">{primaryArchetype?.mythological}</span>
+              {primaryArchetype?.mythologicalUrl ? (
+                <a 
+                  href={primaryArchetype.mythologicalUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="parallel-value parallel-link"
+                >
+                  {primaryArchetype?.mythological} →
+                </a>
+              ) : (
+                <span className="parallel-value">{primaryArchetype?.mythological}</span>
+              )}
             </div>
             <div className="parallel-card secondary">
               <span className="parallel-label">Secondary Archetype</span>
@@ -1769,7 +1791,6 @@ const ReportSlideshow = ({
             <div className="invite-success">
               <p className="invite-success-text">✓ Invite recorded!</p>
               <p className="invite-success-note">Your email app should have opened. Send the message to complete the invite.</p>
-              <p className="invite-success-code">When they complete the test, you'll both receive a <strong>FRIEND5</strong> voucher code!</p>
             </div>
           )}
         </div>
@@ -2934,12 +2955,30 @@ export default function MarquisPersonaTest() {
                     />
                   </div>
                   <div className="editor-field">
+                    <label>Historical Wikipedia URL:</label>
+                    <input
+                      type="text"
+                      value={archetypeForm.historicalUrl || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, historicalUrl: e.target.value }))}
+                      placeholder="e.g., https://en.wikipedia.org/wiki/Catherine_the_Great"
+                    />
+                  </div>
+                  <div className="editor-field">
                     <label>Mythological Parallel:</label>
                     <input
                       type="text"
                       value={archetypeForm.mythological || ''}
                       onChange={(e) => setArchetypeForm(prev => ({ ...prev, mythological: e.target.value }))}
                       placeholder="e.g., Zeus/Hera"
+                    />
+                  </div>
+                  <div className="editor-field">
+                    <label>Mythological Wikipedia URL:</label>
+                    <input
+                      type="text"
+                      value={archetypeForm.mythologicalUrl || ''}
+                      onChange={(e) => setArchetypeForm(prev => ({ ...prev, mythologicalUrl: e.target.value }))}
+                      placeholder="e.g., https://en.wikipedia.org/wiki/Zeus"
                     />
                   </div>
                   <div className="editor-field">
@@ -3887,11 +3926,9 @@ Where:
                 <ul>
                   <li>A downloadable and shareable scorecard with AI report</li>
                   <li>Clear breakdown of your dominant traits, secondary influences, and hidden drives</li>
-                  <li>Desire mapped like a horoscope. Tendencies, cycles, and repeat behaviours revealed</li>
-                  <li>Insights powered by our proprietary BDSM knowledge base and behavioural frameworks</li>
                   <li>Historical and mythological parallels that mirror your power dynamic</li>
                   <li>Explanation of how you seek control, surrender, intimacy, or tension</li>
-                  <li>Compatibility signals. What draws you in. What keeps you obsessed</li>
+                  <li>Invite friends for compatibility matching and get additional 5% discount code</li>
                   <li>Personalised BDSM product recommendations aligned to your archetype</li>
                   <li>Exclusive private offers tailored specifically to your profile</li>
                   <li>Curated and interpreted by the Marquis</li>
