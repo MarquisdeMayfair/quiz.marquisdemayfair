@@ -4830,23 +4830,18 @@ body.show-recaptcha .grecaptcha-badge {
   color: var(--cream);
 }
 
-.archetype-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-md) var(--space-lg);
-  border-bottom: 1px solid var(--gold-dark);
-}
-
-.back-to-home {
-  color: var(--gold-bright);
+.back-to-quiz {
+  display: inline-block;
+  color: var(--gold-muted);
   text-decoration: none;
   font-family: var(--font-body);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
   transition: color 0.3s ease;
 }
 
-.back-to-home:hover {
-  color: var(--gold-pale);
+.back-to-quiz:hover {
+  color: var(--gold-bright);
 }
 
 .archetype-hero {

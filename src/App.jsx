@@ -3102,11 +3102,6 @@ export default function MarquisPersonaTest() {
           "dateModified": new Date().toISOString().split('T')[0]
         })}} />
 
-        <header className="archetype-header">
-          <a href="/" className="back-to-home">← Back to Quiz</a>
-          <img src="/header-logo.png" alt="Marquis de Mayfair" className="header-logo" />
-        </header>
-
         <div className="archetype-hero">
           <img 
             src={archetype.image} 
@@ -3114,6 +3109,7 @@ export default function MarquisPersonaTest() {
             className="archetype-hero-image"
           />
           <div className="archetype-hero-content">
+            <a href="/" className="back-to-quiz">← Take the Quiz</a>
             <h1>{archetype.name}</h1>
             <p className="archetype-title-text">{archetype.title}</p>
             <div className="archetype-parallels">
