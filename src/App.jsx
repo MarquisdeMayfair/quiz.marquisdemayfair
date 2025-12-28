@@ -1762,6 +1762,12 @@ export default function MarquisPersonaTest() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [scores, setScores] = useState({});
+  
+  // Ref to always access latest answers (fixes stale closure in setTimeout)
+  const answersRef = useRef(answers);
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
   const [primaryArchetype, setPrimaryArchetype] = useState(null);
   const [secondaryArchetype, setSecondaryArchetype] = useState(null);
 
@@ -1900,7 +1906,9 @@ export default function MarquisPersonaTest() {
   }, [generationStartTime]);
 
   // Calculate scores with weighted normalization
+  // Uses answersRef to always access latest answers (fixes stale closure in setTimeout)
   const calculateScores = useCallback(() => {
+    const currentAnswers = answersRef.current; // Use ref for latest answers
     const dimensionScores = {};
     const dimensionMaxScores = {};
     
@@ -1910,7 +1918,7 @@ export default function MarquisPersonaTest() {
     });
 
     shuffledQuestions.forEach((question) => {
-      const answer = answers[question.id];
+      const answer = currentAnswers[question.id];
       // Track max possible for each dimension
       dimensionMaxScores[question.dimension] += 5 * question.weight;
       
@@ -1927,7 +1935,7 @@ export default function MarquisPersonaTest() {
     const normalized = {};
     Object.keys(dimensionScores).forEach(dim => {
       const answered = shuffledQuestions.filter(q => 
-        q.dimension === dim && answers[q.id] !== undefined
+        q.dimension === dim && currentAnswers[q.id] !== undefined
       );
       if (answered.length > 0) {
         const maxPossible = answered.reduce((sum, q) => sum + (5 * q.weight), 0);
@@ -1939,13 +1947,13 @@ export default function MarquisPersonaTest() {
     
     // #region agent log
     const sortedForLog = Object.entries(normalized).sort(([,a],[,b]) => b - a).slice(0,5);
-    const answeredIds = Object.keys(answers).map(k => parseInt(k)).sort((a,b) => a - b);
-    const missingIds = shuffledQuestions.map(q => q.id).filter(id => !answers.hasOwnProperty(id));
-    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:calculateScores:return',message:'Calculated normalized scores',data:{top5Scores:sortedForLog,totalAnswered:Object.keys(answers).length,questionsCount:shuffledQuestions.length,missingQuestionIds:missingIds,serviceAnswers:[answers[62],answers[63],answers[64]],ropeBottomAnswers:[answers[25],answers[26],answers[27],answers[28]]},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+    const answeredIds = Object.keys(currentAnswers).map(k => parseInt(k)).sort((a,b) => a - b);
+    const missingIds = shuffledQuestions.map(q => q.id).filter(id => !currentAnswers.hasOwnProperty(id));
+    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:calculateScores:return',message:'Calculated normalized scores',data:{top5Scores:sortedForLog,totalAnswered:Object.keys(currentAnswers).length,questionsCount:shuffledQuestions.length,missingQuestionIds:missingIds,serviceAnswers:[currentAnswers[62],currentAnswers[63],currentAnswers[64]],ropeBottomAnswers:[currentAnswers[25],currentAnswers[26],currentAnswers[27],currentAnswers[28]]},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
     // #endregion
 
     return normalized;
-  }, [answers, shuffledQuestions]);
+  }, [shuffledQuestions]); // Remove answers from deps since we use ref
 
   // Determine archetypes from scores with deterministic tie-breaking
   const determineArchetypes = useCallback((scores) => {
@@ -2018,6 +2026,9 @@ export default function MarquisPersonaTest() {
   // Handle answer selection
   const handleAnswer = (value) => {
     const question = shuffledQuestions[currentQuestion];
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:handleAnswer',message:'Answer recorded',data:{questionId:question.id,questionIndex:currentQuestion,value,totalQuestions:shuffledQuestions.length,isLastQuestion:currentQuestion===shuffledQuestions.length-1},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'F'})}).catch(()=>{});
+    // #endregion
     setAnswers(prev => ({ ...prev, [question.id]: value }));
     
     // Track question progress
