@@ -3586,14 +3586,11 @@ Where:
               <div className="intro-text">
                 <p className="intro-line">Discover your true BDSM persona.</p>
                 <p className="intro-line">Understand how you give power, take control, or surrender.</p>
-                <p className="intro-line intro-spacer"></p>
-                <p className="intro-line">This assessment reveals the patterns behind your desires.</p>
-                <p className="intro-line">Powered by psychology, AI scoring, and deep BDSM expertise</p>
               </div>
               
               <div className="subtitle">
                 <span className="line"></span>
-                <span className="text">Sixteen Possible Archetypes. Which one are you?</span>
+                <span className="text archetypes-headline">Sixteen Possible Archetypes. Which one are you?</span>
                 <span className="line"></span>
               </div>
               
