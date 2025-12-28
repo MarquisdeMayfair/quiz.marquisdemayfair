@@ -1824,6 +1824,7 @@ const ReportSlideshow = ({
         
         {/* FAREWELL SLIDE */}
         <div className={getSlideClass(farewellSlideIndex) + ' farewell-slide'}>
+          <img src="/marquis-portrait.png" alt="The Marquis de Mayfair" className="marquis-portrait" />
           <div className="farewell-content">
             <p className="farewell-greeting">{farewellName},</p>
             <p className="farewell-text">
