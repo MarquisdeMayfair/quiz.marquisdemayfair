@@ -2576,19 +2576,21 @@ export default function MarquisPersonaTest() {
         <div className="admin-header">
           <h2>Admin Panel</h2>
           <div className="admin-actions">
-            <button onClick={() => setShowAdmin(false)} className="admin-btn close">Close Admin</button>
+            <button type="button" onClick={() => setShowAdmin(false)} className="admin-btn close">Close Admin</button>
           </div>
         </div>
 
         {/* Tab Navigation */}
         <div className="admin-tabs">
           <button 
+            type="button"
             className={`admin-tab ${activeTab === 'questions' ? 'active' : ''}`}
             onClick={() => setActiveTab('questions')}
           >
             Questions
           </button>
           <button 
+            type="button"
             className={`admin-tab ${activeTab === 'archetypes' ? 'active' : ''}`}
             onClick={() => setActiveTab('archetypes')}
           >
@@ -2603,8 +2605,8 @@ export default function MarquisPersonaTest() {
               <h3>Question Administration</h3>
               <p>Edit questions while maintaining psychometric validity. Changes preserve scoring weights and dimension mappings.</p>
               <div className="admin-actions">
-                <button onClick={exportQuestions} className="admin-btn export">Export Questions JSON</button>
-                <button onClick={exportLeadsCSV} className="admin-btn export">Export Leads CSV</button>
+                <button type="button" onClick={exportQuestions} className="admin-btn export">Export Questions JSON</button>
+                <button type="button" onClick={exportLeadsCSV} className="admin-btn export">Export Leads CSV</button>
               </div>
             </div>
 
@@ -2650,7 +2652,7 @@ export default function MarquisPersonaTest() {
               <span className="stat-number">{inviteCount}</span>
               <span className="stat-label">Total Invites</span>
             </div>
-            <button onClick={exportInvitesCSV} className="admin-btn export invite-export">Export Invites CSV</button>
+            <button type="button" onClick={exportInvitesCSV} className="admin-btn export invite-export">Export Invites CSV</button>
             {recentInvites.length > 0 && (
               <div className="recent-leads recent-invites">
                 <h4>Recent Referrals:</h4>
@@ -2732,7 +2734,7 @@ export default function MarquisPersonaTest() {
                   <div className="question-header">
                     <span className="question-id">#{question.id}</span>
                     <span className="question-dimension" style={{ backgroundColor: DIMENSIONS[question.dimension]?.color }}>
-                      {DIMENSIONS[question.dimension]?.icon} {DIMENSIONS[question.dimension]?.name}
+                      {DIMENSIONS[question.dimension]?.name}
                     </span>
                     <span className="question-weight">×{question.weight}</span>
                     {question.isReversed && <span className="reversed-badge">↺ Reversed</span>}
@@ -2947,6 +2949,7 @@ export default function MarquisPersonaTest() {
                 {/* Save Actions */}
                 <div className="editor-actions">
                   <button 
+                    type="button"
                     onClick={handleArchetypeSave} 
                     disabled={archetypeSaving}
                     className="save-btn"
@@ -2954,6 +2957,7 @@ export default function MarquisPersonaTest() {
                     {archetypeSaving ? 'Saving...' : 'Save Changes'}
                   </button>
                   <button 
+                    type="button"
                     onClick={handleArchetypeReset}
                     disabled={archetypeSaving}
                     className="reset-btn"
@@ -3022,7 +3026,7 @@ export default function MarquisPersonaTest() {
           <p>
             This <strong>bondage quiz</strong> features 64 original questions developed from peer-reviewed academic research. 
             Each question is carefully weighted and scored to produce meaningful results—not generic entertainment. 
-            Upon completion, you'll discover which of our <strong>17 unique BDSM archetypes</strong> best reflects your 
+            Upon completion, you'll discover which of our <strong>16 unique BDSM archetypes</strong> best reflects your 
             intimate psychology, from The Sovereign's natural authority to The Devotee's sacred surrender.
           </p>
           
@@ -3030,14 +3034,14 @@ export default function MarquisPersonaTest() {
           <ul>
             <li><strong>Academic Foundation:</strong> Built on peer-reviewed research from journals including Psychology & Sexuality and the Journal of Sexual Medicine</li>
             <li><strong>Original Questions:</strong> All 64 questions are original—not recycled from other assessments</li>
-            <li><strong>17 Archetypes:</strong> Discover nuanced results across dominant, submissive, switch, and specialised orientations</li>
+            <li><strong>16 Archetypes:</strong> Discover nuanced results across dominant, submissive, switch, and specialised orientations</li>
             <li><strong>AI-Powered Reports:</strong> Receive a free 1,500-word personalised analysis generated specifically for your results</li>
             <li><strong>Complete Privacy:</strong> No account required, results processed client-side</li>
           </ul>
           
           <h3>The 17 BDSM Archetypes</h3>
           <p>
-            Our <strong>kink test</strong> identifies your primary and secondary archetypes from 17 possible outcomes: 
+            Our <strong>kink test</strong> identifies your primary and secondary archetypes from 16 possible outcomes: 
             The Sovereign, The Devotee, The Artisan, The Phoenix, The Weaver, The Chrysalis, The Luminary, The Oracle, 
             The Apex, The Wild Heart, The Guardian, The Beloved, The Protector, The Innocent, The Shapeshifter, and The Acolyte. 
             Each archetype includes historical parallels, mythological connections, and detailed psychological profiles.
@@ -3128,7 +3132,7 @@ Where:
           <div className="dimension-table">
             {Object.entries(DIMENSIONS).map(([key, dim]) => (
               <div key={key} className="dimension-row">
-                <span className="dim-icon" style={{ color: dim.color }}>{dim.icon}</span>
+                <span className="dim-icon" style={{ color: dim.color }}>●</span>
                 <div className="dim-info">
                   <strong>{dim.name}</strong>
                   <p>{dim.description}</p>
@@ -3241,7 +3245,7 @@ Where:
               
               <div className="subtitle">
                 <span className="line"></span>
-                <span className="text">Seventeen Possible Archetypes. Which one are you?</span>
+                <span className="text">Sixteen Possible Archetypes. Which one are you?</span>
                 <span className="line"></span>
               </div>
               

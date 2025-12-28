@@ -1,102 +1,104 @@
 // Vercel Serverless Function - Dynamic Share Pages
 // Serves OG meta tags for social media with archetype images
+// Fetches archetype data from KV (dynamic) with fallback to defaults
 // Instantly redirects human visitors to main quiz
 
-const ARCHETYPES = {
+// Default archetypes for fallback if KV is unavailable
+const DEFAULT_ARCHETYPES = {
   sovereign: {
     name: "The Sovereign",
     title: "Keeper of Sacred Authority",
-    image: "the_sovereign.png",
+    image: '/archetype-images/the_sovereign.png',
     shareText: "I'm The Sovereign - natural authority meets sacred responsibility. Command with wisdom, lead with purpose."
   },
   devotee: {
     name: "The Devotee",
     title: "Keeper of Sacred Surrender",
-    image: "the_devotee.png",
+    image: '/archetype-images/the_devotee.png',
     shareText: "I'm The Devotee - surrender as strength, trust as power. Finding freedom in giving myself completely."
   },
   artisan: {
     name: "The Artisan",
     title: "Master of Sensation",
-    image: "the_artisan.png",
+    image: '/archetype-images/the_artisan.png',
     shareText: "I'm The Artisan - crafting sensation into art. Precision, skill, and the beauty of intensity."
   },
   phoenix: {
     name: "The Phoenix",
     title: "Transformed Through Fire",
-    image: "the_phoenix.png",
+    image: '/archetype-images/the_phoenix.png',
     shareText: "I'm The Phoenix - transformed through intensity. Rising stronger, finding euphoria in surrender to sensation."
   },
   weaver: {
     name: "The Weaver",
     title: "Architect of Beautiful Restraint",
-    image: "the_weaver.png",
+    image: '/archetype-images/the_weaver.png',
     shareText: "I'm The Weaver - creating art through restraint. Every knot a meditation, every tie a masterpiece."
   },
   chrysalis: {
     name: "The Chrysalis",
     title: "Transformed Through Stillness",
-    image: "the_chrysalis.png",
+    image: '/archetype-images/the_chrysalis.png',
     shareText: "I'm The Chrysalis - finding freedom in stillness. Bound yet liberated, held yet free."
   },
   luminary: {
     name: "The Luminary",
     title: "Radiant in Witness",
-    image: "the_luminary.png",
+    image: '/archetype-images/the_luminary.png',
     shareText: "I'm The Luminary - radiant under the gaze of others. Power in being seen, energy in being witnessed."
   },
   oracle: {
     name: "The Oracle",
     title: "Witness to Mysteries",
-    image: "the_oracle.png",
+    image: '/archetype-images/the_oracle.png',
     shareText: "I'm The Oracle - seeing what others miss. The sacred witness, the keeper of unspoken truths."
   },
   apex: {
     name: "The Apex",
     title: "Pure Instinct Unleashed",
-    image: "the_apex.png",
+    image: '/archetype-images/the_apex.png',
     shareText: "I'm The Apex - pure primal instinct. The thrill of pursuit, the joy of capture."
   },
   wild_heart: {
     name: "The Wild Heart",
     title: "Joy in the Chase",
-    image: "the_wild_heart.png",
+    image: '/archetype-images/the_wild_heart.png',
     shareText: "I'm The Wild Heart - alive in the chase. Elusive, untamed, gloriously free."
   },
   guardian: {
     name: "The Guardian",
     title: "Keeper of Souls",
-    image: "the_guardian.png",
+    image: '/archetype-images/the_guardian.png',
     shareText: "I'm The Guardian - protector and keeper. Complete ownership, sacred responsibility."
   },
   beloved: {
     name: "The Beloved",
     title: "Treasured and Complete",
-    image: "the_beloved.png",
+    image: '/archetype-images/the_beloved.png',
     shareText: "I'm The Beloved - treasured completely. Finding identity in belonging, power in being owned."
   },
   protector: {
     name: "The Protector",
     title: "Tender Authority",
-    image: "the_protector.png",
+    image: '/archetype-images/the_protector.png',
     shareText: "I'm The Protector - nurturing through structure. Gentle guidance, firm boundaries, infinite care."
   },
   innocent: {
     name: "The Innocent",
     title: "Eternal Youth of Spirit",
-    image: "the_innocent.png",
+    image: '/archetype-images/the_innocent.png',
     shareText: "I'm The Innocent - wonder preserved. Trust given freely, vulnerability as gift."
   },
   shapeshifter: {
     name: "The Shapeshifter",
     title: "Infinite Expressions",
-    image: "the_shapeshifter.png",
+    image: '/archetype-images/the_shapeshifter.png',
     shareText: "I'm The Shapeshifter - fluid between all roles. Today's dominant is tomorrow's devoted. Complete freedom."
   },
   acolyte: {
     name: "The Acolyte",
     title: "Sacred Service",
-    image: "the_acolyte.png",
+    image: '/archetype-images/the_acolyte.png',
     shareText: "I'm The Acolyte - service as spiritual practice. Devotion expressed through acts of care."
   }
 };
@@ -142,21 +144,42 @@ const SLUG_MAP = {
 export default async function handler(req, res) {
   const { archetype: slug } = req.query;
   
-  // Normalize slug and look up archetype
+  // Normalize slug and look up archetype key
   const normalizedSlug = slug?.toLowerCase().replace(/\s+/g, '-');
   const archetypeKey = SLUG_MAP[normalizedSlug];
-  const archetype = archetypeKey ? ARCHETYPES[archetypeKey] : null;
   
-  // If invalid archetype, redirect to main quiz
+  // If invalid slug, redirect to main quiz
+  if (!archetypeKey) {
+    res.setHeader('Location', 'https://quiz.marquisdemayfair.com');
+    return res.status(302).end();
+  }
+
+  // Try to fetch archetype data from KV, fall back to defaults
+  let archetypes = DEFAULT_ARCHETYPES;
+  try {
+    const { kv } = await import('@vercel/kv');
+    const kvData = await kv.get('archetypes:data');
+    if (kvData && kvData[archetypeKey]) {
+      archetypes = kvData;
+    }
+  } catch (kvError) {
+    console.warn('KV not available for share page, using defaults:', kvError.message);
+  }
+
+  const archetype = archetypes[archetypeKey];
+  
+  // If archetype not found even in defaults, redirect
   if (!archetype) {
     res.setHeader('Location', 'https://quiz.marquisdemayfair.com');
     return res.status(302).end();
   }
   
   const baseUrl = 'https://quiz.marquisdemayfair.com';
-  const imageUrl = `${baseUrl}/archetype-images/${archetype.image}`;
+  // Handle image path - ensure it's a full URL
+  const imagePath = archetype.image?.startsWith('/') ? archetype.image : `/archetype-images/${archetype.image}`;
+  const imageUrl = `${baseUrl}${imagePath}`;
   const pageTitle = `${archetype.name} - ${archetype.title}`;
-  const description = `I am ${archetype.name} - ${archetype.title}. Discover your BDSM archetype at Marquis de Mayfair.`;
+  const description = archetype.shareText || `I am ${archetype.name} - ${archetype.title}. Discover your BDSM archetype at Marquis de Mayfair.`;
   
   // Generate HTML with OG tags and instant redirect
   const html = `<!DOCTYPE html>
@@ -221,4 +244,3 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
   return res.status(200).send(html);
 }
-
