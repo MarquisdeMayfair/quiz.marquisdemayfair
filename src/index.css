@@ -1741,10 +1741,13 @@ body.show-recaptcha .grecaptcha-badge {
   position: relative;
   width: 100%;
   min-height: 500px;
+  max-height: calc(100vh - 120px);
   background: var(--black-soft);
   border: 1px solid var(--gold-dark);
   border-radius: 8px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Slide Navigation Dots */
@@ -2043,7 +2046,42 @@ body.show-recaptcha .grecaptcha-badge {
    NEW SLIDESHOW STRUCTURE: Video → Parallels → Voucher → Reading → Products
    ============================================================================ */
 
-/* Video Slide */
+/* Intro Slide (Portrait Image - replaced video) */
+.intro-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-md);
+  max-height: calc(100vh - 200px);
+}
+
+.slide-portrait-image {
+  width: 100%;
+  max-width: 280px;
+  max-height: 350px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 2px solid var(--gold-dark);
+  margin-bottom: var(--space-md);
+}
+
+.intro-slide-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold-bright);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.intro-slide-subtitle {
+  font-family: var(--font-elegant);
+  font-size: 1.1rem;
+  color: var(--cream-dark);
+  font-style: italic;
+}
+
+/* Video Slide (legacy) */
 .video-slide {
   display: flex;
   flex-direction: column;
@@ -4617,5 +4655,434 @@ body.show-recaptcha .grecaptcha-badge {
     font-size: 0.85rem;
   }
 }
+/* ============================================================================
+   ARCHETYPE LINKS - Secondary archetype on Parallels slide
+   ============================================================================ */
+
+.archetype-link {
+  color: var(--gold-bright);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.archetype-link:hover {
+  color: var(--gold-pale);
+  text-decoration: underline;
+}
+
+/* ============================================================================
+   REPORT LINKS - Clickable product links in AI report
+   ============================================================================ */
+
+.report-link {
+  color: var(--gold-bright);
+  text-decoration: underline;
+  text-decoration-color: var(--gold-dark);
+  text-underline-offset: 3px;
+  transition: all 0.3s ease;
+}
+
+.report-link:hover {
+  color: var(--gold-pale);
+  text-decoration-color: var(--gold-bright);
+}
+
+/* ============================================================================
+   DISCOUNT LINK - Below Archetype Card
+   ============================================================================ */
+
+.discount-link {
+  display: inline-block;
+  margin: var(--space-md) 0;
+  padding: 0.5rem 1rem;
+  color: var(--gold-bright);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  background: rgba(246, 197, 65, 0.05);
+}
+
+.discount-link:hover {
+  background: rgba(246, 197, 65, 0.15);
+  border-color: var(--gold-bright);
+  transform: translateY(-2px);
+}
+
+/* ============================================================================
+   DIMENSION TOOLTIPS - Fetish Language Labels
+   ============================================================================ */
+
+.bar-name[data-tooltip],
+.chart-bar-label[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+.bar-name[data-tooltip]::after,
+.chart-bar-label[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  background: var(--black-rich);
+  color: var(--gold-bright);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 100;
+  pointer-events: none;
+  margin-bottom: 8px;
+}
+
+.bar-name[data-tooltip]::before,
+.chart-bar-label[data-tooltip]::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--gold-dark);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 101;
+  margin-bottom: -4px;
+}
+
+.bar-name[data-tooltip]:hover::after,
+.bar-name[data-tooltip]:hover::before,
+.chart-bar-label[data-tooltip]:hover::after,
+.chart-bar-label[data-tooltip]:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ============================================================================
+   ADMIN SEO URL FIELD
+   ============================================================================ */
+
+.seo-url-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--black-rich);
+  border-radius: 4px;
+  padding: var(--space-xs);
+}
+
+.url-prefix {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--gray-warm);
+  white-space: nowrap;
+}
+
+.seo-url-row input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--cream);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: var(--space-xs);
+}
+
+.seo-url-row input:focus {
+  outline: none;
+}
+
+.preview-seo-btn {
+  background: var(--gold-dark);
+  color: var(--black-deep);
+  border: none;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.preview-seo-btn:hover {
+  background: var(--gold-bright);
+}
+
+/* ============================================================================
+   ARCHETYPE SEO LANDING PAGES
+   ============================================================================ */
+
+.archetype-seo-page {
+  min-height: 100vh;
+  background: var(--black-deep);
+  color: var(--cream);
+}
+
+.archetype-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--gold-dark);
+}
+
+.back-to-home {
+  color: var(--gold-bright);
+  text-decoration: none;
+  font-family: var(--font-body);
+  transition: color 0.3s ease;
+}
+
+.back-to-home:hover {
+  color: var(--gold-pale);
+}
+
+.archetype-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  padding: var(--space-xl);
+  background: linear-gradient(135deg, var(--black-rich) 0%, var(--black-soft) 100%);
+  border-bottom: 1px solid var(--gold-dark);
+}
+
+.archetype-hero-image {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  border: 2px solid var(--gold-dark);
+  justify-self: end;
+}
+
+.archetype-hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.archetype-hero-content h1 {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--gold-bright);
+  margin-bottom: var(--space-sm);
+}
+
+.archetype-title-text {
+  font-family: var(--font-elegant);
+  font-size: 1.4rem;
+  color: var(--cream-dark);
+  font-style: italic;
+  margin-bottom: var(--space-md);
+}
+
+.archetype-parallels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-family: var(--font-body);
+  color: var(--gold-muted);
+}
+
+.archetype-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+
+.archetype-main section {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--black-lighter);
+}
+
+.archetype-main h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold-bright);
+  margin-bottom: var(--space-md);
+}
+
+.archetype-description p {
+  font-family: var(--font-elegant);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--cream-dark);
+  margin-bottom: var(--space-md);
+}
+
+.archetype-activities ul {
+  list-style: none;
+  padding: 0;
+}
+
+.archetype-activities li {
+  font-family: var(--font-elegant);
+  font-size: 1.05rem;
+  color: var(--cream-dark);
+  padding: var(--space-sm) 0;
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--gold-dark);
+  margin-bottom: var(--space-sm);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-md);
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--black-card);
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  border-color: var(--gold-bright);
+  transform: translateY(-2px);
+}
+
+.product-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--gold-bright);
+}
+
+.product-reason {
+  font-family: var(--font-elegant);
+  font-size: 0.9rem;
+  color: var(--cream-dark);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+
+.related-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--black-soft);
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.related-card:hover {
+  border-color: var(--gold-bright);
+  background: var(--black-card);
+}
+
+.related-name {
+  font-family: var(--font-display);
+  color: var(--gold-bright);
+}
+
+.related-title {
+  font-family: var(--font-elegant);
+  font-size: 0.9rem;
+  color: var(--cream-dark);
+  font-style: italic;
+}
+
+.references-list {
+  list-style: none;
+  padding: 0;
+}
+
+.references-list li {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--gray-warm);
+  padding: var(--space-sm) 0;
+  line-height: 1.5;
+}
+
+.archetype-cta {
+  text-align: center;
+  padding: var(--space-xl);
+  background: linear-gradient(135deg, var(--black-soft) 0%, var(--black-card) 100%);
+  border-radius: 8px;
+  border: 1px solid var(--gold-dark);
+}
+
+.archetype-cta p {
+  font-family: var(--font-elegant);
+  font-size: 1.1rem;
+  color: var(--cream-dark);
+  margin-bottom: var(--space-md);
+}
+
+.archetype-footer {
+  text-align: center;
+  padding: var(--space-lg);
+  border-top: 1px solid var(--black-lighter);
+  margin-top: var(--space-xl);
+}
+
+.archetype-footer a {
+  color: var(--gold-muted);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.archetype-footer a:hover {
+  color: var(--gold-bright);
+}
+
+.archetype-footer .copyright {
+  font-size: 0.8rem;
+  color: var(--gray-warm);
+  margin-top: var(--space-sm);
+}
+
+/* Mobile responsive for archetype pages */
+@media (max-width: 768px) {
+  .archetype-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .archetype-hero-image {
+    justify-self: center;
+    max-width: 280px;
+  }
+  
+  .archetype-hero-content h1 {
+    font-size: 2.2rem;
+  }
+  
+  .archetype-main {
+    padding: var(--space-md);
+  }
+  
+  .product-grid,
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Cache bust: 1766880597 */
 /* Build timestamp: 2025-12-28T00:12:20Z - forcing Vercel rebuild */

@@ -148,3 +148,4 @@ function determineExpectedArchetypes(scores) {
 // Export for use in test tracking
 export { QUESTIONS, ARCHETYPE_MAPPING, calculateExpectedScores, determineExpectedArchetypes };
 
+

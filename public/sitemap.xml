@@ -14,109 +14,206 @@
   
   <!-- Methodology Page -->
   <url>
-    <loc>https://quiz.marquisdemayfair.com/#methodology</loc>
+    <loc>https://quiz.marquisdemayfair.com/methodology</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Archetype Share Pages -->
+  <!-- Archetype Landing Pages (SEO) -->
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-sovereign</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-devotee</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-artisan</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-phoenix</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-weaver</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-chrysalis</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-luminary</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-oracle</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-apex</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-wild-heart</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-guardian</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-beloved</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-protector</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-innocent</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-shapeshifter</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://quiz.marquisdemayfair.com/archetype/the-acolyte</loc>
+    <lastmod>2025-12-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Archetype Share Pages (Social Redirects) -->
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/sovereign</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/devotee</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/artisan</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/phoenix</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/weaver</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/chrysalis</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/luminary</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/oracle</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/apex</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/wild_heart</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/guardian</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/beloved</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/protector</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/innocent</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/shapeshifter</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://quiz.marquisdemayfair.com/api/share/acolyte</loc>
     <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   
 </urlset>
-

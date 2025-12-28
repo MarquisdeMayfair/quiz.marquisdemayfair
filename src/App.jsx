@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import html2canvas from 'html2canvas';
+import { ARCHETYPE_SEO_CONTENT } from './archetypeContent';
 
 // ============================================================================
 // MARQUIS DE MAYFAIR PERSONA ASSESSMENT v2.0
@@ -26,7 +27,8 @@ const DIMENSIONS = {
     description: 'The psychological drive toward control, leadership, and authority in intimate exchanges',
     academicBasis: 'Power exchange dynamics (Cross & Matheson, 2006)',
     color: '#C9A227',
-    complementary: 'submission'
+    complementary: 'submission',
+    fetishLabel: 'Dom - Takes control'
   },
   submission: {
     code: 'SUB',
@@ -34,7 +36,8 @@ const DIMENSIONS = {
     description: 'The desire to yield authority, experience directed surrender, and find peace in consensual obedience',
     academicBasis: 'Psychological relief through power transfer (Yost & Hunter, 2012)',
     color: '#8B1538',
-    complementary: 'dominance'
+    complementary: 'dominance',
+    fetishLabel: 'Sub - Surrenders control'
   },
   sadism: {
     code: 'SAD',
@@ -42,7 +45,8 @@ const DIMENSIONS = {
     description: 'Deriving pleasure and connection from consensually administering intense physical sensation',
     academicBasis: 'Transformed pain research (Dunkley et al., 2020)',
     color: '#2D1B4E',
-    complementary: 'masochism'
+    complementary: 'masochism',
+    fetishLabel: 'Sadist - Delivers sensation'
   },
   masochism: {
     code: 'MAS',
@@ -50,7 +54,8 @@ const DIMENSIONS = {
     description: 'Experiencing transcendence, catharsis, or pleasure through receiving intense physical sensation',
     academicBasis: 'Endorphin release and altered states (Sagarin et al., 2009)',
     color: '#4A0E2C',
-    complementary: 'sadism'
+    complementary: 'sadism',
+    fetishLabel: 'Masochist - Receives sensation'
   },
   rigger: {
     code: 'RIG',
@@ -58,7 +63,8 @@ const DIMENSIONS = {
     description: 'The creative and technical practice of restraint, rope work, and beautiful restriction',
     academicBasis: 'Flow states and artistic expression (Williams et al., 2016)',
     color: '#1A3A2F',
-    complementary: 'rope_bottom'
+    complementary: 'rope_bottom',
+    fetishLabel: 'Rigger - Ties and binds'
   },
   rope_bottom: {
     code: 'ROP',
@@ -66,7 +72,8 @@ const DIMENSIONS = {
     description: 'Finding peace, surrender, and meditative states within physical restraint',
     academicBasis: 'Mindfulness parallels in restriction (Newmahr, 2010)',
     color: '#2C4A3E',
-    complementary: 'rigger'
+    complementary: 'rigger',
+    fetishLabel: 'Rope bunny - Loves being tied'
   },
   exhibitionist: {
     code: 'EXH',
@@ -74,7 +81,8 @@ const DIMENSIONS = {
     description: 'Sexual and psychological arousal from being witnessed, displayed, or performing for others',
     academicBasis: 'Display behaviors and validation (Hébert & Weaver, 2014)',
     color: '#6B2D5B',
-    complementary: 'voyeur'
+    complementary: 'voyeur',
+    fetishLabel: 'Exhibitionist - Loves being watched'
   },
   voyeur: {
     code: 'VOY',
@@ -82,7 +90,8 @@ const DIMENSIONS = {
     description: 'Deep appreciation and arousal from observing others in intimate or vulnerable moments',
     academicBasis: 'Observer dynamics in BDSM spaces (Connolly, 2006)',
     color: '#3D2B5B',
-    complementary: 'exhibitionist'
+    complementary: 'exhibitionist',
+    fetishLabel: 'Voyeur - Loves to watch'
   },
   primal_hunter: {
     code: 'HNT',
@@ -90,7 +99,8 @@ const DIMENSIONS = {
     description: 'Raw, instinctive energy channeled through chase, capture, and predatory play',
     academicBasis: 'Evolutionary psychology of pursuit (Evolutionary review, 2024)',
     color: '#4A3728',
-    complementary: 'primal_prey'
+    complementary: 'primal_prey',
+    fetishLabel: 'Predator - Hunts and captures'
   },
   primal_prey: {
     code: 'PRY',
@@ -98,7 +108,8 @@ const DIMENSIONS = {
     description: 'The exhilaration of being pursued, caught, and consensually overwhelmed',
     academicBasis: 'Fear-excitement arousal overlap (Sagarin et al., 2009)',
     color: '#5C4033',
-    complementary: 'primal_hunter'
+    complementary: 'primal_hunter',
+    fetishLabel: 'Prey - Loves the chase'
   },
   owner: {
     code: 'OWN',
@@ -106,7 +117,8 @@ const DIMENSIONS = {
     description: 'Desire for complete, ongoing power exchange that extends beyond scene-based play',
     academicBasis: '24/7 dynamics research (Pitagora, 2016)',
     color: '#1F2937',
-    complementary: 'property'
+    complementary: 'property',
+    fetishLabel: 'Owner - Total possession'
   },
   property: {
     code: 'PRP',
@@ -114,7 +126,8 @@ const DIMENSIONS = {
     description: 'Finding identity, peace, and fulfillment in complete belonging to another',
     academicBasis: 'Ownership dynamics and attachment (Sprott & Benoit Hadcock, 2018)',
     color: '#374151',
-    complementary: 'owner'
+    complementary: 'owner',
+    fetishLabel: 'Owned - Belongs completely'
   },
   caregiver: {
     code: 'CG',
@@ -122,7 +135,8 @@ const DIMENSIONS = {
     description: 'The blend of protective care, loving guidance, and gentle authority',
     academicBasis: 'Caregiving dynamics in power exchange (Baker, 2018)',
     color: '#7C3AED',
-    complementary: 'dependent'
+    complementary: 'dependent',
+    fetishLabel: 'Caregiver - Nurtures and protects'
   },
   dependent: {
     code: 'DEP',
@@ -130,7 +144,8 @@ const DIMENSIONS = {
     description: 'Accessing vulnerability, playfulness, and the freedom of being completely cared for',
     academicBasis: 'Regression and therapeutic play (Sprott, 2020)',
     color: '#A78BFA',
-    complementary: 'caregiver'
+    complementary: 'caregiver',
+    fetishLabel: 'Little - Cared for and cherished'
   },
   switch: {
     code: 'SWT',
@@ -138,7 +153,8 @@ const DIMENSIONS = {
     description: 'Natural movement between power positions based on partner, mood, or context',
     academicBasis: 'Role fluidity research (Martinez, 2018)',
     color: '#059669',
-    complementary: null
+    complementary: null,
+    fetishLabel: 'Switch - Flows between roles'
   },
   service: {
     code: 'SRV',
@@ -146,7 +162,8 @@ const DIMENSIONS = {
     description: 'Finding deep fulfillment through practical acts of care, attention, and anticipation',
     academicBasis: 'Service orientation studies (Weiss, 2006)',
     color: '#0891B2',
-    complementary: null
+    complementary: null,
+    fetishLabel: 'Service sub - Devoted to pleasing'
   }
 };
 
@@ -1513,13 +1530,35 @@ const ReportSlideshow = ({
     setInviteSubmitting(false);
   };
   
-  // Render markdown content
+  // Render markdown content with formatting fixes
   const renderContent = (content) => {
     if (!content) return null;
-    return content.split('\n').map((line, idx) => {
+    
+    // Pre-process: Replace em-dashes and en-dashes with regular dashes
+    let processedContent = content
+      .replace(/—/g, ' - ')  // em-dash
+      .replace(/–/g, '-')    // en-dash
+      .replace(/\s+-\s+/g, ' - '); // normalize dash spacing
+    
+    // Convert markdown links [text](url) to HTML links
+    processedContent = processedContent.replace(
+      /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" class="report-link">$1</a>'
+    );
+    
+    // Also convert bare product URLs to links
+    processedContent = processedContent.replace(
+      /(https:\/\/www\.marquisdemayfair\.com\/products\/[^\s<),]+)/g,
+      '<a href="$1" target="_blank" rel="noopener noreferrer" class="report-link">View Product</a>'
+    );
+    
+    return processedContent.split('\n').map((line, idx) => {
       if (line.startsWith('### ')) return <h4 key={idx} className="slide-subheader">{line.replace('### ', '')}</h4>;
       if (line.startsWith('---')) return <hr key={idx} className="slide-divider" />;
-      if (line.startsWith('- ')) return <li key={idx} className="slide-list-item">{line.replace('- ', '')}</li>;
+      if (line.startsWith('- ')) {
+        const listContent = line.replace('- ', '');
+        return <li key={idx} className="slide-list-item" dangerouslySetInnerHTML={{ __html: listContent }} />;
+      }
       if (line.trim() === '') return null;
       const boldParsed = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       return <p key={idx} dangerouslySetInnerHTML={{ __html: boldParsed }} />;
@@ -1550,19 +1589,13 @@ const ReportSlideshow = ({
       </div>
       
       <div className="slides-container">
-        {/* SLIDE 0: Video */}
-        <div className={getSlideClass(0) + ' video-slide'}>
-          {primaryArchetype?.video && (
-            <video autoPlay={!videoHasPlayed} muted playsInline className="slide-video"
-              onEnded={(e) => { e.target.currentTime = 0; setVideoHasPlayed(true); }}>
-              <source src={primaryArchetype.video} type="video/mp4" />
-            </video>
+        {/* SLIDE 0: Portrait Image (replaced video for better nav visibility) */}
+        <div className={getSlideClass(0) + ' intro-slide'}>
+          {primaryArchetype?.image && (
+            <img src={primaryArchetype.image} alt={primaryArchetype.name} className="slide-portrait-image" />
           )}
-          {!primaryArchetype?.video && primaryArchetype?.image && (
-            <img src={primaryArchetype.image} alt={primaryArchetype.name} className="slide-image" />
-          )}
-          <h2 className="video-slide-title">{primaryArchetype?.name}</h2>
-          <p className="video-slide-subtitle">{primaryArchetype?.title}</p>
+          <h2 className="intro-slide-title">{primaryArchetype?.name}</h2>
+          <p className="intro-slide-subtitle">{primaryArchetype?.title}</p>
         </div>
         
         {/* SLIDE 1: Parallels */}
@@ -1579,7 +1612,18 @@ const ReportSlideshow = ({
             </div>
             <div className="parallel-card secondary">
               <span className="parallel-label">Secondary Archetype</span>
-              <span className="parallel-value">{secondaryArchetype?.name}</span>
+              <a 
+                href={`/archetype/${secondaryArchetype?.name?.toLowerCase().replace(/\s+/g, '-')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="parallel-value archetype-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(`/archetype/${secondaryArchetype?.name?.toLowerCase().replace(/\s+/g, '-')}`, '_blank');
+                }}
+              >
+                {secondaryArchetype?.name} →
+              </a>
               <span className="parallel-subtitle">{secondaryArchetype?.title}</span>
             </div>
           </div>
@@ -1676,7 +1720,7 @@ const ReportSlideshow = ({
                 const barColor = getRankColor(index, sortedScores.length);
                 return (
                   <div key={dimension} className="chart-bar-row">
-                    <span className="chart-bar-label">{DIMENSIONS[dimension]?.name}</span>
+                    <span className="chart-bar-label" data-tooltip={DIMENSIONS[dimension]?.fetishLabel}>{DIMENSIONS[dimension]?.name}</span>
                     <div className="chart-bar-track">
                       <div className="chart-bar-fill" style={{ width: `${score}%`, backgroundColor: barColor }} />
                     </div>
@@ -1814,15 +1858,28 @@ export default function MarquisPersonaTest() {
       console.log('TEST MODE: Question shuffling disabled');
     } else {
       // Production: shuffle questions randomly
-      const shuffled = [...editableQuestions].sort(() => Math.random() - 0.5);
-      setShuffledQuestions(shuffled);
+    const shuffled = [...editableQuestions].sort(() => Math.random() - 0.5);
+    setShuffledQuestions(shuffled);
     }
   }, [editableQuestions, isTestMode]);
 
-  // Check for /admin path on mount
+  // State for archetype SEO pages
+  const [archetypePageKey, setArchetypePageKey] = useState(null);
+
+  // Check for /admin and /archetype/* paths on mount
   useEffect(() => {
-    if (window.location.pathname === '/admin') {
+    const pathname = window.location.pathname;
+    if (pathname === '/admin') {
       setShowAdmin(true);
+    } else if (pathname.startsWith('/archetype/')) {
+      const slug = pathname.replace('/archetype/', '');
+      // Find matching archetype by slug
+      const matchedKey = Object.keys(ARCHETYPE_SEO_CONTENT).find(
+        key => ARCHETYPE_SEO_CONTENT[key].slug === slug || key === slug.replace('the-', '')
+      );
+      if (matchedKey) {
+        setArchetypePageKey(matchedKey);
+      }
     }
   }, []);
 
@@ -1970,7 +2027,7 @@ export default function MarquisPersonaTest() {
         normalized[dim] = 0;
       }
     });
-    
+
     return normalized;
   }, [shuffledQuestions]); // Remove answers from deps since we use ref
 
@@ -2043,7 +2100,7 @@ export default function MarquisPersonaTest() {
     const isAtFurthestPoint = currentQuestion >= furthestQuestion;
     
     if (isAtFurthestPoint) {
-      if (currentQuestion < shuffledQuestions.length - 1) {
+    if (currentQuestion < shuffledQuestions.length - 1) {
         // Move to next question and update furthest point
         const nextQuestion = currentQuestion + 1; // Capture value before setTimeout
         setTimeout(() => {
@@ -2057,24 +2114,24 @@ export default function MarquisPersonaTest() {
           });
           setFurthestQuestion(prev => Math.max(prev, nextQuestion));
         }, 300);
-      } else {
+    } else {
         // Last question answered - go to calculating
         trackEvent('quiz_completed', { event_category: 'Quiz' });
-        setPhase('calculating');
-        setTimeout(() => {
-          const calculated = calculateScores();
-          setScores(calculated);
-          const { primary, secondary } = determineArchetypes(calculated);
-          setPrimaryArchetype(primary);
-          setSecondaryArchetype(secondary);
+      setPhase('calculating');
+      setTimeout(() => {
+        const calculated = calculateScores();
+        setScores(calculated);
+        const { primary, secondary } = determineArchetypes(calculated);
+        setPrimaryArchetype(primary);
+        setSecondaryArchetype(secondary);
           trackEvent('results_viewed', {
             event_category: 'Quiz',
             primary_archetype: primary?.name,
             secondary_archetype: secondary?.name
           });
-          setPhase('results');
-        }, 3000);
-      }
+        setPhase('results');
+      }, 3000);
+    }
     }
     // If user went back and changed an answer, stay on current question (no auto-advance)
   };
@@ -2603,11 +2660,12 @@ export default function MarquisPersonaTest() {
           <>
             <div className="admin-tab-header">
               <h3>Question Administration</h3>
-              <p>Edit questions while maintaining psychometric validity. Changes preserve scoring weights and dimension mappings.</p>
-              <div className="admin-actions">
+          <p>Edit questions while maintaining psychometric validity. Changes preserve scoring weights and dimension mappings.</p>
+          <div className="admin-actions">
+                <button type="button" onClick={handleAddQuestion} className="admin-btn add">+ Add Question</button>
                 <button type="button" onClick={exportQuestions} className="admin-btn export">Export Questions JSON</button>
                 <button type="button" onClick={exportLeadsCSV} className="admin-btn export">Export Leads CSV</button>
-              </div>
+          </div>
             </div>
 
         {/* Lead Stats Section */}
@@ -2852,6 +2910,32 @@ export default function MarquisPersonaTest() {
                   </div>
                 </div>
 
+                {/* SEO Page Section */}
+                <div className="editor-section">
+                  <h4>SEO Landing Page</h4>
+                  <div className="editor-field">
+                    <label>SEO Page URL:</label>
+                    <div className="seo-url-row">
+                      <span className="url-prefix">quiz.marquisdemayfair.com/archetype/</span>
+                      <input
+                        type="text"
+                        value={archetypeForm.seoSlug || `the-${selectedArchetypeKey.replace(/_/g, '-')}`}
+                        onChange={(e) => setArchetypeForm(prev => ({ ...prev, seoSlug: e.target.value }))}
+                        placeholder="the-sovereign"
+                      />
+                    </div>
+                  </div>
+                  <div className="editor-actions">
+                    <button
+                      type="button"
+                      className="preview-seo-btn"
+                      onClick={() => window.open(`/archetype/${archetypeForm.seoSlug || `the-${selectedArchetypeKey.replace(/_/g, '-')}`}`, '_blank')}
+                    >
+                      Preview SEO Page
+                    </button>
+                  </div>
+                </div>
+
                 {/* Share Text Section */}
                 <div className="editor-section">
                   <h4>Share Text</h4>
@@ -2974,6 +3058,162 @@ export default function MarquisPersonaTest() {
             )}
           </div>
         )}
+      </div>
+    );
+  };
+
+  // Archetype SEO Landing Page Component
+  const ArchetypePage = ({ archetypeKey }) => {
+    const archetype = archetypes?.[archetypeKey];
+    const seoContent = ARCHETYPE_SEO_CONTENT[archetypeKey];
+    
+    if (!archetype || !seoContent) {
+      return (
+        <div className="app-container">
+          <div className="error-page">
+            <h1>Archetype Not Found</h1>
+            <p>The archetype you're looking for doesn't exist.</p>
+            <button className="cta-button" onClick={() => setPhase('landing')}>
+              Take the Assessment
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="archetype-seo-page">
+        {/* SEO Meta Tags via Helmet would go here in production */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": seoContent.metaTitle,
+          "description": seoContent.metaDescription,
+          "image": `https://quiz.marquisdemayfair.com${archetype.image}`,
+          "author": {
+            "@type": "Organization",
+            "name": "Marquis de Mayfair Ltd"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Marquis de Mayfair Ltd"
+          },
+          "datePublished": "2025-01-01",
+          "dateModified": new Date().toISOString().split('T')[0]
+        })}} />
+
+        <header className="archetype-header">
+          <a href="/" className="back-to-home">← Back to Quiz</a>
+          <img src="/header-logo.png" alt="Marquis de Mayfair" className="header-logo" />
+        </header>
+
+        <div className="archetype-hero">
+          <img 
+            src={archetype.image} 
+            alt={archetype.name} 
+            className="archetype-hero-image"
+          />
+          <div className="archetype-hero-content">
+            <h1>{archetype.name}</h1>
+            <p className="archetype-title-text">{archetype.title}</p>
+            <div className="archetype-parallels">
+              <span>Historical: {archetype.historical}</span>
+              <span>Mythological: {archetype.mythological}</span>
+            </div>
+          </div>
+        </div>
+
+        <main className="archetype-main">
+          <section className="archetype-description">
+            <h2>Understanding {archetype.name}</h2>
+            {seoContent.extendedDescription.split('\n\n').map((para, idx) => (
+              <p key={idx}>{para}</p>
+            ))}
+          </section>
+
+          <section className="archetype-activities">
+            <h2>Activities {archetype.name} Delights In</h2>
+            <ul>
+              {seoContent.sexualActivities.map((activity, idx) => (
+                <li key={idx}>{activity}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="archetype-products">
+            <h2>Recommended Equipment</h2>
+            <p>Curated tools for the {archetype.name} archetype:</p>
+            <div className="product-grid">
+              {archetype.suggestedProducts?.map((product, idx) => (
+                <a 
+                  key={idx}
+                  href={`https://www.marquisdemayfair.com${product.url}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="product-card"
+                >
+                  <span className="product-name">{product.name}</span>
+                  <span className="product-reason">{product.reason}</span>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <section className="archetype-related">
+            <h2>Related Archetypes</h2>
+            <p>Explore archetypes with complementary dynamics:</p>
+            <div className="related-grid">
+              {seoContent.relatedArchetypes.map((relatedKey) => {
+                const related = archetypes?.[relatedKey];
+                return related ? (
+                  <a 
+                    key={relatedKey}
+                    href={`/archetype/${ARCHETYPE_SEO_CONTENT[relatedKey]?.slug || relatedKey}`}
+                    className="related-card"
+                  >
+                    <span className="related-name">{related.name}</span>
+                    <span className="related-title">{related.title}</span>
+                  </a>
+                ) : null;
+              })}
+            </div>
+          </section>
+
+          <section className="archetype-references">
+            <h2>Academic References</h2>
+            <ul className="references-list">
+              {seoContent.academicReferences.map((ref, idx) => (
+                <li key={idx}>{ref}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="archetype-cta">
+            <h2>Discover Your Archetype</h2>
+            <p>Take our comprehensive psychometric assessment to reveal your primary and secondary archetypes.</p>
+            <button className="cta-button large" onClick={() => {
+              window.history.pushState({}, '', '/');
+              setPhase('landing');
+            }}>
+              Start the Assessment
+            </button>
+          </section>
+
+          <footer className="archetype-footer">
+            <p>
+              <a href="https://www.marquisdemayfair.com" target="_blank" rel="noopener noreferrer">
+                Visit Marquis de Mayfair
+              </a>
+              {' • '}
+              <a href="/methodology">Scientific Methodology</a>
+              {' • '}
+              <a href="/">Take the Quiz</a>
+            </p>
+            <p className="copyright">
+              Copyright © 2025 Marquis de Mayfair Ltd. Registered in the UK under company number 15762981
+            </p>
+          </footer>
+        </main>
       </div>
     );
   };
@@ -3210,6 +3450,11 @@ Where:
         <AdminPanel />
       </div>
     );
+  }
+
+  // Archetype SEO Landing Page
+  if (archetypePageKey) {
+    return <ArchetypePage archetypeKey={archetypePageKey} />;
   }
 
   if (phase === 'methodology') {
@@ -3469,6 +3714,17 @@ Where:
               </div>
             </div>
             
+            <a 
+              href="#email-capture" 
+              className="discount-link"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('email-capture')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Get 10% off Luxury BDSM Equipment →
+            </a>
+            
             <p className="archetype-share-text">{primaryArchetype?.shareText}</p>
             
             <div className="social-share-buttons">
@@ -3530,25 +3786,27 @@ Where:
               const barColor = getRankColor(index, sortedScores.length);
               
               return (
-                <div 
-                  key={dimension} 
-                  className={`score-bar ${index < 3 ? 'top-score' : ''}`}
-                  style={{ '--delay': `${index * 0.05}s` }}
-                >
-                  <div className="bar-header">
-                    <span className="bar-name">{DIMENSIONS[dimension]?.name}</span>
-                    <span className="bar-percent">{score}%</span>
-                  </div>
-                  <div className="bar-track">
-                    <div 
-                      className="bar-fill" 
-                      style={{ 
-                        width: `${score}%`,
-                        backgroundColor: barColor
-                      }}
-                    ></div>
-                  </div>
+              <div 
+                key={dimension} 
+                className={`score-bar ${index < 3 ? 'top-score' : ''}`}
+                style={{ '--delay': `${index * 0.05}s` }}
+              >
+                <div className="bar-header">
+                  <span className="bar-name" data-tooltip={DIMENSIONS[dimension]?.fetishLabel}>
+                    {DIMENSIONS[dimension]?.name}
+                  </span>
+                  <span className="bar-percent">{score}%</span>
                 </div>
+                <div className="bar-track">
+                  <div 
+                    className="bar-fill" 
+                    style={{ 
+                      width: `${score}%`,
+                        backgroundColor: barColor
+                    }}
+                  ></div>
+                </div>
+              </div>
               );
             })}
           </div>
@@ -3577,9 +3835,9 @@ Where:
               </div>
               
               {!emailSubmitted ? (
-                <div className="email-capture-section">
+                <div id="email-capture" className="email-capture-section">
                   <h4 className="email-cta">Enter your email to receive your free report</h4>
-                  <form onSubmit={handleEmailSubmit} className="email-form">
+                <form onSubmit={handleEmailSubmit} className="email-form">
                     {submitError && (
                       <div className="submit-error">
                         <span className="error-icon">⚠</span>
@@ -3595,16 +3853,16 @@ Where:
                         className="email-input name-input"
                         disabled={isSubmitting}
                       />
-                      <input
-                        type="email"
-                        value={email}
+                  <input
+                    type="email"
+                    value={email}
                         onChange={(e) => {
                           setEmail(e.target.value);
                           setSubmitError(''); // Clear error when email changes
                         }}
-                        placeholder="Enter your email address"
-                        className="email-input"
-                        required
+                    placeholder="Enter your email address"
+                    className="email-input"
+                    required
                         disabled={isSubmitting}
                       />
                     </div>
@@ -3625,8 +3883,8 @@ Where:
                       disabled={!marketingOptIn || isSubmitting}
                     >
                       <span>{isSubmitting ? 'Verifying...' : 'Get My Detailed Report'}</span>
-                    </button>
-                  </form>
+                  </button>
+                </form>
                   
                   <div className="discount-callout">
                     <span className="discount-label">EXCLUSIVE OFFER</span>
@@ -3658,9 +3916,9 @@ Where:
     return (
       <div className="app-container">
         <div className="archetype-page">
-          {isGeneratingAI ? (
+            {isGeneratingAI ? (
             <div className="analysis-loading-fullscreen">
-              <div className="loading-quill">✒</div>
+                <div className="loading-quill">✒</div>
               <p>The Marquis is crafting your report...</p>
               <div className="generation-timer">
                 <span className="timer-elapsed">{elapsedTime}s</span>
@@ -3668,7 +3926,7 @@ Where:
               <div className="loading-progress">
                 <div className="loading-progress-bar" style={{ width: `${Math.min((elapsedTime / 45) * 100, 95)}%` }}></div>
               </div>
-            </div>
+          </div>
           ) : (
               <ReportSlideshow
                 aiAnalysis={aiAnalysis || primaryArchetype?.coldReading || ''}

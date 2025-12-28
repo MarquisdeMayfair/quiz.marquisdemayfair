@@ -17,3 +17,4 @@ tail -f "$LOG_FILE" | grep --line-buffered -E "(Progress:|INCORRECT|Final Test|C
     echo "$line"
 done
 
+

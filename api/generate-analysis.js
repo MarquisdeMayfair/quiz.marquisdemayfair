@@ -139,12 +139,28 @@ ${productContext}
 
 ---
 
+## 6. THREE INTIMATE SCENARIOS (200+ words)
+
+Create three sensual fantasy vignettes specifically designed for the ${primaryArchetype?.name} archetype:
+
+For EACH scenario:
+- Write a brief, evocative scene (50-75 words each) that captures a moment of power exchange
+- Naturally incorporate 1-2 of the recommended products as part of the scene
+- Focus on the psychological journey, anticipation, and emotional states rather than explicit mechanics
+- Write in sophisticated, literary style - evocative and sensual, not crude or clinical
+- Capture what makes this archetype's desires unique
+- End each with the emotional or psychological payoff they would experience
+
+These should feel like intimate glimpses into their ideal experiences - luxurious, psychologically rich, and deeply personal to their archetype.
+
+---
+
 === WRITING GUIDELINES ===
 
 TONE: 
 - Warm, insightful, literary, unapologetically sexual and adult
 - Use BDSM terminology naturally (Dom, sub, scene, play, power exchange, dynamic, etc.)
-- Sex-positive and affirming—celebrate their configuration
+- Sex-positive and affirming - celebrate their configuration
 - Cold reading style: "You have probably always felt..." "Others may have told you..." "There's a quality in you that..."
 
 STYLE:
@@ -154,12 +170,20 @@ STYLE:
 - Psychological depth without jargon
 - Sensual and sophisticated
 
+FORMATTING:
+- Use regular dashes (-) NOT em-dashes (—) or en-dashes (–)
+- Break long paragraphs into digestible chunks (3-4 sentences max per paragraph)
+- Use clear section headers as specified
+- Add line breaks between paragraphs for readability
+- Format product URLs as clickable markdown links: [Product Name](URL)
+
 CRITICAL REQUIREMENTS:
 - AT LEAST 1500 words total
 - Reference specific dimension scores by name and percentage
-- Include ALL product recommendations with URLs
+- Include ALL product recommendations with URLs formatted as markdown links
 - Make it feel like a genuine psychological reading, not a template
 - Every paragraph should feel personally relevant to THIS user's results
+- Keep paragraphs short and scannable for mobile reading
 
 Begin the report now:`;
 

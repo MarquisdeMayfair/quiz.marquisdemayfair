@@ -12,3 +12,4 @@ echo ""
 MAX_TESTS=${1:-200}
 node automate-quiz-tests.js 2>&1 | grep -A 5 "INCORRECT RESULT" || echo "All tests passed!"
 
+
