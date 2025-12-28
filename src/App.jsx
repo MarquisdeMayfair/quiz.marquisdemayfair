@@ -2765,7 +2765,7 @@ Where:
               
               <div className="subtitle">
                 <span className="line"></span>
-                <span className="text">Not labels. Not fantasies. Your real erotic psychology.</span>
+                <span className="text">Seventeen Possible Archetypes. Which one are you?</span>
                 <span className="line"></span>
               </div>
               
