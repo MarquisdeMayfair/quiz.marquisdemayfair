@@ -15,20 +15,34 @@ export default async function handler(req, res) {
   }
   
   try {
-    const { invitedEmail, referrerEmail, referrerArchetype } = req.body;
+    const { invitedEmail, referrerEmail, referrerArchetype, message } = req.body;
     
     if (!invitedEmail || !invitedEmail.includes('@')) {
       return res.status(400).json({ error: 'Valid email required' });
     }
+    
+    // Sanitize message - remove any HTML/script tags
+    const sanitizeText = (text) => {
+      if (!text) return '';
+      return text
+        .replace(/<[^>]*>/g, '') // Remove HTML tags
+        .replace(/[<>]/g, '') // Remove angle brackets
+        .replace(/javascript:/gi, '') // Remove javascript: protocol
+        .replace(/on\w+=/gi, '') // Remove event handlers
+        .substring(0, 500) // Limit length
+        .trim();
+    };
     
     // Store invite with referrer information
     const inviteData = {
       invitedEmail: invitedEmail.toLowerCase().trim(),
       referrerEmail: referrerEmail?.toLowerCase().trim() || 'unknown',
       referrerArchetype: referrerArchetype || 'unknown',
+      message: sanitizeText(message),
       type: 'invite',
       timestamp: new Date().toISOString(),
-      status: 'pending'
+      status: 'pending', // Will be updated to 'completed' when invitee completes the test
+      voucherSent: false // Track if vouchers have been sent
     };
     
     // Store in KV with invite: prefix

@@ -2632,12 +2632,29 @@ body.show-recaptcha .grecaptcha-badge {
   margin-bottom: var(--space-lg);
 }
 
+.invite-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
 .invite-form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: var(--space-md);
   width: 100%;
-  max-width: 300px;
+}
+
+.invite-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  text-align: left;
+}
+
+.invite-label {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--gold-muted);
 }
 
 .invite-input {
@@ -2648,7 +2665,6 @@ body.show-recaptcha .grecaptcha-badge {
   border-radius: 4px;
   background: var(--black-rich);
   color: var(--cream);
-  text-align: center;
 }
 
 .invite-input:focus {
@@ -2656,16 +2672,47 @@ body.show-recaptcha .grecaptcha-badge {
   border-color: var(--gold-bright);
 }
 
+.invite-message-input {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: var(--space-sm);
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  background: var(--black-rich);
+  color: var(--cream);
+  resize: none;
+  line-height: 1.5;
+}
+
+.invite-message-input:focus {
+  outline: none;
+  border-color: var(--gold-bright);
+}
+
+.char-count {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--gray-warm);
+  text-align: right;
+}
+
+.invite-actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
 .invite-submit-btn {
   font-family: var(--font-display);
-  font-size: 1rem;
-  padding: var(--space-sm) var(--space-lg);
+  font-size: 0.95rem;
+  padding: var(--space-sm) var(--space-md);
   background: var(--gold-bright);
   color: var(--black-deep);
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
+  flex: 1;
 }
 
 .invite-submit-btn:hover:not(:disabled) {
@@ -2678,6 +2725,32 @@ body.show-recaptcha .grecaptcha-badge {
   cursor: not-allowed;
 }
 
+.invite-copy-btn {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  color: var(--gold-muted);
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.invite-copy-btn:hover {
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+}
+
+.invite-note {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--gray-warm);
+  text-align: center;
+  margin-top: var(--space-sm);
+}
+
 .invite-success {
   text-align: center;
 }
@@ -2686,7 +2759,24 @@ body.show-recaptcha .grecaptcha-badge {
   font-family: var(--font-body);
   font-size: 1.2rem;
   color: var(--gold-bright);
+  margin-bottom: var(--space-sm);
+}
+
+.invite-success-note {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--cream-dark);
   margin-bottom: var(--space-md);
+}
+
+.invite-success-code {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--cream);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--black-rich);
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
 }
 
 .friend-code-reveal {

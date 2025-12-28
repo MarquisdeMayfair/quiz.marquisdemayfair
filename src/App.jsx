@@ -1228,6 +1228,10 @@ const ReportSlideshow = ({
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteSubmitted, setInviteSubmitted] = useState(false);
   const [inviteSubmitting, setInviteSubmitting] = useState(false);
+  const [inviteMessage, setInviteMessage] = useState(
+    `Hey! I just took the Marquis de Mayfair personality test about my inner dom and sub - it was fascinating! We both get a 5% voucher if you take it too. Here's the link: quiz.marquisdemayfair.com`
+  );
+  const [inviteCopied, setInviteCopied] = useState(false);
   const chartRef = useRef(null);
   const touchStartX = useRef(0);
   const slideshowRef = useRef(null);
@@ -1507,27 +1511,61 @@ const ReportSlideshow = ({
     }
   };
   
-  // Submit invite email
+  // Sanitize text - remove any HTML/script tags and dangerous characters
+  const sanitizeText = (text) => {
+    return text
+      .replace(/<[^>]*>/g, '') // Remove HTML tags
+      .replace(/[<>]/g, '') // Remove angle brackets
+      .replace(/javascript:/gi, '') // Remove javascript: protocol
+      .replace(/on\w+=/gi, '') // Remove event handlers
+      .trim();
+  };
+
+  // Submit invite email and open mailto
   const handleInviteSubmit = async (e) => {
     e.preventDefault();
     if (!inviteEmail || !inviteEmail.includes('@')) return;
     
     setInviteSubmitting(true);
+    
+    // Sanitize the message
+    const cleanMessage = sanitizeText(inviteMessage);
+    
     try {
+      // Save to database first
       await fetch('/api/invite', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           invitedEmail: inviteEmail,
           referrerEmail: email,
-          referrerArchetype: primaryArchetype?.name
+          referrerArchetype: primaryArchetype?.name,
+          message: cleanMessage
         })
       });
+      
+      // Open mailto: link so user sends the email themselves
+      const subject = encodeURIComponent('Discover Your BDSM Archetype - Marquis de Mayfair');
+      const body = encodeURIComponent(cleanMessage);
+      window.location.href = `mailto:${inviteEmail}?subject=${subject}&body=${body}`;
+      
       setInviteSubmitted(true);
     } catch (err) {
       console.error('Invite submission failed:', err);
+      // Still try to open mailto even if DB save fails
+      const subject = encodeURIComponent('Discover Your BDSM Archetype - Marquis de Mayfair');
+      const body = encodeURIComponent(sanitizeText(inviteMessage));
+      window.location.href = `mailto:${inviteEmail}?subject=${subject}&body=${body}`;
     }
     setInviteSubmitting(false);
+  };
+
+  // Copy invite to clipboard (alternative for mobile/no mail client)
+  const handleCopyInvite = () => {
+    const cleanMessage = sanitizeText(inviteMessage);
+    navigator.clipboard.writeText(cleanMessage);
+    setInviteCopied(true);
+    setTimeout(() => setInviteCopied(false), 2000);
   };
   
   // Render markdown content with formatting fixes
@@ -1686,22 +1724,52 @@ const ReportSlideshow = ({
           <p className="invite-bonus">Get an additional <strong>5% discount voucher for you both</strong> when they complete the test.</p>
           
           {!inviteSubmitted ? (
-            <form onSubmit={handleInviteSubmit} className="invite-form">
-              <input
-                type="email"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                placeholder="Friend's email address"
-                required
-                className="invite-input"
-              />
-              <button type="submit" className="invite-submit-btn" disabled={inviteSubmitting}>
-                {inviteSubmitting ? 'Sending...' : 'Send Invite'}
-              </button>
-            </form>
+            <div className="invite-form-container">
+              <form onSubmit={handleInviteSubmit} className="invite-form">
+                <div className="invite-field">
+                  <label className="invite-label">Friend's Email:</label>
+                  <input
+                    type="email"
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    placeholder="friend@email.com"
+                    required
+                    className="invite-input"
+                  />
+                </div>
+                <div className="invite-field">
+                  <label className="invite-label">Your Message (edit as you like):</label>
+                  <textarea
+                    value={inviteMessage}
+                    onChange={(e) => setInviteMessage(e.target.value)}
+                    className="invite-message-input"
+                    rows={4}
+                    maxLength={500}
+                  />
+                  <span className="char-count">{inviteMessage.length}/500</span>
+                </div>
+                <div className="invite-actions">
+                  <button type="submit" className="invite-submit-btn" disabled={inviteSubmitting}>
+                    {inviteSubmitting ? 'Opening...' : 'Send via Email'}
+                  </button>
+                  <button 
+                    type="button" 
+                    className="invite-copy-btn"
+                    onClick={handleCopyInvite}
+                  >
+                    {inviteCopied ? '✓ Copied!' : 'Copy Message'}
+                  </button>
+                </div>
+                <p className="invite-note">
+                  Clicking "Send via Email" will open your email app with this message ready to send.
+                </p>
+              </form>
+            </div>
           ) : (
             <div className="invite-success">
-              <p className="invite-success-text">✓ Invite sent!</p>
+              <p className="invite-success-text">✓ Invite recorded!</p>
+              <p className="invite-success-note">Your email app should have opened. Send the message to complete the invite.</p>
+              <p className="invite-success-code">When they complete the test, you'll both receive a <strong>FRIEND5</strong> voucher code!</p>
             </div>
           )}
         </div>
