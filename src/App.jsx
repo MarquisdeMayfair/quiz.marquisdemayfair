@@ -2433,7 +2433,6 @@ export default function MarquisPersonaTest() {
           <h2>Question Administration</h2>
           <p>Edit questions while maintaining psychometric validity. Changes preserve scoring weights and dimension mappings.</p>
           <div className="admin-actions">
-            <button onClick={handleAddQuestion} className="admin-btn add">+ Add Question</button>
             <button onClick={exportQuestions} className="admin-btn export">Export Questions JSON</button>
             <button onClick={exportLeadsCSV} className="admin-btn export">Export Leads CSV</button>
             <button onClick={() => setShowAdmin(false)} className="admin-btn close">Close Admin</button>
