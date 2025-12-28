@@ -2586,11 +2586,72 @@ export default function MarquisPersonaTest() {
   // Methodology Page Component
   const MethodologyPage = () => (
     <div className="methodology-page">
+      {/* Schema.org Structured Data for Methodology Page */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "The Science Behind the Kink Test: BDSM Persona Assessment Methodology",
+        "description": "Comprehensive scientific methodology behind the most in-depth kink test available. Learn how our bondage quiz uses psychometric principles to identify your BDSM archetype.",
+        "author": {
+          "@type": "Organization",
+          "name": "Marquis de Mayfair Ltd"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Marquis de Mayfair Ltd",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://quiz.marquisdemayfair.com/header-logo.png"
+          }
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2025-12-28",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://quiz.marquisdemayfair.com/methodology"
+        },
+        "keywords": ["kink test", "bondage quiz", "BDSM assessment", "psychometric test", "power exchange"]
+      })}} />
+      
       <div className="methodology-content">
         <button className="back-btn" onClick={() => setPhase('landing')}>← Return to Assessment</button>
         
         <h1>Scientific Methodology</h1>
         <p className="subtitle">The Mayfair Psychometric Framework</p>
+
+        {/* SEO-Optimized Introduction Section */}
+        <section className="seo-intro">
+          <h2>About This Kink Test</h2>
+          <p>
+            The Marquis de Mayfair <strong>kink test</strong> represents the most comprehensive BDSM persona assessment available online. 
+            Unlike superficial quizzes, this <strong>in depth kink test</strong> applies rigorous psychometric methodology to understand 
+            your authentic power exchange psychology. Whether you're curious about dominance, submission, bondage, or sensation play, 
+            our assessment maps your responses across 16 scientifically-validated dimensions.
+          </p>
+          <p>
+            This <strong>bondage quiz</strong> features 64 original questions developed from peer-reviewed academic research. 
+            Each question is carefully weighted and scored to produce meaningful results—not generic entertainment. 
+            Upon completion, you'll discover which of our <strong>17 unique BDSM archetypes</strong> best reflects your 
+            intimate psychology, from The Sovereign's natural authority to The Devotee's sacred surrender.
+          </p>
+          
+          <h3>What Makes This Kink Test Different</h3>
+          <ul>
+            <li><strong>Academic Foundation:</strong> Built on peer-reviewed research from journals including Psychology & Sexuality and the Journal of Sexual Medicine</li>
+            <li><strong>Original Questions:</strong> All 64 questions are original—not recycled from other assessments</li>
+            <li><strong>17 Archetypes:</strong> Discover nuanced results across dominant, submissive, switch, and specialised orientations</li>
+            <li><strong>AI-Powered Reports:</strong> Receive a free 1,500-word personalised analysis generated specifically for your results</li>
+            <li><strong>Complete Privacy:</strong> No account required, results processed client-side</li>
+          </ul>
+          
+          <h3>The 17 BDSM Archetypes</h3>
+          <p>
+            Our <strong>kink test</strong> identifies your primary and secondary archetypes from 17 possible outcomes: 
+            The Sovereign, The Devotee, The Artisan, The Phoenix, The Weaver, The Chrysalis, The Luminary, The Oracle, 
+            The Apex, The Wild Heart, The Guardian, The Beloved, The Protector, The Innocent, The Shapeshifter, and The Acolyte. 
+            Each archetype includes historical parallels, mythological connections, and detailed psychological profiles.
+          </p>
+        </section>
 
         <section>
           <h2>Academic Foundation</h2>
@@ -2713,7 +2774,8 @@ Where:
         </section>
 
         <div className="methodology-footer">
-          <p>© 2024 Marquis de Mayfair. All questions and methodology are original intellectual property.</p>
+          <p>© 2025 Marquis de Mayfair Ltd. All questions and methodology are original intellectual property.</p>
+          <p>Registered in the UK under company number 15762981</p>
           <p>For research inquiries: research@marquisdemayfair.com</p>
         </div>
       </div>

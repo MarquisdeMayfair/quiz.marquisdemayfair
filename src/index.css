@@ -3837,6 +3837,42 @@ body.show-recaptcha .grecaptcha-badge {
   color: var(--gray-cool);
 }
 
+/* SEO Introduction Section */
+.seo-intro {
+  background: linear-gradient(135deg, rgba(139, 90, 43, 0.1) 0%, rgba(10, 10, 10, 0.3) 100%);
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.seo-intro h2 {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.seo-intro p strong {
+  color: var(--gold-bright);
+}
+
+.seo-intro ul {
+  list-style: none;
+  margin-left: 0;
+}
+
+.seo-intro li {
+  padding-left: var(--space-md);
+  position: relative;
+  margin-bottom: var(--space-sm);
+}
+
+.seo-intro li::before {
+  content: "✓";
+  color: var(--gold-bright);
+  position: absolute;
+  left: 0;
+}
+
 .methodology-footer {
   text-align: center;
   padding-top: var(--space-lg);
