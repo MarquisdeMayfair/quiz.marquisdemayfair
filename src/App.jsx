@@ -2651,6 +2651,14 @@ export default function MarquisPersonaTest() {
             The Apex, The Wild Heart, The Guardian, The Beloved, The Protector, The Innocent, The Shapeshifter, and The Acolyte. 
             Each archetype includes historical parallels, mythological connections, and detailed psychological profiles.
           </p>
+          
+          <div className="cta-box">
+            <p>Ready to discover your archetype?</p>
+            <button className="cta-button" onClick={() => setPhase('landing')}>
+              Take the Kink Test Now →
+            </button>
+            <span className="cta-note">Free • Private • Takes 10-15 minutes</span>
+          </div>
         </section>
 
         <section>
@@ -2771,6 +2779,21 @@ Where:
             <li>A snapshot of current orientation, which may evolve over time</li>
             <li>Not a substitute for professional guidance in exploring BDSM</li>
           </ul>
+        </section>
+
+        {/* Final CTA */}
+        <section className="final-cta">
+          <h2>Discover Your BDSM Archetype</h2>
+          <p>
+            Join thousands who have taken the most comprehensive <strong>kink test</strong> available. 
+            Understand your authentic power exchange psychology with our academically-grounded assessment.
+          </p>
+          <button className="cta-button large" onClick={() => setPhase('landing')}>
+            Start the Assessment →
+          </button>
+          <p className="cta-subtext">
+            Free 1,500-word AI report • No account required • Complete privacy
+          </p>
         </section>
 
         <div className="methodology-footer">

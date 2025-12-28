@@ -3873,6 +3873,64 @@ body.show-recaptcha .grecaptcha-badge {
   left: 0;
 }
 
+/* CTA Box in methodology content */
+.methodology-content .cta-box {
+  text-align: center;
+  margin-top: var(--space-lg);
+  padding: var(--space-lg);
+  background: linear-gradient(135deg, rgba(139, 90, 43, 0.15) 0%, rgba(10, 10, 10, 0.4) 100%);
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+}
+
+.methodology-content .cta-box p {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--cream);
+  margin-bottom: var(--space-md);
+}
+
+.methodology-content .cta-note {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--gray-warm);
+  margin-top: var(--space-sm);
+}
+
+/* Final CTA Section */
+.final-cta {
+  text-align: center;
+  padding: var(--space-xl);
+  background: linear-gradient(135deg, var(--burgundy-deep) 0%, var(--black-rich) 100%);
+  border: 2px solid var(--gold-bright);
+  border-radius: 12px;
+  margin-top: var(--space-xl);
+}
+
+.final-cta h2 {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: var(--space-md);
+}
+
+.final-cta p {
+  max-width: 600px;
+  margin: 0 auto var(--space-lg);
+}
+
+.final-cta .cta-button.large {
+  font-size: 1.2rem;
+  padding: var(--space-md) var(--space-xl);
+}
+
+.final-cta .cta-subtext {
+  font-size: 0.95rem;
+  color: var(--gray-warm);
+  margin-top: var(--space-md);
+  margin-bottom: 0;
+}
+
 .methodology-footer {
   text-align: center;
   padding-top: var(--space-lg);
