@@ -1584,9 +1584,9 @@ const ReportSlideshow = ({
       '<a href="$2" target="_blank" rel="noopener noreferrer" class="report-link">$1</a>'
     );
     
-    // Also convert bare product URLs to links
+    // Also convert bare product URLs to links (exclude " to avoid double-processing URLs in href attributes)
     processedContent = processedContent.replace(
-      /(https:\/\/www\.marquisdemayfair\.com\/products\/[^\s<),]+)/g,
+      /(https:\/\/www\.marquisdemayfair\.com\/products\/[^\s<),"]+)/g,
       '<a href="$1" target="_blank" rel="noopener noreferrer" class="report-link">View Product</a>'
     );
     
@@ -3885,7 +3885,7 @@ Where:
               <div className="unlock-benefits">
                 <h4>What you'll receive</h4>
                 <ul>
-                  <li>A full AI-scored analysis of your sexual archetype, based on your answers</li>
+                  <li>A downloadable and shareable scorecard with AI report</li>
                   <li>Clear breakdown of your dominant traits, secondary influences, and hidden drives</li>
                   <li>Desire mapped like a horoscope. Tendencies, cycles, and repeat behaviours revealed</li>
                   <li>Insights powered by our proprietary BDSM knowledge base and behavioural frameworks</li>

@@ -2388,6 +2388,10 @@ body.show-recaptcha .grecaptcha-badge {
   align-items: center;
 }
 
+.chart-slide .chart-download-area {
+  margin-bottom: var(--space-lg); /* Space before nav buttons */
+}
+
 .chart-download-area {
   background: linear-gradient(180deg, var(--black-rich), var(--black-deep));
   border: 1px solid var(--gold-dark);
