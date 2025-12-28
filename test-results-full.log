@@ -1,0 +1,15 @@
+Starting quiz validation tests...
+
+Progress: 1/200 tests | Correct: 1 | Incorrect: 0 | Current: Test #1Progress: 2/200 tests | Correct: 2 | Incorrect: 0 | Current: Test #2Progress: 3/200 tests | Correct: 3 | Incorrect: 0 | Current: Test #3
+❌ INCORRECT RESULT - Test #4
+   Expected Primary: chrysalis
+   Actual Primary: acolyte
+   Top 3 Expected Scores: rope_bottom: 81, dominance: 77, submission: 75
+Progress: 4/200 tests | Correct: 3 | Incorrect: 1 | Current: Test #4Progress: 5/200 tests | Correct: 4 | Incorrect: 1 | Current: Test #5Progress: 6/200 tests | Correct: 5 | Incorrect: 1 | Current: Test #6Progress: 7/200 tests | Correct: 6 | Incorrect: 1 | Current: Test #7Progress: 8/200 tests | Correct: 7 | Incorrect: 1 | Current: Test #8Progress: 9/200 tests | Correct: 8 | Incorrect: 1 | Current: Test #9Progress: 10/200 tests | Correct: 9 | Incorrect: 1 | Current: Test #10
+Progress: 10/200 tests | Correct: 9 | Incorrect: 1 | Current: Test #10
+Progress: 11/200 tests | Correct: 10 | Incorrect: 1 | Current: Test #11
+❌ INCORRECT RESULT - Test #12
+   Expected Primary: oracle
+   Actual Primary: acolyte
+   Top 3 Expected Scores: voyeur: 85, owner: 81, submission: 78
+Progress: 12/200 tests | Correct: 10 | Incorrect: 2 | Current: Test #12

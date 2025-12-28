@@ -1936,6 +1936,13 @@ export default function MarquisPersonaTest() {
         normalized[dim] = 0;
       }
     });
+    
+    // #region agent log
+    const sortedForLog = Object.entries(normalized).sort(([,a],[,b]) => b - a).slice(0,5);
+    const answeredIds = Object.keys(answers).map(k => parseInt(k)).sort((a,b) => a - b);
+    const missingIds = shuffledQuestions.map(q => q.id).filter(id => !answers.hasOwnProperty(id));
+    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:calculateScores:return',message:'Calculated normalized scores',data:{top5Scores:sortedForLog,totalAnswered:Object.keys(answers).length,questionsCount:shuffledQuestions.length,missingQuestionIds:missingIds,serviceAnswers:[answers[62],answers[63],answers[64]],ropeBottomAnswers:[answers[25],answers[26],answers[27],answers[28]]},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
+    // #endregion
 
     return normalized;
   }, [answers, shuffledQuestions]);
@@ -1964,9 +1971,16 @@ export default function MarquisPersonaTest() {
       return dimensionPriority.indexOf(dimA) - dimensionPriority.indexOf(dimB);
     });
     
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:determineArchetypes:sorted',message:'Sorted dimensions after sort',data:{top5:sorted.slice(0,5),entriesCount:entries.length,dimensionPriorityFirst3:dimensionPriority.slice(0,3)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,B'})}).catch(()=>{});
+    // #endregion
+    
     // Null safety: handle edge case where less than 2 dimensions have scores
     if (sorted.length < 2) {
       console.warn('Warning: Less than 2 dimensions with scores');
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:determineArchetypes:nullSafety',message:'Less than 2 dimensions - using fallback',data:{sortedLength:sorted.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'E'})}).catch(()=>{});
+      // #endregion
       return { 
         primary: Object.values(ARCHETYPES)[0], 
         secondary: Object.values(ARCHETYPES)[1] 
@@ -1978,6 +1992,12 @@ export default function MarquisPersonaTest() {
 
     const primary = Object.values(ARCHETYPES).find(a => a.primaryDimension === primaryDim);
     const secondary = Object.values(ARCHETYPES).find(a => a.primaryDimension === secondaryDim);
+    
+    // #region agent log
+    const archetypeKeys = Object.keys(ARCHETYPES);
+    const archetypeFirst = Object.values(ARCHETYPES)[0];
+    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:determineArchetypes:lookup',message:'Archetype lookup results',data:{primaryDim,secondaryDim,primaryFound:!!primary,primaryName:primary?.name,primaryPrimaryDim:primary?.primaryDimension,secondaryFound:!!secondary,secondaryName:secondary?.name,fallbackName:archetypeFirst?.name,archetypeKeysFirst3:archetypeKeys.slice(0,3)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,C,D,E'})}).catch(()=>{});
+    // #endregion
 
     // Debug logging for test mode
     if (testMode) {
@@ -1986,8 +2006,13 @@ export default function MarquisPersonaTest() {
       console.log('DEBUG: Primary dimension:', primaryDim, '→', primary?.name || 'NOT FOUND');
       console.log('DEBUG: Secondary dimension:', secondaryDim, '→', secondary?.name || 'NOT FOUND');
     }
+    
+    const finalPrimary = primary || Object.values(ARCHETYPES)[0];
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/68dcbe0c-c15c-46b4-b258-fd6979cfde49',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:determineArchetypes:return',message:'Final archetype selection',data:{usedFallback:!primary,finalPrimaryName:finalPrimary?.name,finalPrimaryDim:finalPrimary?.primaryDimension,secondaryName:secondary?.name},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'E'})}).catch(()=>{});
+    // #endregion
 
-    return { primary: primary || Object.values(ARCHETYPES)[0], secondary };
+    return { primary: finalPrimary, secondary };
   }, []);
 
   // Handle answer selection
