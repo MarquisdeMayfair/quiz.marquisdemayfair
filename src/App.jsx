@@ -1466,9 +1466,52 @@ const ReportSlideshow = ({
   const shareSlideIndex = pdfSlideIndex + 1;
   const totalSlides = shareSlideIndex + 1;
   
-  // PDF generation state
+  // PDF generation and payment state
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [pdfGenerated, setPdfGenerated] = useState(false);
+  const [pdfPurchased, setPdfPurchased] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  
+  // Check for payment success on mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('payment');
+    if (paymentStatus === 'success') {
+      setPdfPurchased(true);
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+  
+  // Handle Stripe checkout
+  const handlePurchasePDF = async () => {
+    setIsCheckingOut(true);
+    try {
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          archetype: primaryArchetype?.name,
+          archetypeTitle: primaryArchetype?.title,
+          scores: scores
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        alert('Error creating checkout session. Please try again.');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Error processing payment. Please try again.');
+    }
+    setIsCheckingOut(false);
+  };
   
   // Navigation
   const nextSlide = () => {
@@ -2254,7 +2297,9 @@ const ReportSlideshow = ({
         <div className={getSlideClass(pdfSlideIndex) + ' pdf-slide'}>
           <div className="pdf-slide-content">
             <div className="pdf-icon">📄</div>
-            <h3 className="slide-title centered">Download Your Full Report</h3>
+            <h3 className="slide-title centered">
+              {pdfPurchased ? 'Download Your Report' : 'Get Your Full Report'}
+            </h3>
             <p className="pdf-description">
               Keep your complete BDSM Persona Assessment as a beautifully formatted PDF.
               Includes your archetype analysis, dimension scores, and personalised insights.
@@ -2268,22 +2313,44 @@ const ReportSlideshow = ({
               <div className="pdf-preview-item">✓ Beautifully designed for sharing</div>
             </div>
             
-            <button 
-              className="pdf-download-btn"
-              onClick={generatePDFReport}
-              disabled={isGeneratingPDF}
-            >
-              {isGeneratingPDF ? (
-                <>Generating PDF...</>
-              ) : pdfGenerated ? (
-                <>✓ Download Again</>
-              ) : (
-                <>📥 Download Free PDF Report</>
-              )}
-            </button>
-            
-            {pdfGenerated && (
-              <p className="pdf-success">Your PDF has been downloaded!</p>
+            {pdfPurchased ? (
+              <>
+                <button 
+                  className="pdf-download-btn"
+                  onClick={generatePDFReport}
+                  disabled={isGeneratingPDF}
+                >
+                  {isGeneratingPDF ? (
+                    <>Generating PDF...</>
+                  ) : pdfGenerated ? (
+                    <>✓ Download Again</>
+                  ) : (
+                    <>📥 Download Your PDF Report</>
+                  )}
+                </button>
+                {pdfGenerated && (
+                  <p className="pdf-success">Your PDF has been downloaded!</p>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="pdf-price">
+                  <span className="price-amount">£0.99</span>
+                  <span className="price-note">One-time purchase</span>
+                </div>
+                <button 
+                  className="pdf-purchase-btn"
+                  onClick={handlePurchasePDF}
+                  disabled={isCheckingOut}
+                >
+                  {isCheckingOut ? (
+                    <>Processing...</>
+                  ) : (
+                    <>🔒 Buy Now - £0.99</>
+                  )}
+                </button>
+                <p className="pdf-secure-note">Secure payment via Stripe</p>
+              </>
             )}
           </div>
         </div>
