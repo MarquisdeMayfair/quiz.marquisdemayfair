@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import { ARCHETYPE_SEO_CONTENT } from './archetypeContent';
 
 // ============================================================================
@@ -1461,8 +1462,13 @@ const ReportSlideshow = ({
   const chartSlideIndex = inviteSlideIndex + 1;
   const farewellSlideIndex = chartSlideIndex + 1;
   const voucher2SlideIndex = farewellSlideIndex + 1;
-  const shareSlideIndex = voucher2SlideIndex + 1;
+  const pdfSlideIndex = voucher2SlideIndex + 1;
+  const shareSlideIndex = pdfSlideIndex + 1;
   const totalSlides = shareSlideIndex + 1;
+  
+  // PDF generation state
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [pdfGenerated, setPdfGenerated] = useState(false);
   
   // Navigation
   const nextSlide = () => {
@@ -1531,6 +1537,279 @@ const ReportSlideshow = ({
     } catch (err) {
       console.error('Download failed:', err);
     }
+  };
+  
+  // Generate PDF Report
+  const generatePDFReport = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 20;
+      const contentWidth = pageWidth - (margin * 2);
+      let yPos = margin;
+      
+      // Helper to add new page if needed
+      const checkNewPage = (requiredHeight) => {
+        if (yPos + requiredHeight > pageHeight - margin) {
+          pdf.addPage();
+          yPos = margin;
+          return true;
+        }
+        return false;
+      };
+      
+      // Helper to wrap text
+      const addWrappedText = (text, x, y, maxWidth, lineHeight = 6) => {
+        const lines = pdf.splitTextToSize(text, maxWidth);
+        lines.forEach((line, i) => {
+          checkNewPage(lineHeight);
+          pdf.text(line, x, yPos);
+          yPos += lineHeight;
+        });
+        return yPos;
+      };
+      
+      // ===== PAGE 1: COVER =====
+      // Dark background simulation with header
+      pdf.setFillColor(10, 10, 20);
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+      
+      // Gold accent line
+      pdf.setDrawColor(201, 162, 39);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, 40, pageWidth - margin, 40);
+      
+      // Title
+      pdf.setTextColor(201, 162, 39);
+      pdf.setFontSize(28);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('BDSM PERSONA', pageWidth / 2, 55, { align: 'center' });
+      pdf.setFontSize(22);
+      pdf.text('ASSESSMENT REPORT', pageWidth / 2, 65, { align: 'center' });
+      
+      // Archetype name
+      pdf.setFontSize(36);
+      pdf.setTextColor(255, 255, 255);
+      yPos = 100;
+      pdf.text(primaryArchetype?.name || 'Your Archetype', pageWidth / 2, yPos, { align: 'center' });
+      
+      // Subtitle
+      pdf.setFontSize(14);
+      pdf.setTextColor(230, 220, 200);
+      pdf.setFont('helvetica', 'italic');
+      yPos += 12;
+      pdf.text(primaryArchetype?.title || '', pageWidth / 2, yPos, { align: 'center' });
+      
+      // Cold reading / description
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(11);
+      pdf.setTextColor(200, 200, 200);
+      yPos += 20;
+      if (primaryArchetype?.coldReading) {
+        const coldReadingLines = pdf.splitTextToSize(primaryArchetype.coldReading, contentWidth);
+        coldReadingLines.forEach(line => {
+          pdf.text(line, pageWidth / 2, yPos, { align: 'center' });
+          yPos += 6;
+        });
+      }
+      
+      // Secondary archetype
+      if (secondaryArchetype) {
+        yPos += 15;
+        pdf.setTextColor(201, 162, 39);
+        pdf.setFontSize(12);
+        pdf.text('Secondary Archetype', pageWidth / 2, yPos, { align: 'center' });
+        yPos += 8;
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(16);
+        pdf.text(secondaryArchetype.name, pageWidth / 2, yPos, { align: 'center' });
+        yPos += 6;
+        pdf.setFontSize(10);
+        pdf.setTextColor(200, 200, 200);
+        pdf.setFont('helvetica', 'italic');
+        pdf.text(secondaryArchetype.title, pageWidth / 2, yPos, { align: 'center' });
+      }
+      
+      // Footer
+      pdf.setFontSize(9);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text('quiz.marquisdemayfair.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
+      pdf.setDrawColor(201, 162, 39);
+      pdf.line(margin, pageHeight - 25, pageWidth - margin, pageHeight - 25);
+      
+      // ===== PAGE 2: DIMENSION SCORES =====
+      pdf.addPage();
+      pdf.setFillColor(10, 10, 20);
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+      
+      yPos = margin;
+      pdf.setTextColor(201, 162, 39);
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Your Dimension Scores', pageWidth / 2, yPos, { align: 'center' });
+      yPos += 15;
+      
+      // Draw bar chart
+      const barHeight = 8;
+      const barGap = 12;
+      const labelWidth = 55;
+      const barMaxWidth = contentWidth - labelWidth - 15;
+      
+      sortedScores.forEach(([dimension, score], index) => {
+        checkNewPage(barGap + 5);
+        
+        // Label
+        pdf.setFontSize(9);
+        pdf.setTextColor(200, 200, 200);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(dimensions[dimension]?.name || dimension, margin, yPos + 5);
+        
+        // Bar background
+        pdf.setFillColor(30, 30, 40);
+        pdf.roundedRect(margin + labelWidth, yPos, barMaxWidth, barHeight, 2, 2, 'F');
+        
+        // Bar fill - gradient color based on rank
+        const ratio = index / (sortedScores.length - 1);
+        let r, g, b;
+        if (ratio < 0.2) { r = 201; g = 162; b = 39; } // Gold
+        else if (ratio < 0.4) { r = 34; g = 197; b = 94; } // Green
+        else if (ratio < 0.6) { r = 20; g = 184; b = 166; } // Teal
+        else if (ratio < 0.8) { r = 8; g = 145; b = 178; } // Blue
+        else { r = 139; g = 21; b = 56; } // Burgundy
+        
+        pdf.setFillColor(r, g, b);
+        const fillWidth = (score / 100) * barMaxWidth;
+        if (fillWidth > 0) {
+          pdf.roundedRect(margin + labelWidth, yPos, fillWidth, barHeight, 2, 2, 'F');
+        }
+        
+        // Score value
+        pdf.setTextColor(201, 162, 39);
+        pdf.setFontSize(9);
+        pdf.text(`${score}%`, margin + labelWidth + barMaxWidth + 3, yPos + 5);
+        
+        yPos += barGap;
+      });
+      
+      // Footer
+      pdf.setFontSize(9);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text('quiz.marquisdemayfair.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
+      
+      // ===== PAGE 3+: AI ANALYSIS =====
+      if (aiAnalysis) {
+        pdf.addPage();
+        pdf.setFillColor(10, 10, 20);
+        pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+        
+        yPos = margin;
+        pdf.setTextColor(201, 162, 39);
+        pdf.setFontSize(18);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Your Personal Analysis', pageWidth / 2, yPos, { align: 'center' });
+        yPos += 15;
+        
+        // Clean up AI analysis text
+        const cleanAnalysis = aiAnalysis
+          .replace(/<[^>]*>/g, '') // Remove HTML
+          .replace(/\*\*/g, '') // Remove markdown bold
+          .replace(/\*/g, '') // Remove markdown italics
+          .replace(/—/g, '-') // Replace em-dashes
+          .replace(/"/g, '"').replace(/"/g, '"') // Normalize quotes
+          .replace(/'/g, "'").replace(/'/g, "'");
+        
+        // Split into paragraphs
+        const paragraphs = cleanAnalysis.split(/\n\n+/);
+        
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(10);
+        pdf.setTextColor(220, 220, 220);
+        
+        paragraphs.forEach(para => {
+          if (!para.trim()) return;
+          
+          // Check if it's a heading (starts with caps or is short)
+          const isHeading = para.length < 50 && para === para.toUpperCase();
+          
+          if (isHeading) {
+            checkNewPage(15);
+            yPos += 5;
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(201, 162, 39);
+            pdf.setFontSize(12);
+            pdf.text(para.trim(), margin, yPos);
+            yPos += 8;
+            pdf.setFont('helvetica', 'normal');
+            pdf.setTextColor(220, 220, 220);
+            pdf.setFontSize(10);
+          } else {
+            const lines = pdf.splitTextToSize(para.trim(), contentWidth);
+            lines.forEach(line => {
+              checkNewPage(6);
+              pdf.text(line, margin, yPos);
+              yPos += 5.5;
+            });
+            yPos += 4;
+          }
+        });
+        
+        // Footer on last page
+        pdf.setFontSize(9);
+        pdf.setTextColor(150, 150, 150);
+        pdf.text('quiz.marquisdemayfair.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
+      }
+      
+      // ===== FINAL PAGE: CALL TO ACTION =====
+      pdf.addPage();
+      pdf.setFillColor(10, 10, 20);
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+      
+      yPos = 60;
+      pdf.setTextColor(201, 162, 39);
+      pdf.setFontSize(20);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Explore Your Desires', pageWidth / 2, yPos, { align: 'center' });
+      
+      yPos += 20;
+      pdf.setTextColor(230, 220, 200);
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'normal');
+      const ctaText = 'Visit the Marquis de Mayfair collection to discover luxury items curated for your archetype.';
+      const ctaLines = pdf.splitTextToSize(ctaText, contentWidth - 20);
+      ctaLines.forEach(line => {
+        pdf.text(line, pageWidth / 2, yPos, { align: 'center' });
+        yPos += 7;
+      });
+      
+      yPos += 15;
+      pdf.setTextColor(201, 162, 39);
+      pdf.setFontSize(14);
+      pdf.text('Use code PERSONA10 for 10% off', pageWidth / 2, yPos, { align: 'center' });
+      
+      yPos += 25;
+      pdf.setFontSize(11);
+      pdf.setTextColor(200, 200, 200);
+      pdf.text('www.marquisdemayfair.com', pageWidth / 2, yPos, { align: 'center' });
+      
+      // Footer
+      pdf.setDrawColor(201, 162, 39);
+      pdf.line(margin, pageHeight - 25, pageWidth - margin, pageHeight - 25);
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text('© Marquis de Mayfair - Surrender to Sensation', pageWidth / 2, pageHeight - 15, { align: 'center' });
+      
+      // Save the PDF
+      const fileName = `${primaryArchetype?.name?.replace(/\s+/g, '-') || 'BDSM'}-Persona-Report.pdf`;
+      pdf.save(fileName);
+      setPdfGenerated(true);
+      
+    } catch (err) {
+      console.error('PDF generation failed:', err);
+      alert('PDF generation failed. Please try again.');
+    }
+    setIsGeneratingPDF(false);
   };
   
   // Sanitize text - remove any HTML/script tags and dangerous characters
@@ -1873,6 +2152,44 @@ const ReportSlideshow = ({
             <a href="https://www.marquisdemayfair.com" target="_blank" rel="noopener noreferrer" className="voucher-shop-btn">
               Shop Now →
             </a>
+          </div>
+        </div>
+        
+        {/* PDF DOWNLOAD SLIDE */}
+        <div className={getSlideClass(pdfSlideIndex) + ' pdf-slide'}>
+          <div className="pdf-slide-content">
+            <div className="pdf-icon">📄</div>
+            <h3 className="slide-title centered">Download Your Full Report</h3>
+            <p className="pdf-description">
+              Keep your complete BDSM Persona Assessment as a beautifully formatted PDF.
+              Includes your archetype analysis, dimension scores, and personalised insights.
+            </p>
+            
+            <div className="pdf-preview">
+              <div className="pdf-preview-item">✓ Your archetype & description</div>
+              <div className="pdf-preview-item">✓ All 16 dimension scores</div>
+              <div className="pdf-preview-item">✓ AI-generated personal analysis</div>
+              <div className="pdf-preview-item">✓ Product recommendations</div>
+              <div className="pdf-preview-item">✓ Beautifully designed for sharing</div>
+            </div>
+            
+            <button 
+              className="pdf-download-btn"
+              onClick={generatePDFReport}
+              disabled={isGeneratingPDF}
+            >
+              {isGeneratingPDF ? (
+                <>Generating PDF...</>
+              ) : pdfGenerated ? (
+                <>✓ Download Again</>
+              ) : (
+                <>📥 Download Free PDF Report</>
+              )}
+            </button>
+            
+            {pdfGenerated && (
+              <p className="pdf-success">Your PDF has been downloaded!</p>
+            )}
           </div>
         </div>
         

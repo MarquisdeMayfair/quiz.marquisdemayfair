@@ -2587,6 +2587,102 @@ body.show-recaptcha .grecaptcha-badge {
 }
 
 /* ============================================================================
+   PDF DOWNLOAD SLIDE
+   ============================================================================ */
+
+.pdf-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.pdf-slide-content {
+  max-width: 400px;
+  width: 100%;
+}
+
+.pdf-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-sm);
+  filter: drop-shadow(0 4px 12px rgba(201, 162, 39, 0.3));
+}
+
+.pdf-slide .slide-title {
+  margin-bottom: var(--space-sm);
+}
+
+.pdf-description {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--cream-dark);
+  line-height: 1.6;
+  margin-bottom: var(--space-md);
+}
+
+.pdf-preview {
+  background: rgba(201, 162, 39, 0.08);
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  text-align: left;
+}
+
+.pdf-preview-item {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--cream);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.15);
+}
+
+.pdf-preview-item:last-child {
+  border-bottom: none;
+}
+
+.pdf-download-btn {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
+  color: var(--black-rich);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+.pdf-download-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(201, 162, 39, 0.4);
+}
+
+.pdf-download-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.pdf-success {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--gold-bright);
+  margin-top: var(--space-sm);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================================
    FINAL SHARE SLIDE
    ============================================================================ */
 
@@ -3179,6 +3275,33 @@ body.show-recaptcha .grecaptcha-badge {
   .summary-actions-top .summary-download-btn {
     font-size: 0.75rem;
     padding: var(--space-xs) var(--space-sm);
+  }
+  
+  /* Mobile: PDF Slide */
+  .pdf-slide {
+    padding: var(--space-sm);
+  }
+  
+  .pdf-icon {
+    font-size: 2.5rem;
+  }
+  
+  .pdf-description {
+    font-size: 0.85rem;
+  }
+  
+  .pdf-preview {
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  .pdf-preview-item {
+    font-size: 0.8rem;
+    padding: 5px 0;
+  }
+  
+  .pdf-download-btn {
+    font-size: 0.9rem;
+    padding: 12px 24px;
   }
 }
 
