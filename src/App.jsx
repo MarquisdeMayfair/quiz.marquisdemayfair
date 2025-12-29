@@ -1223,7 +1223,14 @@ const ReportSlideshow = ({
   email,
   videoHasPlayed,
   setVideoHasPlayed,
-  getShareUrl
+  getShareUrl,
+  pdfPurchased,
+  handlePurchasePDF,
+  isCheckingOut,
+  isGeneratingPDF,
+  setIsGeneratingPDF,
+  pdfGenerated,
+  setPdfGenerated
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [inviteEmail, setInviteEmail] = useState('');
@@ -1466,52 +1473,7 @@ const ReportSlideshow = ({
   const shareSlideIndex = pdfSlideIndex + 1;
   const totalSlides = shareSlideIndex + 1;
   
-  // PDF generation and payment state
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const [pdfGenerated, setPdfGenerated] = useState(false);
-  const [pdfPurchased, setPdfPurchased] = useState(false);
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-  
-  // Check for payment success on mount
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const paymentStatus = urlParams.get('payment');
-    if (paymentStatus === 'success') {
-      setPdfPurchased(true);
-      // Clean up URL
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-  }, []);
-  
-  // Handle Stripe checkout
-  const handlePurchasePDF = async () => {
-    setIsCheckingOut(true);
-    try {
-      const response = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email,
-          archetype: primaryArchetype?.name,
-          archetypeTitle: primaryArchetype?.title,
-          scores: scores
-        })
-      });
-      
-      const data = await response.json();
-      
-      if (data.url) {
-        // Redirect to Stripe Checkout
-        window.location.href = data.url;
-      } else {
-        alert('Error creating checkout session. Please try again.');
-      }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      alert('Error processing payment. Please try again.');
-    }
-    setIsCheckingOut(false);
-  };
+  // PDF generation state is now passed as props from parent
   
   // Navigation
   const nextSlide = () => {
@@ -2455,6 +2417,94 @@ export default function MarquisPersonaTest() {
   // State for archetype SEO pages
   const [archetypePageKey, setArchetypePageKey] = useState(null);
 
+  // Payment success state - lifted to main component
+  const [pdfPurchased, setPdfPurchased] = useState(false);
+  
+  // Check for payment success and restore quiz state on mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('payment');
+    
+    if (paymentStatus === 'success') {
+      // Try to restore quiz state from localStorage
+      const savedState = localStorage.getItem('quizStateForPayment');
+      if (savedState) {
+        try {
+          const state = JSON.parse(savedState);
+          setScores(state.scores || {});
+          setPrimaryArchetype(state.primaryArchetype || null);
+          setSecondaryArchetype(state.secondaryArchetype || null);
+          setEmail(state.email || '');
+          setFirstName(state.firstName || '');
+          setAiAnalysis(state.aiAnalysis || '');
+          setPhase('report'); // Go to report phase
+          setPdfPurchased(true);
+          
+          // Clear saved state
+          localStorage.removeItem('quizStateForPayment');
+          
+          console.log('Payment successful - restored quiz state');
+        } catch (e) {
+          console.error('Failed to restore quiz state:', e);
+        }
+      } else {
+        // No saved state but payment success - still mark as purchased
+        setPdfPurchased(true);
+      }
+      
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+  
+  // PDF generation state
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [pdfGenerated, setPdfGenerated] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  
+  // Handle Stripe checkout - save state before redirecting
+  const handlePurchasePDF = async () => {
+    setIsCheckingOut(true);
+    try {
+      // Save quiz state to localStorage before redirecting
+      const stateToSave = {
+        scores: scores,
+        primaryArchetype: primaryArchetype,
+        secondaryArchetype: secondaryArchetype,
+        email: email,
+        firstName: firstName,
+        aiAnalysis: aiAnalysis
+      };
+      localStorage.setItem('quizStateForPayment', JSON.stringify(stateToSave));
+      
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          archetype: primaryArchetype?.name,
+          archetypeTitle: primaryArchetype?.title,
+          scores: scores
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        alert('Error creating checkout session. Please try again.');
+        localStorage.removeItem('quizStateForPayment');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Error processing payment. Please try again.');
+      localStorage.removeItem('quizStateForPayment');
+    }
+    setIsCheckingOut(false);
+  };
+  
   // Check for /admin and /archetype/* paths on mount
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -4559,6 +4609,13 @@ Where:
                 videoHasPlayed={reportVideoHasPlayed}
                 setVideoHasPlayed={setReportVideoHasPlayed}
                 getShareUrl={getShareUrl}
+                pdfPurchased={pdfPurchased}
+                handlePurchasePDF={handlePurchasePDF}
+                isCheckingOut={isCheckingOut}
+                isGeneratingPDF={isGeneratingPDF}
+                setIsGeneratingPDF={setIsGeneratingPDF}
+                pdfGenerated={pdfGenerated}
+                setPdfGenerated={setPdfGenerated}
               />
           )}
 

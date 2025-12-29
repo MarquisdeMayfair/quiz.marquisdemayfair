@@ -70,6 +70,15 @@ export default async function handler(req, res) {
       const purchaseKey = `purchase:${session.id}`;
       await kv.set(purchaseKey, JSON.stringify(purchase));
 
+      // Mark customer as paid for PDF
+      const paidKey = `paid:${customerEmail}`;
+      await kv.set(paidKey, JSON.stringify({
+        paid: true,
+        purchaseType: purchaseType,
+        timestamp: new Date().toISOString(),
+        sessionId: session.id
+      }));
+
       // Add to purchases list for the email
       const emailPurchasesKey = `purchases:${customerEmail}`;
       const existingPurchases = await kv.get(emailPurchasesKey) || '[]';
