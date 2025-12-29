@@ -2437,8 +2437,8 @@ export default function MarquisPersonaTest() {
           setEmail(state.email || '');
           setFirstName(state.firstName || '');
           setAiAnalysis(state.aiAnalysis || '');
-          setEmailSubmitted(true); // Required for ReportSlideshow to render
-          setPhase('results'); // Go to results phase (where ReportSlideshow is)
+          setEmailSubmitted(true);
+          setPhase('archetype'); // Go to archetype phase where ReportSlideshow is rendered
           setPdfPurchased(true);
           
           // Clear saved state
