@@ -1565,7 +1565,7 @@ const ReportSlideshow = ({
         return false;
       };
       
-      // Helper to load image as base64
+      // Helper to load image as base64 with dimensions
       const loadImageAsBase64 = (url) => {
         return new Promise((resolve) => {
           const img = new Image();
@@ -1576,7 +1576,11 @@ const ReportSlideshow = ({
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
-            resolve(canvas.toDataURL('image/png'));
+            resolve({ 
+              data: canvas.toDataURL('image/png'),
+              width: img.width,
+              height: img.height
+            });
           };
           img.onerror = () => resolve(null);
           img.src = url;
@@ -1584,16 +1588,20 @@ const ReportSlideshow = ({
       };
       
       // Load images - use simple logo
-      const logoBase64 = await loadImageAsBase64('/simple-logo.png');
-      const archetypeImageBase64 = primaryArchetype?.image ? await loadImageAsBase64(primaryArchetype.image) : null;
+      const logoResult = await loadImageAsBase64('/simple-logo.png');
+      const archetypeResult = primaryArchetype?.image ? await loadImageAsBase64(primaryArchetype.image) : null;
       
       // ===== PAGE 1: COVER =====
       pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
-      // Logo at top
-      if (logoBase64) {
-        pdf.addImage(logoBase64, 'PNG', pageWidth / 2 - 25, 15, 50, 20);
+      // Logo at top - maintain aspect ratio
+      if (logoResult) {
+        const logoMaxWidth = 60;
+        const logoAspect = logoResult.width / logoResult.height;
+        const logoWidth = logoMaxWidth;
+        const logoHeight = logoMaxWidth / logoAspect;
+        pdf.addImage(logoResult.data, 'PNG', pageWidth / 2 - logoWidth / 2, 12, logoWidth, logoHeight);
       }
       
       // Gold accent line
@@ -1601,10 +1609,14 @@ const ReportSlideshow = ({
       pdf.setLineWidth(0.5);
       pdf.line(margin, 45, pageWidth - margin, 45);
       
-      // Archetype image
-      if (archetypeImageBase64) {
-        pdf.addImage(archetypeImageBase64, 'PNG', pageWidth / 2 - 35, 55, 70, 85);
-        yPos = 150;
+      // Archetype image - maintain aspect ratio
+      if (archetypeResult) {
+        const imgMaxHeight = 85;
+        const imgAspect = archetypeResult.width / archetypeResult.height;
+        const imgHeight = imgMaxHeight;
+        const imgWidth = imgMaxHeight * imgAspect;
+        pdf.addImage(archetypeResult.data, 'PNG', pageWidth / 2 - imgWidth / 2, 50, imgWidth, imgHeight);
+        yPos = 145;
       } else {
         yPos = 60;
       }
@@ -1792,9 +1804,13 @@ const ReportSlideshow = ({
       pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
-      // Add logo at top
-      if (logoBase64) {
-        pdf.addImage(logoBase64, 'PNG', pageWidth / 2 - 25, 20, 50, 20);
+      // Add logo at top - maintain aspect ratio
+      if (logoResult) {
+        const logoMaxWidth = 60;
+        const logoAspect = logoResult.width / logoResult.height;
+        const logoWidth = logoMaxWidth;
+        const logoHeight = logoMaxWidth / logoAspect;
+        pdf.addImage(logoResult.data, 'PNG', pageWidth / 2 - logoWidth / 2, 15, logoWidth, logoHeight);
       }
       
       yPos = 55;
