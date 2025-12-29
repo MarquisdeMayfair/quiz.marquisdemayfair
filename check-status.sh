@@ -39,3 +39,4 @@ echo "To see full progress: tail -f $LOG_FILE"
 echo "To see all incorrect results: grep 'INCORRECT' $LOG_FILE"
 
 
+

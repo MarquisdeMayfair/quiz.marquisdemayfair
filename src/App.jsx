@@ -1497,11 +1497,33 @@ const ReportSlideshow = ({
   const downloadChart = async () => {
     if (!chartRef.current) return;
     try {
-      const canvas = await html2canvas(chartRef.current, {
+      const element = chartRef.current;
+      
+      // Clone the element to capture it without scroll issues
+      const clone = element.cloneNode(true);
+      clone.style.position = 'fixed';
+      clone.style.left = '0';
+      clone.style.top = '0';
+      clone.style.zIndex = '-9999';
+      clone.style.width = '400px';
+      clone.style.background = 'linear-gradient(180deg, #0a0a14, #050508)';
+      clone.style.padding = '16px';
+      clone.style.borderRadius = '8px';
+      document.body.appendChild(clone);
+      
+      // Wait for fonts/styles to apply
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const canvas = await html2canvas(clone, {
         backgroundColor: '#0a0a14',
         scale: 2,
-        useCORS: true
+        useCORS: true,
+        logging: false
       });
+      
+      // Remove the clone
+      document.body.removeChild(clone);
+      
       const link = document.createElement('a');
       link.download = `bdsm-analysis-profile.png`;
       link.href = canvas.toDataURL('image/png');

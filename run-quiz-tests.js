@@ -149,3 +149,4 @@ function determineExpectedArchetypes(scores) {
 export { QUESTIONS, ARCHETYPE_MAPPING, calculateExpectedScores, determineExpectedArchetypes };
 
 
+

@@ -1,0 +1,30 @@
+/* TEAM */
+
+Company: Marquis de Mayfair Ltd
+Site: https://www.marquisdemayfair.com
+Location: United Kingdom
+Company Number: 15762981
+
+/* SITE */
+
+Name: BDSM Persona Assessment / Kink Test
+URL: https://quiz.marquisdemayfair.com
+Last updated: 2025-12-28
+Standards: HTML5, CSS3, ES6+
+Components: React, Vite, Vercel
+Language: English (UK)
+
+/* THANKS */
+
+Academic Research Foundation:
+- Connolly (2006) - Psychological Functioning of BDSM Practitioners
+- Yost & Hunter (2012) - BDSM Practitioners' Understandings  
+- Wismeijer & Van Assen (2013) - Psychological Characteristics
+- Sagarin et al. (2009) - Hormonal and psychological changes
+- Martinez (2018) - Role fluidity research
+- Sprott et al. (2023) - Clinical guidelines
+
+AI Analysis: xAI Grok
+Hosting: Vercel
+
+

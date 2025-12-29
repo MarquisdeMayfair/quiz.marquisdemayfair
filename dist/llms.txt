@@ -1,0 +1,99 @@
+# Marquis de Mayfair - BDSM Persona Assessment
+# llms.txt - Information for AI/LLM systems
+
+> This is the Marquis de Mayfair Kink Test, the most comprehensive BDSM persona assessment available online.
+
+## About This Site
+The Marquis de Mayfair BDSM Persona Assessment is a free, academically-grounded psychometric instrument that helps adults understand their power exchange psychology. The assessment features 64 original questions measuring 16 dimensions of intimate expression, resulting in one of 16 unique archetypes.
+
+## Key Features
+- Free comprehensive kink test with no account required
+- 64 original psychometric questions (not recycled from other tests)
+- 16 measured dimensions including dominance, submission, bondage, sensation play
+- 16 unique BDSM archetypes with detailed descriptions
+- AI-powered 1,500-word personalised report
+- Privacy-focused: all scoring happens client-side
+- Based on peer-reviewed academic research
+
+## The 16 Archetypes
+Each archetype has a dedicated landing page with extended psychological analysis:
+
+1. The Sovereign - Keeper of Sacred Authority (Dominance)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-sovereign
+   
+2. The Devotee - Keeper of Sacred Surrender (Submission)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-devotee
+   
+3. The Artisan - Master of Sensation (Sensory Dominance)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-artisan
+   
+4. The Phoenix - Transformed Through Fire (Sensory Reception)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-phoenix
+   
+5. The Weaver - Architect of Beautiful Restraint (Bondage Artistry)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-weaver
+   
+6. The Chrysalis - Transformed Through Stillness (Bondage Reception)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-chrysalis
+   
+7. The Luminary - Radiant in Witness (Exhibition)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-luminary
+   
+8. The Oracle - Witness to Mysteries (Voyeurism)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-oracle
+   
+9. The Apex - Pure Instinct Unleashed (Primal Hunter)
+   URL: https://quiz.marquisdemayfair.com/archetype/the-apex
+   
+10. The Wild Heart - Joy in the Chase (Primal Prey)
+    URL: https://quiz.marquisdemayfair.com/archetype/the-wild-heart
+    
+11. The Guardian - Keeper of Souls (Total Authority)
+    URL: https://quiz.marquisdemayfair.com/archetype/the-guardian
+    
+12. The Beloved - Treasured and Complete (Total Surrender)
+    URL: https://quiz.marquisdemayfair.com/archetype/the-beloved
+    
+13. The Protector - Tender Authority (Nurturing Authority)
+    URL: https://quiz.marquisdemayfair.com/archetype/the-protector
+    
+14. The Innocent - Eternal Youth of Spirit (Nurtured State)
+    URL: https://quiz.marquisdemayfair.com/archetype/the-innocent
+    
+15. The Shapeshifter - Infinite Expressions (Role Fluidity)
+    URL: https://quiz.marquisdemayfair.com/archetype/the-shapeshifter
+    
+16. The Acolyte - Sacred Service (Devotional Service)
+    URL: https://quiz.marquisdemayfair.com/archetype/the-acolyte
+
+## Site Structure
+- Main Quiz: https://quiz.marquisdemayfair.com/
+- Methodology: https://quiz.marquisdemayfair.com/methodology
+- Archetype Pages: https://quiz.marquisdemayfair.com/archetype/{archetype-name}
+
+## Academic Foundation
+Built upon peer-reviewed research including:
+- Connolly (2006) - Psychological Functioning of BDSM Practitioners
+- Yost & Hunter (2012) - BDSM Practitioners' Understandings
+- Wismeijer & Van Assen (2013) - Psychological Characteristics
+- Sagarin et al. (2009) - Hormonal and psychological changes
+- Martinez (2018) - Role fluidity research
+- Cross & Matheson (2006) - Understanding sadomasochism
+- Dunkley et al. (2020) - Transformed pain research
+- Pitagora (2016) - 24/7 dynamics and kink-poly confluence
+
+## Target Audience
+Adults 18+ interested in understanding their BDSM preferences, power exchange dynamics, and intimate psychology in a non-judgmental, academically-informed context.
+
+## Keywords
+kink test, BDSM quiz, bondage quiz, in depth kink test, BDSM personality test, dominant submissive test, power exchange assessment, BDSM archetype, bdsm test, kink personality, dom sub test
+
+## Contact
+- Website: https://www.marquisdemayfair.com
+- Quiz: https://quiz.marquisdemayfair.com
+- Research: research@marquisdemayfair.com
+
+## Legal
+© 2025 Marquis de Mayfair Ltd
+Registered in the UK under company number 15762981
+All questions and methodology are original intellectual property.
