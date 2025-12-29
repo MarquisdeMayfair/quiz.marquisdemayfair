@@ -1550,11 +1550,14 @@ const ReportSlideshow = ({
       const contentWidth = pageWidth - (margin * 2);
       let yPos = margin;
       
+      // Royal blue background color
+      const bgColor = { r: 12, g: 28, b: 76 }; // #0c1c4c
+      
       // Helper to add new page if needed
       const checkNewPage = (requiredHeight) => {
         if (yPos + requiredHeight > pageHeight - margin) {
           pdf.addPage();
-          pdf.setFillColor(10, 10, 20);
+          pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
           pdf.rect(0, 0, pageWidth, pageHeight, 'F');
           yPos = margin;
           return true;
@@ -1580,12 +1583,12 @@ const ReportSlideshow = ({
         });
       };
       
-      // Load images
-      const logoBase64 = await loadImageAsBase64('/header-logo.png');
+      // Load images - use simple logo
+      const logoBase64 = await loadImageAsBase64('/simple-logo.png');
       const archetypeImageBase64 = primaryArchetype?.image ? await loadImageAsBase64(primaryArchetype.image) : null;
       
       // ===== PAGE 1: COVER =====
-      pdf.setFillColor(10, 10, 20);
+      pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
       // Logo at top
@@ -1648,7 +1651,7 @@ const ReportSlideshow = ({
       
       // ===== PAGE 2: DIMENSION SCORES =====
       pdf.addPage();
-      pdf.setFillColor(10, 10, 20);
+      pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
       yPos = margin;
@@ -1708,7 +1711,7 @@ const ReportSlideshow = ({
       // ===== PAGE 3+: AI ANALYSIS =====
       if (aiAnalysis) {
         pdf.addPage();
-        pdf.setFillColor(10, 10, 20);
+        pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
         pdf.rect(0, 0, pageWidth, pageHeight, 'F');
         
         yPos = margin;
@@ -1744,8 +1747,8 @@ const ReportSlideshow = ({
           // Check if it's a heading (contains uppercase words like "YOUR CORE IDENTITY" or section titles)
           const trimmedPara = para.trim();
           const isHeading = (
-            (trimmedPara.length < 80 && /^[A-Z][A-Z\s\-:]+[A-Z]/.test(trimmedPara)) || // All caps pattern
-            /^(YOUR|THE|PRODUCT|THREE|INTIMATE|SCENARIOS|RECOMMENDATIONS)/i.test(trimmedPara) // Section keywords
+            (trimmedPara.length < 60 && /^[A-Z][A-Z\s\-:]+[A-Z]$/.test(trimmedPara)) || // Short all caps
+            /^YOUR (CORE|PSYCHOLOGICAL|RELATIONAL|INTIMATE)/i.test(trimmedPara) // Section keywords
           );
           
           if (isHeading) {
@@ -1754,14 +1757,20 @@ const ReportSlideshow = ({
             pdf.setFont('helvetica', 'bold');
             pdf.setTextColor(201, 162, 39);
             pdf.setFontSize(11);
-            // Clean up heading text
+            // Clean up heading text and wrap if needed
             const headingText = trimmedPara.replace(/^\d+\.\s*/, '').trim();
-            pdf.text(headingText, margin, yPos);
-            yPos += 10;
+            const headingLines = pdf.splitTextToSize(headingText, contentWidth);
+            headingLines.forEach(line => {
+              checkNewPage(7);
+              pdf.text(line, margin, yPos);
+              yPos += 7;
+            });
+            yPos += 3;
             pdf.setFont('helvetica', 'normal');
             pdf.setTextColor(220, 220, 220);
             pdf.setFontSize(10);
           } else {
+            // Regular paragraph - wrap text properly
             const lines = pdf.splitTextToSize(trimmedPara, contentWidth);
             lines.forEach(line => {
               checkNewPage(6);
@@ -1780,7 +1789,7 @@ const ReportSlideshow = ({
       
       // ===== FINAL PAGE: CALL TO ACTION =====
       pdf.addPage();
-      pdf.setFillColor(10, 10, 20);
+      pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
       // Add logo at top
