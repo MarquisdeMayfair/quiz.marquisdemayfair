@@ -1607,27 +1607,27 @@ const ReportSlideshow = ({
       pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
-      // Logo at top - maintain aspect ratio (smaller to avoid clash)
-      let logoEndY = 25;
+      // Logo at top - maintain aspect ratio
+      let logoEndY = 30;
       if (logoResult) {
-        const logoMaxWidth = 45;
+        const logoMaxWidth = 55;
         const logoAspect = logoResult.width / logoResult.height;
         const logoWidth = logoMaxWidth;
         const logoHeight = logoMaxWidth / logoAspect;
-        pdf.addImage(logoResult.data, 'PNG', pageWidth / 2 - logoWidth / 2, 10, logoWidth, logoHeight);
-        logoEndY = 10 + logoHeight + 5;
+        pdf.addImage(logoResult.data, 'PNG', pageWidth / 2 - logoWidth / 2, 12, logoWidth, logoHeight);
+        logoEndY = 12 + logoHeight;
       }
       
       // Gold accent line - positioned below logo
       pdf.setDrawColor(201, 162, 39);
       pdf.setLineWidth(0.5);
-      const lineY = Math.max(logoEndY + 3, 35);
+      const lineY = logoEndY + 5;
       pdf.line(margin, lineY, pageWidth - margin, lineY);
       
       // Archetype image - maintain aspect ratio, positioned below line
       const imageStartY = lineY + 5;
       if (archetypeResult) {
-        const imgMaxHeight = 80;
+        const imgMaxHeight = 90;
         const imgAspect = archetypeResult.width / archetypeResult.height;
         const imgHeight = imgMaxHeight;
         const imgWidth = imgMaxHeight * imgAspect;
@@ -1820,16 +1820,18 @@ const ReportSlideshow = ({
       pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
-      // Add logo at top - maintain aspect ratio
+      // Add logo at top - smaller for final page to avoid clash
+      let finalLogoEndY = 40;
       if (logoResult) {
-        const logoMaxWidth = 60;
+        const logoMaxWidth = 40;
         const logoAspect = logoResult.width / logoResult.height;
         const logoWidth = logoMaxWidth;
         const logoHeight = logoMaxWidth / logoAspect;
-        pdf.addImage(logoResult.data, 'PNG', pageWidth / 2 - logoWidth / 2, 15, logoWidth, logoHeight);
+        pdf.addImage(logoResult.data, 'PNG', pageWidth / 2 - logoWidth / 2, 20, logoWidth, logoHeight);
+        finalLogoEndY = 20 + logoHeight + 10;
       }
       
-      yPos = 55;
+      yPos = Math.max(finalLogoEndY, 50);
       pdf.setTextColor(201, 162, 39);
       pdf.setFontSize(20);
       pdf.setFont('helvetica', 'bold');
