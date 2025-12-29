@@ -277,7 +277,13 @@ body.show-recaptcha .grecaptcha-badge {
 
 @media (max-width: 768px) {
   .subtitle .text.archetypes-headline {
-    font-size: 0.95rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .subtitle .text.archetypes-headline {
+    font-size: 0.65rem;
   }
 }
 
