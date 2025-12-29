@@ -1,7 +1,5 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,7 +14,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Check for Stripe key
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.error('STRIPE_SECRET_KEY is not configured');
+    return res.status(500).json({ error: 'Payment system not configured' });
+  }
+
   try {
+    // Initialize Stripe inside the handler
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    
     const { 
       email, 
       archetype, 
@@ -29,6 +36,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Email is required' });
     }
 
+    // Build the base URL
+    const baseUrl = 'https://quiz.marquisdemayfair.com';
+
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -40,14 +50,13 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://quiz.marquisdemayfair.com'}/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://quiz.marquisdemayfair.com'}/?payment=cancelled`,
+      success_url: `${baseUrl}/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/?payment=cancelled`,
       metadata: {
         email: email,
         archetype: archetype || '',
         archetypeTitle: archetypeTitle || '',
         purchaseType: 'pdf_report',
-        scores: scores ? JSON.stringify(scores).substring(0, 500) : '', // Stripe metadata limit
       },
       // Allow promotion codes
       allow_promotion_codes: true,
@@ -59,8 +68,7 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('Stripe checkout error:', error);
-    res.status(500).json({ error: error.message });
+    console.error('Stripe checkout error:', error.message, error.stack);
+    res.status(500).json({ error: error.message || 'Payment error' });
   }
 }
-

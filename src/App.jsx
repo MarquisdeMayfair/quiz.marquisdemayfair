@@ -2296,7 +2296,6 @@ const ReportSlideshow = ({
         {/* PDF DOWNLOAD SLIDE */}
         <div className={getSlideClass(pdfSlideIndex) + ' pdf-slide'}>
           <div className="pdf-slide-content">
-            <div className="pdf-icon">📄</div>
             <h3 className="slide-title centered">
               {pdfPurchased ? 'Download Your Report' : 'Get Your Full Report'}
             </h3>
