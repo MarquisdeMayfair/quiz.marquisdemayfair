@@ -1554,82 +1554,89 @@ const ReportSlideshow = ({
       const checkNewPage = (requiredHeight) => {
         if (yPos + requiredHeight > pageHeight - margin) {
           pdf.addPage();
+          pdf.setFillColor(10, 10, 20);
+          pdf.rect(0, 0, pageWidth, pageHeight, 'F');
           yPos = margin;
           return true;
         }
         return false;
       };
       
-      // Helper to wrap text
-      const addWrappedText = (text, x, y, maxWidth, lineHeight = 6) => {
-        const lines = pdf.splitTextToSize(text, maxWidth);
-        lines.forEach((line, i) => {
-          checkNewPage(lineHeight);
-          pdf.text(line, x, yPos);
-          yPos += lineHeight;
+      // Helper to load image as base64
+      const loadImageAsBase64 = (url) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = () => resolve(null);
+          img.src = url;
         });
-        return yPos;
       };
       
+      // Load images
+      const logoBase64 = await loadImageAsBase64('/header-logo.png');
+      const archetypeImageBase64 = primaryArchetype?.image ? await loadImageAsBase64(primaryArchetype.image) : null;
+      
       // ===== PAGE 1: COVER =====
-      // Dark background simulation with header
       pdf.setFillColor(10, 10, 20);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+      
+      // Logo at top
+      if (logoBase64) {
+        pdf.addImage(logoBase64, 'PNG', pageWidth / 2 - 25, 15, 50, 20);
+      }
       
       // Gold accent line
       pdf.setDrawColor(201, 162, 39);
       pdf.setLineWidth(0.5);
-      pdf.line(margin, 40, pageWidth - margin, 40);
+      pdf.line(margin, 45, pageWidth - margin, 45);
       
-      // Title
+      // Archetype image
+      if (archetypeImageBase64) {
+        pdf.addImage(archetypeImageBase64, 'PNG', pageWidth / 2 - 35, 55, 70, 85);
+        yPos = 150;
+      } else {
+        yPos = 60;
+      }
+      
+      // Title below image
       pdf.setTextColor(201, 162, 39);
-      pdf.setFontSize(28);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('BDSM PERSONA', pageWidth / 2, 55, { align: 'center' });
-      pdf.setFontSize(22);
-      pdf.text('ASSESSMENT REPORT', pageWidth / 2, 65, { align: 'center' });
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('BDSM PERSONA ASSESSMENT', pageWidth / 2, yPos, { align: 'center' });
       
       // Archetype name
-      pdf.setFontSize(36);
+      yPos += 15;
+      pdf.setFontSize(32);
       pdf.setTextColor(255, 255, 255);
-      yPos = 100;
+      pdf.setFont('helvetica', 'bold');
       pdf.text(primaryArchetype?.name || 'Your Archetype', pageWidth / 2, yPos, { align: 'center' });
       
       // Subtitle
       pdf.setFontSize(14);
       pdf.setTextColor(230, 220, 200);
       pdf.setFont('helvetica', 'italic');
-      yPos += 12;
+      yPos += 10;
       pdf.text(primaryArchetype?.title || '', pageWidth / 2, yPos, { align: 'center' });
-      
-      // Cold reading / description
-      pdf.setFont('helvetica', 'normal');
-      pdf.setFontSize(11);
-      pdf.setTextColor(200, 200, 200);
-      yPos += 20;
-      if (primaryArchetype?.coldReading) {
-        const coldReadingLines = pdf.splitTextToSize(primaryArchetype.coldReading, contentWidth);
-        coldReadingLines.forEach(line => {
-          pdf.text(line, pageWidth / 2, yPos, { align: 'center' });
-          yPos += 6;
-        });
-      }
       
       // Secondary archetype
       if (secondaryArchetype) {
-        yPos += 15;
+        yPos += 20;
         pdf.setTextColor(201, 162, 39);
-        pdf.setFontSize(12);
-        pdf.text('Secondary Archetype', pageWidth / 2, yPos, { align: 'center' });
-        yPos += 8;
-        pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(16);
-        pdf.text(secondaryArchetype.name, pageWidth / 2, yPos, { align: 'center' });
-        yPos += 6;
         pdf.setFontSize(10);
-        pdf.setTextColor(200, 200, 200);
-        pdf.setFont('helvetica', 'italic');
-        pdf.text(secondaryArchetype.title, pageWidth / 2, yPos, { align: 'center' });
+        pdf.setFont('helvetica', 'normal');
+        pdf.text('Secondary Archetype', pageWidth / 2, yPos, { align: 'center' });
+        yPos += 6;
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(14);
+        pdf.text(secondaryArchetype.name, pageWidth / 2, yPos, { align: 'center' });
       }
       
       // Footer
@@ -1718,7 +1725,11 @@ const ReportSlideshow = ({
           .replace(/\*/g, '') // Remove markdown italics
           .replace(/—/g, '-') // Replace em-dashes
           .replace(/"/g, '"').replace(/"/g, '"') // Normalize quotes
-          .replace(/'/g, "'").replace(/'/g, "'");
+          .replace(/'/g, "'").replace(/'/g, "'")
+          .replace(/^#{1,6}\s*/gm, '') // Remove markdown heading markers
+          .replace(/^---+$/gm, '') // Remove horizontal rules
+          .replace(/^\d+\.\s+/gm, '') // Remove numbered list markers at start of lines
+          .replace(/^[-*]\s+/gm, ''); // Remove bullet markers
         
         // Split into paragraphs
         const paragraphs = cleanAnalysis.split(/\n\n+/);
@@ -1730,22 +1741,28 @@ const ReportSlideshow = ({
         paragraphs.forEach(para => {
           if (!para.trim()) return;
           
-          // Check if it's a heading (starts with caps or is short)
-          const isHeading = para.length < 50 && para === para.toUpperCase();
+          // Check if it's a heading (contains uppercase words like "YOUR CORE IDENTITY" or section titles)
+          const trimmedPara = para.trim();
+          const isHeading = (
+            (trimmedPara.length < 80 && /^[A-Z][A-Z\s\-:]+[A-Z]/.test(trimmedPara)) || // All caps pattern
+            /^(YOUR|THE|PRODUCT|THREE|INTIMATE|SCENARIOS|RECOMMENDATIONS)/i.test(trimmedPara) // Section keywords
+          );
           
           if (isHeading) {
             checkNewPage(15);
-            yPos += 5;
+            yPos += 8;
             pdf.setFont('helvetica', 'bold');
             pdf.setTextColor(201, 162, 39);
-            pdf.setFontSize(12);
-            pdf.text(para.trim(), margin, yPos);
-            yPos += 8;
+            pdf.setFontSize(11);
+            // Clean up heading text
+            const headingText = trimmedPara.replace(/^\d+\.\s*/, '').trim();
+            pdf.text(headingText, margin, yPos);
+            yPos += 10;
             pdf.setFont('helvetica', 'normal');
             pdf.setTextColor(220, 220, 220);
             pdf.setFontSize(10);
           } else {
-            const lines = pdf.splitTextToSize(para.trim(), contentWidth);
+            const lines = pdf.splitTextToSize(trimmedPara, contentWidth);
             lines.forEach(line => {
               checkNewPage(6);
               pdf.text(line, margin, yPos);
@@ -1766,38 +1783,91 @@ const ReportSlideshow = ({
       pdf.setFillColor(10, 10, 20);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
-      yPos = 60;
+      // Add logo at top
+      if (logoBase64) {
+        pdf.addImage(logoBase64, 'PNG', pageWidth / 2 - 25, 20, 50, 20);
+      }
+      
+      yPos = 55;
       pdf.setTextColor(201, 162, 39);
       pdf.setFontSize(20);
       pdf.setFont('helvetica', 'bold');
       pdf.text('Explore Your Desires', pageWidth / 2, yPos, { align: 'center' });
       
-      yPos += 20;
+      yPos += 18;
       pdf.setTextColor(230, 220, 200);
-      pdf.setFontSize(12);
+      pdf.setFontSize(11);
       pdf.setFont('helvetica', 'normal');
       const ctaText = 'Visit the Marquis de Mayfair collection to discover luxury items curated for your archetype.';
       const ctaLines = pdf.splitTextToSize(ctaText, contentWidth - 20);
       ctaLines.forEach(line => {
         pdf.text(line, pageWidth / 2, yPos, { align: 'center' });
-        yPos += 7;
+        yPos += 6;
       });
       
-      yPos += 15;
+      yPos += 12;
       pdf.setTextColor(201, 162, 39);
       pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
       pdf.text('Use code PERSONA10 for 10% off', pageWidth / 2, yPos, { align: 'center' });
       
-      yPos += 25;
-      pdf.setFontSize(11);
+      // Shop link (clickable)
+      yPos += 20;
+      pdf.setFontSize(12);
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFont('helvetica', 'normal');
+      const shopUrl = 'https://www.marquisdemayfair.com';
+      const shopLinkWidth = pdf.getTextWidth(shopUrl);
+      pdf.textWithLink(shopUrl, pageWidth / 2 - shopLinkWidth / 2, yPos, { url: shopUrl });
+      // Underline for link
+      pdf.setDrawColor(255, 255, 255);
+      pdf.setLineWidth(0.3);
+      pdf.line(pageWidth / 2 - shopLinkWidth / 2, yPos + 1, pageWidth / 2 + shopLinkWidth / 2, yPos + 1);
+      
+      // Separator
+      yPos += 30;
+      pdf.setDrawColor(201, 162, 39);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin + 40, yPos, pageWidth - margin - 40, yPos);
+      
+      // Share CTA
+      yPos += 20;
+      pdf.setTextColor(201, 162, 39);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Share With a Friend', pageWidth / 2, yPos, { align: 'center' });
+      
+      yPos += 15;
       pdf.setTextColor(200, 200, 200);
-      pdf.text('www.marquisdemayfair.com', pageWidth / 2, yPos, { align: 'center' });
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      const shareText = 'Know someone who would enjoy discovering their BDSM archetype? Share this report or send them to take the quiz themselves:';
+      const shareLines = pdf.splitTextToSize(shareText, contentWidth - 20);
+      shareLines.forEach(line => {
+        pdf.text(line, pageWidth / 2, yPos, { align: 'center' });
+        yPos += 5;
+      });
+      
+      // Quiz link (clickable)
+      yPos += 12;
+      pdf.setFontSize(13);
+      pdf.setTextColor(201, 162, 39);
+      pdf.setFont('helvetica', 'bold');
+      const quizUrl = 'https://quiz.marquisdemayfair.com';
+      const quizLinkWidth = pdf.getTextWidth(quizUrl);
+      pdf.textWithLink(quizUrl, pageWidth / 2 - quizLinkWidth / 2, yPos, { url: quizUrl });
+      // Underline for link
+      pdf.setDrawColor(201, 162, 39);
+      pdf.setLineWidth(0.3);
+      pdf.line(pageWidth / 2 - quizLinkWidth / 2, yPos + 1, pageWidth / 2 + quizLinkWidth / 2, yPos + 1);
       
       // Footer
       pdf.setDrawColor(201, 162, 39);
+      pdf.setLineWidth(0.5);
       pdf.line(margin, pageHeight - 25, pageWidth - margin, pageHeight - 25);
       pdf.setFontSize(8);
       pdf.setTextColor(150, 150, 150);
+      pdf.setFont('helvetica', 'normal');
       pdf.text('© Marquis de Mayfair - Surrender to Sensation', pageWidth / 2, pageHeight - 15, { align: 'center' });
       
       // Save the PDF
