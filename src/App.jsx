@@ -1463,15 +1463,15 @@ const ReportSlideshow = ({
   // 3 to 3+beforeProducts-1: Sections before products
   // productsIdx: Products (Curated For You)
   // productsIdx+1 to +afterProducts: Sections after products
-  // Then: Invite, Chart, Farewell, Voucher2, Share (Share is last)
+  // Then: PDF, Invite, Chart, Voucher2, Share, Farewell (Farewell is last)
   const productsSlideIndex = 3 + sectionsBeforeProducts.length;
-  const inviteSlideIndex = productsSlideIndex + 1 + sectionsAfterProducts.length;
+  const pdfSlideIndex = productsSlideIndex + 1 + sectionsAfterProducts.length;  // After last AI section
+  const inviteSlideIndex = pdfSlideIndex + 1;
   const chartSlideIndex = inviteSlideIndex + 1;
-  const farewellSlideIndex = chartSlideIndex + 1;
-  const voucher2SlideIndex = farewellSlideIndex + 1;
-  const pdfSlideIndex = voucher2SlideIndex + 1;
-  const shareSlideIndex = pdfSlideIndex + 1;
-  const totalSlides = shareSlideIndex + 1;
+  const voucher2SlideIndex = chartSlideIndex + 1;
+  const shareSlideIndex = voucher2SlideIndex + 1;
+  const farewellSlideIndex = shareSlideIndex + 1;  // Now last
+  const totalSlides = farewellSlideIndex + 1;
   
   // PDF generation state is now passed as props from parent
   
@@ -1497,6 +1497,13 @@ const ReportSlideshow = ({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+  
+  // Navigate to PDF slide when returning from successful payment
+  useEffect(() => {
+    if (pdfPurchased) {
+      setCurrentSlide(pdfSlideIndex);
+    }
+  }, [pdfPurchased, pdfSlideIndex]);
   
   const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e) => {
@@ -2139,6 +2146,67 @@ const ReportSlideshow = ({
           </div>
         ))}
         
+        {/* PDF DOWNLOAD SLIDE */}
+        <div className={getSlideClass(pdfSlideIndex) + ' pdf-slide'}>
+          <div className="pdf-slide-content">
+            <h3 className="slide-title centered">
+              {pdfPurchased ? 'Download Your Report' : 'Get Your Full Report'}
+            </h3>
+            <p className="pdf-description">
+              Keep your complete BDSM Persona Assessment as a beautifully formatted PDF.
+              Includes your archetype analysis, dimension scores, and personalised insights.
+            </p>
+            
+            <div className="pdf-preview">
+              <div className="pdf-preview-item">✓ Your archetype & description</div>
+              <div className="pdf-preview-item">✓ All 16 dimension scores</div>
+              <div className="pdf-preview-item">✓ AI-generated personal analysis</div>
+              <div className="pdf-preview-item">✓ Product recommendations</div>
+              <div className="pdf-preview-item">✓ Beautifully designed for sharing</div>
+            </div>
+            
+            {pdfPurchased ? (
+              <>
+                <button 
+                  className="pdf-download-btn"
+                  onClick={generatePDFReport}
+                  disabled={isGeneratingPDF}
+                >
+                  {isGeneratingPDF ? (
+                    <>Generating PDF...</>
+                  ) : pdfGenerated ? (
+                    <>✓ Download Again</>
+                  ) : (
+                    <>📥 Download Your PDF Report</>
+                  )}
+                </button>
+                {pdfGenerated && (
+                  <p className="pdf-success">Your PDF has been downloaded!</p>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="pdf-price">
+                  <span className="price-amount">£0.99</span>
+                  <span className="price-note">One-time purchase</span>
+                </div>
+                <button 
+                  className="pdf-purchase-btn"
+                  onClick={handlePurchasePDF}
+                  disabled={isCheckingOut}
+                >
+                  {isCheckingOut ? (
+                    <>Processing...</>
+                  ) : (
+                    <>🔒 Buy Now - £0.99</>
+                  )}
+                </button>
+                <p className="pdf-secure-note">Secure payment via Stripe</p>
+              </>
+            )}
+          </div>
+        </div>
+        
         {/* INVITE FRIEND SLIDE */}
         <div className={getSlideClass(inviteSlideIndex) + ' invite-slide'}>
           <h3 className="slide-title centered">Invite a Friend</h3>
@@ -2223,22 +2291,6 @@ const ReportSlideshow = ({
           <button className="chart-download-btn" onClick={downloadChart}>📥 Download Analysis</button>
         </div>
         
-        {/* FAREWELL SLIDE */}
-        <div className={getSlideClass(farewellSlideIndex) + ' farewell-slide'}>
-          <img src="/marquis-portrait.png" alt="The Marquis de Mayfair" className="marquis-portrait" />
-          <div className="farewell-content">
-            <p className="farewell-greeting">{farewellName},</p>
-            <p className="farewell-text">
-              This report is but the beginning. You are a being of untamed power and profound devotion, 
-              and the world of BDSM offers you a canvas to paint with every shade of your soul. 
-              Walk this path with courage, and know that I am here to witness and guide you.
-            </p>
-            <div className="farewell-signature">
-              <span className="signature-line">— The Marquis de Mayfair</span>
-            </div>
-          </div>
-        </div>
-        
         {/* VOUCHER REPEAT SLIDE */}
         <div className={getSlideClass(voucher2SlideIndex) + ' voucher-slide voucher-repeat'}>
           <h3 className="slide-title centered">Don't Forget Your Reward</h3>
@@ -2255,68 +2307,7 @@ const ReportSlideshow = ({
           </div>
         </div>
         
-        {/* PDF DOWNLOAD SLIDE */}
-        <div className={getSlideClass(pdfSlideIndex) + ' pdf-slide'}>
-          <div className="pdf-slide-content">
-            <h3 className="slide-title centered">
-              {pdfPurchased ? 'Download Your Report' : 'Get Your Full Report'}
-            </h3>
-            <p className="pdf-description">
-              Keep your complete BDSM Persona Assessment as a beautifully formatted PDF.
-              Includes your archetype analysis, dimension scores, and personalised insights.
-            </p>
-            
-            <div className="pdf-preview">
-              <div className="pdf-preview-item">✓ Your archetype & description</div>
-              <div className="pdf-preview-item">✓ All 16 dimension scores</div>
-              <div className="pdf-preview-item">✓ AI-generated personal analysis</div>
-              <div className="pdf-preview-item">✓ Product recommendations</div>
-              <div className="pdf-preview-item">✓ Beautifully designed for sharing</div>
-            </div>
-            
-            {pdfPurchased ? (
-              <>
-                <button 
-                  className="pdf-download-btn"
-                  onClick={generatePDFReport}
-                  disabled={isGeneratingPDF}
-                >
-                  {isGeneratingPDF ? (
-                    <>Generating PDF...</>
-                  ) : pdfGenerated ? (
-                    <>✓ Download Again</>
-                  ) : (
-                    <>📥 Download Your PDF Report</>
-                  )}
-                </button>
-                {pdfGenerated && (
-                  <p className="pdf-success">Your PDF has been downloaded!</p>
-                )}
-              </>
-            ) : (
-              <>
-                <div className="pdf-price">
-                  <span className="price-amount">£0.99</span>
-                  <span className="price-note">One-time purchase</span>
-                </div>
-                <button 
-                  className="pdf-purchase-btn"
-                  onClick={handlePurchasePDF}
-                  disabled={isCheckingOut}
-                >
-                  {isCheckingOut ? (
-                    <>Processing...</>
-                  ) : (
-                    <>🔒 Buy Now - £0.99</>
-                  )}
-                </button>
-                <p className="pdf-secure-note">Secure payment via Stripe</p>
-              </>
-            )}
-          </div>
-        </div>
-        
-        {/* SHARE SLIDE (LAST) */}
+        {/* SHARE SLIDE */}
         <div className={getSlideClass(shareSlideIndex) + ' share-slide'}>
           <h3 className="slide-title">Share Your Archetype</h3>
           {primaryArchetype?.image && (
@@ -2337,6 +2328,22 @@ const ReportSlideshow = ({
               navigator.clipboard.writeText(`I am ${primaryArchetype?.name} - ${primaryArchetype?.title}.\n\nDiscover your BDSM archetype at: ${getShareUrl()}`);
               alert('Copied for FetLife!');
             }}>Copy for FetLife</button>
+          </div>
+        </div>
+        
+        {/* FAREWELL SLIDE (LAST) */}
+        <div className={getSlideClass(farewellSlideIndex) + ' farewell-slide'}>
+          <img src="/marquis-portrait.png" alt="The Marquis de Mayfair" className="marquis-portrait" />
+          <div className="farewell-content">
+            <p className="farewell-greeting">{farewellName},</p>
+            <p className="farewell-text">
+              This report is but the beginning. You are a being of untamed power and profound devotion, 
+              and the world of BDSM offers you a canvas to paint with every shade of your soul. 
+              Walk this path with courage, and know that I am here to witness and guide you.
+            </p>
+            <div className="farewell-signature">
+              <span className="signature-line">— The Marquis de Mayfair</span>
+            </div>
           </div>
         </div>
       </div>
