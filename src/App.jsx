@@ -2437,19 +2437,21 @@ export default function MarquisPersonaTest() {
           setEmail(state.email || '');
           setFirstName(state.firstName || '');
           setAiAnalysis(state.aiAnalysis || '');
+          setEmailSubmitted(true); // Required for ReportSlideshow to render
           setPhase('report'); // Go to report phase
           setPdfPurchased(true);
           
           // Clear saved state
           localStorage.removeItem('quizStateForPayment');
           
-          console.log('Payment successful - restored quiz state');
+          console.log('Payment successful - restored quiz state, showing report');
         } catch (e) {
           console.error('Failed to restore quiz state:', e);
         }
       } else {
         // No saved state but payment success - still mark as purchased
         setPdfPurchased(true);
+        console.log('Payment successful but no saved state found');
       }
       
       // Clean up URL
