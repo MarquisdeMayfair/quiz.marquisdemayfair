@@ -1607,30 +1607,34 @@ const ReportSlideshow = ({
       pdf.setFillColor(bgColor.r, bgColor.g, bgColor.b);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
       
-      // Logo at top - maintain aspect ratio
+      // Logo at top - maintain aspect ratio (smaller to avoid clash)
+      let logoEndY = 25;
       if (logoResult) {
-        const logoMaxWidth = 60;
+        const logoMaxWidth = 45;
         const logoAspect = logoResult.width / logoResult.height;
         const logoWidth = logoMaxWidth;
         const logoHeight = logoMaxWidth / logoAspect;
-        pdf.addImage(logoResult.data, 'PNG', pageWidth / 2 - logoWidth / 2, 12, logoWidth, logoHeight);
+        pdf.addImage(logoResult.data, 'PNG', pageWidth / 2 - logoWidth / 2, 10, logoWidth, logoHeight);
+        logoEndY = 10 + logoHeight + 5;
       }
       
-      // Gold accent line
+      // Gold accent line - positioned below logo
       pdf.setDrawColor(201, 162, 39);
       pdf.setLineWidth(0.5);
-      pdf.line(margin, 45, pageWidth - margin, 45);
+      const lineY = Math.max(logoEndY + 3, 35);
+      pdf.line(margin, lineY, pageWidth - margin, lineY);
       
-      // Archetype image - maintain aspect ratio
+      // Archetype image - maintain aspect ratio, positioned below line
+      const imageStartY = lineY + 5;
       if (archetypeResult) {
-        const imgMaxHeight = 85;
+        const imgMaxHeight = 80;
         const imgAspect = archetypeResult.width / archetypeResult.height;
         const imgHeight = imgMaxHeight;
         const imgWidth = imgMaxHeight * imgAspect;
-        pdf.addImage(archetypeResult.data, 'PNG', pageWidth / 2 - imgWidth / 2, 50, imgWidth, imgHeight);
-        yPos = 145;
+        pdf.addImage(archetypeResult.data, 'PNG', pageWidth / 2 - imgWidth / 2, imageStartY, imgWidth, imgHeight);
+        yPos = imageStartY + imgHeight + 10;
       } else {
-        yPos = 60;
+        yPos = lineY + 15;
       }
       
       // Title below image
@@ -2150,7 +2154,7 @@ const ReportSlideshow = ({
         <div className={getSlideClass(pdfSlideIndex) + ' pdf-slide'}>
           <div className="pdf-slide-content">
             <h3 className="slide-title centered">
-              {pdfPurchased ? 'Download Your Report' : 'Get Your Full Report'}
+              {pdfPurchased ? 'Download Your Report' : 'Download and Keep Your Full Report'}
             </h3>
             <p className="pdf-description">
               Keep your complete BDSM Persona Assessment as a beautifully formatted PDF.
