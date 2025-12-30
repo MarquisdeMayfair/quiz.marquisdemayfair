@@ -2049,7 +2049,7 @@ const ReportSlideshow = ({
           <h2 className="intro-slide-title">{primaryArchetype?.name}</h2>
           <p className="intro-slide-subtitle">{primaryArchetype?.title}</p>
           <div className="scroll-indicator" onClick={() => nextSlide()}>
-            <span className="scroll-text">Swipe for your full report</span>
+            <span className="scroll-text">Scroll for more</span>
             <span className="scroll-arrow">→</span>
           </div>
         </div>
@@ -4369,6 +4369,14 @@ Where:
           </div>
 
           <div className="archetype-preview">
+            <div 
+              className="scroll-indicator vertical"
+              onClick={() => document.getElementById('email-capture')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              <span className="scroll-text">Scroll for more</span>
+              <span className="scroll-arrow">↓</span>
+            </div>
+            
             <h2>Your Primary Archetype</h2>
             
             {primaryArchetype?.video && (
@@ -4403,14 +4411,6 @@ Where:
                 <h3>{primaryArchetype?.name}</h3>
                 <p>{primaryArchetype?.title}</p>
               </div>
-            </div>
-            
-            <div 
-              className="scroll-indicator vertical"
-              onClick={() => document.getElementById('email-capture')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <span className="scroll-text">Scroll for your free AI report</span>
-              <span className="scroll-arrow">↓</span>
             </div>
             
             <a 
