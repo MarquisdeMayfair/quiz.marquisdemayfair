@@ -881,7 +881,7 @@ body.show-recaptcha .grecaptcha-badge {
   color: var(--gold-bright);
   text-align: center;
   letter-spacing: 0.08em;
-  margin-top: var(--space-lg);
+  margin-top: var(--space-sm);
   margin-bottom: var(--space-lg);
 }
 
@@ -1019,7 +1019,7 @@ body.show-recaptcha .grecaptcha-badge {
 
 /* Video container styling */
 .archetype-video-container {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
   display: flex;
   justify-content: center;
 }
@@ -1044,7 +1044,7 @@ body.show-recaptcha .grecaptcha-badge {
   color: var(--cream);
   font-size: 1.25rem;
   max-width: 500px;
-  margin: var(--space-lg) auto;
+  margin: var(--space-md) auto var(--space-sm);
   text-align: center;
   line-height: 1.7;
 }
@@ -1054,7 +1054,7 @@ body.show-recaptcha .grecaptcha-badge {
   display: flex;
   gap: var(--space-md);
   justify-content: center;
-  margin-top: var(--space-lg);
+  margin-top: var(--space-sm);
   flex-wrap: wrap;
 }
 
@@ -2109,7 +2109,7 @@ body.show-recaptcha .grecaptcha-badge {
 
 /* Scroll Indicator - guides users to continue */
 .scroll-indicator {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;

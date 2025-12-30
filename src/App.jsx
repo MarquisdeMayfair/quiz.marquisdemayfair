@@ -4366,9 +4366,6 @@ Where:
           <div className="results-header">
             <h1>Your Psychometric Fingerprint</h1>
             <p className="header-sub">A statistical portrait of your intimate dimensions</p>
-          </div>
-
-          <div className="archetype-preview">
             <div 
               className="scroll-indicator vertical"
               onClick={() => document.getElementById('email-capture')?.scrollIntoView({ behavior: 'smooth' })}
@@ -4376,7 +4373,9 @@ Where:
               <span className="scroll-text">Scroll for more</span>
               <span className="scroll-arrow">↓</span>
             </div>
-            
+          </div>
+
+          <div className="archetype-preview">
             <h2>Your Primary Archetype</h2>
             
             {primaryArchetype?.video && (
@@ -4412,17 +4411,6 @@ Where:
                 <p>{primaryArchetype?.title}</p>
               </div>
             </div>
-            
-            <a 
-              href="#email-capture" 
-              className="discount-link"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('email-capture')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Get 10% off Luxury BDSM Equipment →
-            </a>
             
             <p className="archetype-share-text">{primaryArchetype?.shareText}</p>
             
@@ -4467,6 +4455,17 @@ Where:
                 <span>Copy for FetLife</span>
               </button>
             </div>
+            
+            <a 
+              href="#email-capture" 
+              className="discount-link"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('email-capture')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Get 10% off Luxury BDSM Equipment →
+            </a>
           </div>
 
           <h2 className="your-results-heading">Your Results</h2>
@@ -4512,7 +4511,7 @@ Where:
 
           <div className="unlock-section">
             <div className="unlock-card">
-              <h2>FREE 1,500-Word Sexual Archetype Report Based on Your Results</h2>
+              <h2>There is even more!<br />Get a Free 1,500-Word Sexual Archetype Report Based on Your Results</h2>
               <p className="unlock-tagline">Written for you. Decoded by AI. Curated by the Marquis.</p>
               
               <h3 className="unlock-intro">You are not random. Your desires follow patterns.<br />This free 1,500-word report reveals exactly how yours are wired.</h3>
@@ -4533,7 +4532,7 @@ Where:
               
               {!emailSubmitted ? (
                 <div id="email-capture" className="email-capture-section">
-                  <h4 className="email-cta">Enter your email to receive your free report</h4>
+                  <h4 className="email-cta">Enter your email to receive your free report IMMEDIATELY</h4>
                 <form onSubmit={handleEmailSubmit} className="email-form">
                     {submitError && (
                       <div className="submit-error">
