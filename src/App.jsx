@@ -4512,9 +4512,9 @@ Where:
           <div className="unlock-section">
             <div className="unlock-card">
               <h2>There is even more!<br />Get a Free 1,500-Word Sexual Archetype Report Based on Your Results</h2>
+              <img src="/report-banner.png" alt="AI Report Preview" className="report-banner-image" />
               <p className="unlock-tagline">Written for you. Decoded by AI. Curated by the Marquis.</p>
-              
-              <h3 className="unlock-intro">You are not random. Your desires follow patterns.<br />This free 1,500-word report reveals exactly how yours are wired.</h3>
+
               
               <div className="unlock-benefits">
                 <h4>What you'll receive</h4>

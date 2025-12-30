@@ -1147,13 +1147,14 @@ body.show-recaptcha .grecaptcha-badge {
   flex-direction: column;
 }
 
-/* Order elements: title, tagline, intro, email form, discount, then bullets */
+/* Order elements: title, banner, tagline, intro, email form, discount, then bullets */
 .unlock-card h2 { order: 1; }
-.unlock-card .unlock-tagline { order: 2; }
-.unlock-card .unlock-intro { order: 3; }
-.unlock-card .email-capture-section { order: 4; }
-.unlock-card .discount-callout { order: 5; }
-.unlock-card .unlock-benefits { order: 6; }
+.unlock-card .report-banner-image { order: 2; }
+.unlock-card .unlock-tagline { order: 3; }
+.unlock-card .unlock-intro { order: 4; }
+.unlock-card .email-capture-section { order: 5; }
+.unlock-card .discount-callout { order: 6; }
+.unlock-card .unlock-benefits { order: 7; }
 
 .unlock-card::before {
   content: '✧';
@@ -1182,6 +1183,17 @@ body.show-recaptcha .grecaptcha-badge {
   font-size: 1.1rem;
   color: var(--cream);
   margin-bottom: var(--space-md);
+}
+
+.report-banner-image {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  border-radius: 8px;
+  margin: var(--space-sm) auto;
+  display: block;
+  border: 1px solid var(--gold-dark);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .unlock-intro {
