@@ -4519,14 +4519,13 @@ Where:
               <div className="unlock-benefits">
                 <h4>What you'll receive</h4>
                 <ul>
-                  <li>A downloadable and shareable scorecard with AI report</li>
-                  <li>Clear breakdown of your dominant traits, secondary influences, and hidden drives</li>
-                  <li>Historical and mythological parallels that mirror your power dynamic</li>
-                  <li>Explanation of how you seek control, surrender, intimacy, or tension</li>
-                  <li>Invite friends for compatibility matching and get additional 5% discount code</li>
-                  <li>Personalised BDSM product recommendations aligned to your archetype</li>
-                  <li>Exclusive private offers tailored specifically to your profile</li>
-                  <li>Curated and interpreted by the Marquis</li>
+                  <li>Downloadable scorecard</li>
+                  <li>Three sexual fantasies based on your persona</li>
+                  <li>Fully personalised 1500 word report, based on you!</li>
+                  <li>BDSM products matched to your kinks</li>
+                  <li>Exclusive discount codes (up to 15% off)</li>
+                  <li>Historical and mythological characters that match your profile</li>
+                  <li>Detailed breakdown of your power traits and hidden sexual drivers</li>
                 </ul>
               </div>
               
