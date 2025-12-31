@@ -4171,7 +4171,7 @@ Where:
               </div>
               
               <h1 className="main-title">
-                <span className="title-main">BDSM Persona Assessment</span>
+                <span className="title-main">BDSM Persona Quiz</span>
               </h1>
               
               <div className="intro-text">
